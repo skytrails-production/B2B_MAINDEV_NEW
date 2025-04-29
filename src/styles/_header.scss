@@ -1,0 +1,9 @@
+.nc-header-bg {
+  @apply bg-white/70  backdrop-blur-2xl backdrop-filter;
+}
+
+
+.custom-container {
+  @apply container mx-auto px-4; /* Tailwind utility classes */
+  /* Optionally, add any Bootstrap styles */
+}

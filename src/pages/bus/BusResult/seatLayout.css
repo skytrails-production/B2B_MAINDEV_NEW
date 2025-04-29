@@ -1,0 +1,252 @@
+.sealLayoutDiv {
+    width: 100%;
+    /* border: 1px solid lightgray; */
+    border-top: none;
+    /* background-color: rgb(241, 241, 241); */
+    background: white;
+    position: relative;
+    /* height: 400px; */
+    min-height: 300px;
+    margin-top: -15px;
+    margin-bottom: 10px;
+}
+
+.sealLayoutDiv>div:first-child {
+    height: 100%;
+    padding: 30px 15px;
+    /* box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; */
+    /* border-bottom: 1px solid lightgray;
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray; */
+}
+
+.sealLayoutDiv>div:first-child>div {
+    height: 100%;
+}
+
+.seatcontainer {
+    /* position: relative; */
+    /* align-self: center; */
+    /* display: flex !important; */
+    /* flex-wrap: wrap; */
+    position: absolute;
+    left: 21%;
+    top: 6%;
+    transform: translate(-50%, -50%);
+}
+
+.busSeatrgt .busSeat .seatcontainer {
+    display: flex;
+    /* grid-template-columns: auto auto auto auto auto auto auto; */
+    gap: 3px;
+}
+
+.seatContTwo {
+    display: flex !important;
+    /* grid-template-columns: auto auto auto auto auto auto auto; */
+    column-gap: 14px !important;
+    row-gap: 10px !important;
+}
+
+.seatcontainer>div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin-left: 10px !important; */
+    flex-direction: row;
+    gap: 7px;
+}
+
+.sealLayoutDiv>div:first-child>div {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: flex-start;
+    /* padding-left: 70px; */
+}
+
+.layOutParentInner {
+    display: flex;
+    flex-direction: column;
+}
+
+.seatBoxCustom {
+    /* padding-left: 100px; */
+    margin: 0px auto;
+}
+
+
+.steeringBoxLower {
+    position: relative;
+}
+
+.svgStreering {
+    position: absolute;
+    top: 12px;
+    left: 49px;
+    transform: rotate(-90deg);
+}
+
+
+.rott p {
+    transform: rotate(-90deg);
+    font-weight: 700;
+    position: absolute;
+}
+
+.seatNameBox {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    /* max-width: 160px; */
+}
+
+.seatNameBox p {
+    color: black;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.seatFareBox {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+.seatFareBox p,
+.seatFareBox h2 {
+    color: black;
+    font-weight: 600 !important;
+    font-size: 18px;
+    margin-bottom: 0 !important;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.buttonLayoutBox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    /* margin: 10px 0px; */
+}
+
+.buttonLayoutBox button {
+    padding: 8px 13px;
+    border-radius: 4px;
+    background: #d90429;
+    color: #fff;
+    font-family: "Montserrat";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    border: 2px solid #d90429;
+    transition: all 0.3s;
+}
+
+.originBoxSelect select {
+    max-width: 170px;
+}
+
+.outerseat,
+.outerlowerseat {
+    display: flex;
+    gap: 27px;
+    justify-content: flex-start;
+    align-items: center;
+    background: #f1f1f1;
+    border-radius: 10px;
+    padding: 13px;
+}
+
+.customBusBox {
+    width: 450px;
+    position: relative;
+}
+
+.steeringBox p,
+.outerlowerseat p {
+    transform: rotate(-90deg);
+    font-weight: 700;
+    position: absolute;
+}
+
+.steeringBox {
+    position: relative;
+}
+
+.steeringBox svg {
+    transform: rotate(-90deg);
+    top: -14px;
+    right: -18px;
+    position: absolute;
+}
+
+.seatOrgDes {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.seatPriceBox {
+    display: flex;
+    gap: 10px;
+}
+
+.loadBusGif {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainimgBusSearch {
+    background-image: url();
+    background-size: cover;
+    background-repeat: no-repeat !important;
+    height: 220px;
+    background-position: bottom center;
+}
+
+.upperBoxCustom {
+    height: 169px;
+}
+
+
+.seatTypeDetails {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center;
+    align-items: center !important;
+    gap: 15px !important;
+    /* padding-left: 100px; */
+}
+
+.seatTypeDetails>div {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.seatTypeDetails>div p {
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.seatTypeDetails span {
+    display: inline-block;
+    height: 16px;
+    width: 24px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}

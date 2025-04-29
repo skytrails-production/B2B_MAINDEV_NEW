@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: "Montserrat";
+}
+
+.error-message {
+  color: "red !important";
+  font-size: "12px";
+}
+
+.disableTrue {
+  overflow: hidden !important;
+}
+
+.disableFalse {
+  overflow: unset !important;
+}
+
+.mainimgHotelSearchResult {
+  height: 91px !important;
+  position: relative;
+  z-index: 3;
+  background-image: linear-gradient(
+    to right,
+    #84c2c8 0%,
+    #ade6e8 51%,
+    #84c2c8 100%
+  );
+
+}
+.mainimgFlightSearchResult {
+  height: 100%;
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  background-image: linear-gradient(
+    to right,
+    #4b556d 0%,
+    #636979 51%,
+    #4b556d 100%
+  );
+}
+
+@media (min-width: 995px) {
+  .mainimgFlightSearchResult {
+    width: 91px;
+    height: 100%;
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    background-image: linear-gradient(
+      to right,
+      #4b556d 0%,
+      #636979 51%,
+      #4b556d 100%
+    );
+  }
+}
+
+@media (min-width: 1200px) {
+  .container-xl,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container {
+    max-width: 1190px !important;
+  }
+}

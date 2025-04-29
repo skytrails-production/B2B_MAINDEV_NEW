@@ -1,0 +1,123 @@
+@import "../../../mixins.scss";
+
+.holidayFilterMainBox {
+  // background-color: white;
+  padding: 15px;
+  position: sticky;
+  border-radius: 10px;
+  top: 90px;
+  //   overflow: hidden;
+  // border: 1px solid lightgray;
+  overflow-y: scroll;
+  position: -webkit-sticky;
+  max-height: 100vh;
+
+  // p {
+  //   font-size: 13px;
+  //   font-weight: 600;
+  //   color: #071c2c;
+  // }
+
+  > div {
+    margin: 14px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 8px;
+
+    .bustravelNameBox {
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100%;
+      white-space: wrap;
+      gap: 10px;
+
+      > div {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        background-color: #f1f1f1;
+        padding: 10px;
+        gap: 8px;
+        height: 190px;
+        overflow: hidden;
+        overflow-y: scroll;
+        border-radius: 6px;
+      }
+    }
+  }
+
+  .holidayFilterSearch {
+    .ant-input-outlined:hover {
+      border-color: gray !important;
+    }
+    .ant-input-outlined:focus {
+      border-color: gray !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .holidayFilterSelectMulti {
+    .ant-select-multiple:hover .ant-select-selector {
+      border-color: gray !important;
+    }
+    .ant-select-focused .ant-select-selector {
+      border-color: gray !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
+.filterCitiesMobile {
+  cursor: pointer;
+
+  p {
+    font-size: 13px;
+    // line-height: 0 !important;
+    text-align: center;
+    padding: 7px 8px;
+    background-color: white;
+    border-radius: 30px;
+    white-space: nowrap;
+  }
+}
+
+.filterPackageMobileBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  position: sticky;
+  top: 0px;
+
+  .scrollable {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .selectFilterBoxMobile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    overflow-x: scroll;
+  }
+}
+
+.stickyForMobile {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  border-bottom: 1px solid lightgray;
+  border-top: 1px solid lightgray;
+  margin-bottom: 15px;
+}

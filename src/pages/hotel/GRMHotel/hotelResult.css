@@ -1,0 +1,325 @@
+.antImgGall .ant-image-img {
+  border-radius: 8px !important;
+  height: 330px !important;
+}
+
+.antImgGallSmall .ant-image-img {
+  border-radius: 8px !important;
+  height: 157px !important;
+}
+
+.bookRoomHotDetails {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.hotelBookDesignFirst {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.othInc {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.othIncInner {
+  padding: 4px 0px;
+}
+
+/* filter css starts here  */
+
+.hotelFilterNew {
+  background-color: #fff !important;
+  padding: 10px !important;
+}
+
+.hotelFilterNew input[type="checkbox"]:checked {
+  background-color: #e73c34;
+}
+
+.hotelFilterNew input[type="checkbox"] {
+  background-color: #e73c34;
+}
+
+.hotelFilterNew p {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px !important;
+}
+
+.hotelSearchFilter {
+  display: flex;
+  flex-direction: column;
+}
+
+.hotelSearchFilter input {
+  border: none;
+  padding: 9px 4px;
+  font-size: 13px;
+  border-radius: 5px;
+}
+
+.hotelSearchFilter input:focus {
+  border: none !important;
+  outline: none !important;
+}
+
+.hotelFilterOuter {
+  padding: 14px 8px;
+  background: #eee;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.hoterRatingFilter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hoterRatingFilter label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+}
+
+.hoterFacilityFilter {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.hoterFacilityFilter label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+}
+
+.noHotels {
+  margin-bottom: 200px;
+  margin-top: 30px;
+  text-align: center;
+}
+
+.noHotels h3 {
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.noHotels p {
+  font-size: 15px;
+  color: #e73c34;
+}
+
+.noHotels p svg {
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.hotelPriceSlider:where(.css-dev-only-do-not-override-j9bb5n).ant-slider {
+  box-sizing: border-box;
+  margin: 0px 0px !important;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+  line-height: 1.5714285714285714;
+  list-style: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  position: relative;
+  height: 10px;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.hotelPriceSlider:where(.css-j9bb5n).ant-slider {
+  box-sizing: border-box;
+  margin: 0px 0px !important;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+  line-height: 1.5714285714285714;
+  list-style: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  position: relative;
+  height: 10px;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.hotelPriceSlider:where(.css-j9bb5n).ant-slider {
+  box-sizing: border-box;
+  margin: 0px 0px !important;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+  line-height: 1.5714285714285714;
+  list-style: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  position: relative;
+  height: 10px;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.hotelPriceSlider:where(.css-dev-only-do-not-override-j9bb5n).ant-slider
+  .ant-slider-track {
+  background-color: #000 !important;
+  border-radius: 2px;
+}
+
+.hotelPriceSlider:where(.css-j9bb5n).ant-slider .ant-slider-track {
+  background-color: #000 !important;
+  border-radius: 2px;
+}
+
+:where(.css-j9bb5n).ant-slider .ant-slider-track {
+  background-color: #000 !important;
+  border-radius: 2px;
+}
+
+.ant-slider-track {
+  background-color: #000 !important;
+  border-radius: 2px;
+}
+
+:where(.css-dev-only-do-not-override-j9bb5n).ant-slider
+  .ant-slider-handle:hover::after,
+:where(.css-dev-only-do-not-override-j9bb5n).ant-slider
+  .ant-slider-handle:active::after,
+:where(.css-dev-only-do-not-override-j9bb5n).ant-slider
+  .ant-slider-handle:focus::after {
+  box-shadow: 0 0 0 4px #e73c34 !important;
+  width: 12px;
+  height: 12px;
+  inset-inline-start: -1px;
+  inset-block-start: -1px;
+}
+
+:where(.css-j9bb5n).ant-slider .ant-slider-handle:hover::after,
+:where(.css-j9bb5n).ant-slider .ant-slider-handle:active::after,
+:where(.css-j9bb5n).ant-slider .ant-slider-handle:focus::after {
+  box-shadow: 0 0 0 4px #e73c34 !important;
+  width: 12px;
+  height: 12px;
+  inset-inline-start: -1px;
+  inset-block-start: -1px;
+}
+
+.ant-slider-handle:hover::after,
+.ant-slider-handle:active::after,
+.ant-slider-handle:focus::after {
+  box-shadow: 0 0 0 4px #e73c34 !important;
+  width: 12px;
+  height: 12px;
+  inset-inline-start: -1px;
+  inset-block-start: -1px;
+}
+
+.ant-slider .ant-slider-handle::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  width: 10px;
+  height: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px #6366f1;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: inset-inline-start 0.2s, inset-block-start 0.2s, width 0.2s,
+    height 0.2s, box-shadow 0.2s;
+}
+
+/* filter css ends here  */
+
+.dangerousHTMLhotel {
+  font-size: 14px;
+}
+
+.dangerousHTMLhotel > p {
+  margin-bottom: 10px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.9 !important;
+}
+
+.dangerousHTMLhotel b {
+  display: block !important;
+  font-weight: 600 !important;
+}
+
+:where(.css-dev-only-do-not-override-j9bb5n).ant-tabs
+  .ant-tabs-tab.ant-tabs-tab-active
+  .ant-tabs-tab-btn {
+  color: #e73c34 !important;
+  text-shadow: 0 0 0.25px currentcolor;
+  font-weight: 600 !important;
+}
+
+:where(.css-j9bb5n).ant-tabs
+  .ant-tabs-tab.ant-tabs-tab-active
+  .ant-tabs-tab-btn {
+  color: #e73c34 !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 0.25px currentcolor;
+}
+
+:where(.css-dev-only-do-not-override-j9bb5n).ant-tabs
+  .ant-tabs-tab-btn:focus:not(:focus-visible),
+:where(.css-dev-only-do-not-override-j9bb5n).ant-tabs
+  .ant-tabs-tab-remove:focus:not(:focus-visible),
+:where(.css-dev-only-do-not-override-j9bb5n).ant-tabs .ant-tabs-tab-btn:active,
+:where(.css-dev-only-do-not-override-j9bb5n).ant-tabs
+  .ant-tabs-tab-remove:active {
+  color: #e73c34 !important;
+}
+
+:where(.css-j9bb5n).ant-tabs .ant-tabs-tab-btn:focus:not(:focus-visible),
+:where(.css-j9bb5n).ant-tabs .ant-tabs-tab-remove:focus:not(:focus-visible),
+:where(.css-j9bb5n).ant-tabs .ant-tabs-tab-btn:active,
+:where(.css-j9bb5n).ant-tabs .ant-tabs-tab-remove:active {
+  color: #e73c34 !important;
+}
+
+:where(.css-dev-only-do-not-override-j9bb5n).ant-tabs .ant-tabs-tab:hover {
+  color: #e73c34 !important;
+}
+
+:where(.css-j9bb5n).ant-tabs .ant-tabs-tab:hover {
+  color: #e73c34 !important;
+}
+
+:where(.css-j9bb5n).ant-tabs .ant-tabs-ink-bar {
+  position: absolute;
+  background: #e73c34 !important;
+  pointer-events: none;
+}
+
+:where(.css-j9bb5n).ant-tabs .ant-tabs-ink-bar {
+  position: absolute;
+  background: #e73c34 !important;
+  pointer-events: none;
+}
+
+:where(.css-dev-only-do-not-override-j9bb5n).ant-tabs .ant-tabs-ink-bar {
+  position: absolute;
+  background: #e73c34 !important;
+  pointer-events: none;
+}

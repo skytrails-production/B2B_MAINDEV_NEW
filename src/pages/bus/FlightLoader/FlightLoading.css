@@ -1,0 +1,73 @@
+/* .flightLoading {
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    background-color: white !important;
+    position: absolute;
+} */
+
+/* LoadingSpinner.css */
+.flightLoading {
+  position: fixed !important;
+  /* position: relative !important; */
+  overflow-y: hidden;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  /* background-color: #cceaf7; */
+  background-color: #fff;
+  /* background: transparent; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 999 !important;
+  /* opacity: 0.2; */
+  /* Ensure the spinner is above other content */
+}
+
+.flighloadingtext {
+  text-align: center;
+}
+
+.flightimgcontainer {
+  width: 270px;
+  height: 270px;
+  border-radius: 50%;
+}
+
+.flightimgcontainer > img:first-child {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.imageflightcontent {
+  margin-top: -100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 54px;
+}
+
+.funnyfact > div > p {
+  font: bold;
+  font-size: 12px;
+}
+
+.funnyfact h3,
+.funnyfact h5 {
+  font-size: 22px;
+  font-weight: 900 !important;
+  color: #21325d !important;
+  /* text-shadow: 1px 1px 2px black; */
+  font-family: "Montserrat";
+  text-align: center;
+}
+
+.funnyfact {
+  width: 50%;
+  text-align: center;
+}

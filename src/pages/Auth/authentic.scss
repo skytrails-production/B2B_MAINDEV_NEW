@@ -1,0 +1,182 @@
+@import "../../mixins.scss";
+
+.authenticMain {
+  .ant-modal-content {
+    padding: 0 0 !important;
+  }
+  .ant-modal {
+    width: 300px !important;
+  }
+}
+
+.authenticModal {
+  .ant-modal-content {
+    background: white !important;
+    padding: 45px 30px !important;
+    .ant-modal-close {
+      top: 0 !important;
+    }
+  }
+}
+
+.logoutBox {
+  padding: 15px 0 !important;
+  h3 {
+    font-size: calc(1rem + 0.6vw) !important;
+  }
+}
+.logoutButton.ant-btn-primary {
+  background-color: var(--primary) !important;
+  // width: 100% !important;
+  padding: 15px 30px !important;
+  // height: 35px !important;
+
+  &:hover {
+    background-color: var(--primaryHover) !important;
+  }
+}
+.logoutButton.ant-btn-default {
+  background-color: transparent !important;
+  // width: 100% !important;
+
+  padding: 15px 30px !important;
+  // height: 35px !important;
+
+  &:hover {
+    // background-color: var(--primaryHover) !important;
+    border: 1px solid var(--primary) !important;
+    color: var(--primary) !important;
+  }
+}
+
+.authenticModalContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+
+  .ant-picker {
+    padding: 6px 11px 5px;
+    &:hover {
+      border: 1px solid #ddd;
+    }
+  }
+
+  button {
+    background-color: var(--primary) !important;
+    width: 100% !important;
+    padding: 6px 12px !important;
+    font-size: 14px;
+    height: 45px !important;
+
+    @include md {
+      font-size: 16px;
+    }
+
+    &:hover {
+      background-color: var(--primaryHover) !important;
+    }
+  }
+
+  .ant-btn-primary:disabled,
+  .ant-btn-primary.ant-btn-disabled {
+    cursor: not-allowed;
+    border-color: #d9d9d9;
+    color: rgba(0, 0, 0, 0.75);
+    background-color: #d9d9d9 !important;
+    box-shadow: none;
+  }
+
+  .ant-otp .ant-otp-input {
+    border: 1px solid #ddd;
+  }
+
+  img {
+    width: 200px;
+  }
+
+  p {
+    font-weight: 500;
+    font-size: 20px;
+  }
+
+  .signInForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .form-control {
+      padding: 0.675rem 0.75rem !important;
+      &:focus {
+        border: 1px solid #ddd !important;
+      }
+    }
+  }
+
+  .socialLoginBox {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    p {
+      color: var(--black4) !important;
+      font-size: 13px !important;
+      text-align: center;
+      // display: inline-block;
+      position: relative;
+      &::before {
+        position: absolute;
+        content: "";
+        width: 30px;
+        height: 1px;
+        background-color: var(--black4);
+        top: 50%; /* Aligns the lines to the middle vertically */
+        transform: translateY(-50%);
+        left: -37px;
+      }
+      &::after {
+        position: absolute;
+        content: "";
+        width: 30px;
+        height: 1px;
+        background-color: var(--black4);
+        top: 50%; /* Aligns the lines to the middle vertically */
+        transform: translateY(-50%);
+        right: -37px;
+      }
+    }
+
+    > div {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      flex-grow: 1;
+
+      .googleLogin {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid lightgray;
+        border-radius: 20px;
+        padding: 10px 12px;
+        flex: 1;
+        transition: 0.2s all;
+        cursor: pointer;
+
+        &:hover {
+          border: 1px solid var(--black4);
+        }
+      }
+    }
+  }
+}

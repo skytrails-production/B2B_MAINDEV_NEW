@@ -1,0 +1,74 @@
+.flightLoadingreturn {
+  /* position: fixed !important;
+  overflow-y: hidden;
+  top: -300px;
+  left: -107px;
+  width: 100vw !important;
+  height: 200vh !important;
+  overflow: hidden !important;
+  overflow-y: hidden;
+  background-color: #fff;
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 99999999999999999999999 !important; */
+  position: fixed !important;
+  overflow-y: hidden;
+  top: -350px;
+  left: -107px;
+  width: 100vw !important;
+  height: 150vh !important;
+  background-color: rgba(255, 255, 255, 0.5); 
+  backdrop-filter: blur(5px); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 99999999999999999999999 !important;
+}
+
+.flighloadingtextreturn {
+  text-align: center;
+}
+
+.flightimgcontainerreturn {
+  width: 270px;
+  height: 270px;
+  border-radius: 50%;
+}
+
+.flightimgcontainerreturn > img:first-child {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.imageflightcontentreturn {
+  margin-top: -100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 54px;
+}
+
+.funnyfactreturn > div > p {
+  font: bold;
+  font-size: 12px;
+}
+
+.funnyfactreturn h3,
+.funnyfactreturn h5 {
+  font-size: 22px;
+  font-weight: 900 !important;
+  color: #21325d !important;
+  font-family: "Montserrat";
+  text-align: center;
+}
+
+.funnyfactreturn {
+  width: 50%;
+  text-align: center;
+}

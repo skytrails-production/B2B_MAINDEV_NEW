@@ -1,0 +1,24 @@
+@import "../../../mixins.scss";
+
+.marginLg {
+  margin-top: 0rem !important;
+
+  @include md {
+    margin-top: 1.5rem !important;
+  }
+}
+
+.visibleBig {
+  display: none;
+
+  @include md {
+    display: unset !important;
+  }
+}
+.visibleSmall {
+  display: unset !important;
+
+  @include md {
+    display: none !important;
+  }
+}

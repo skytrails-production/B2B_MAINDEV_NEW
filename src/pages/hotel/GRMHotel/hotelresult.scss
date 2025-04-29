@@ -1,0 +1,76 @@
+@import "../../mixins.scss";
+
+.marginLg {
+  margin-top: 0rem !important;
+
+  @include md {
+    margin-top: 1.5rem !important;
+  }
+}
+
+.visibleBig {
+  display: none;
+
+  @include md {
+    display: unset !important;
+  }
+}
+.visibleSmall {
+  display: unset !important;
+
+  @include md {
+    display: none !important;
+  }
+}
+
+.stickyHotelDetails {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.smallHotelEditBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0px;
+  // background-color: white;
+
+  .smallHotelEditDetails {
+    span {
+      font-weight: 500 !important;
+      font-size: 13px !important;
+    }
+  }
+  // border-top: 1px solid lightgray;
+
+  p {
+    font-weight: 600;
+    font-size: 15px;
+  }
+  span {
+    font-weight: 500;
+    font-size: 21px;
+  }
+}
+
+.stikcyHotelFilter {
+  position: sticky;
+  top: 61px;
+  z-index: 10;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  border-bottom: 1px solid lightgray;
+  border-top: 1px solid lightgray;
+  margin-bottom: 15px;
+}
+
+.visibleBigHotel {
+  display: none !important;
+
+  @include md {
+    display: flex !important;
+  }
+}

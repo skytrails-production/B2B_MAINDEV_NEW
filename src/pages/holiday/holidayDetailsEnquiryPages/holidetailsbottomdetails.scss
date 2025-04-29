@@ -1,0 +1,88 @@
+@import "../../../mixins.scss";
+
+.packageDayWiseOuterMain {
+  border: 1px solid lightgray;
+  margin: 10px 0px;
+  border-radius: 9px;
+
+  .packageNameHeading {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 0;
+    padding: 10px 0px 10px 16px;
+    border-radius: 10px 10px 0px 0px;
+    background-image: linear-gradient(to right, var(--lightPurple), white);
+
+    @include md {
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+
+  .dayWiseDetailsBox {
+    background-color: #fff;
+    padding: 15px 20px 20px 20px;
+
+    h3 {
+      font-size: 20px;
+      font-weight: 500;
+      @include md {
+        font-size: 23px;
+      }
+    }
+    .dangerDesignHoliday {
+      margin-top: 12px;
+      margin-bottom: 12px;
+
+      ul {
+        padding-left: 19px !important;
+
+        li {
+          font-size: 14px !important;
+          font-weight: 500 !important;
+          // margin-bottom: 12px !important;
+          text-align: justify !important;
+          font-family: "Montserrat" !important;
+          text-transform: lowercase !important;
+          color: black !important;
+        }
+      }
+
+      p {
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        // margin-bottom: 12px !important;
+        text-align: justify !important;
+        font-family: "Montserrat" !important;
+        text-transform: lowercase !important;
+        color: black !important;
+      }
+      font {
+        font-size: 14px !important;
+        font-family: "Montserrat" !important;
+        font-weight: 500 !important;
+        // margin-bottom: 12px !important;
+        text-align: justify !important;
+        text-transform: lowercase !important;
+        color: black !important;
+      }
+      div {
+        font-size: 14px !important;
+        font-family: "Montserrat" !important;
+        text-align: justify !important;
+        font-weight: 500 !important;
+        text-transform: lowercase !important;
+        color: black !important;
+      }
+      span {
+        font-size: 14px !important;
+        font-family: "Montserrat" !important;
+        text-align: justify !important;
+        font-weight: 500 !important;
+        text-transform: lowercase !important;
+        text-indent: -27.5pt !important;
+        color: black !important;
+      }
+    }
+  }
+}

@@ -1,0 +1,110 @@
+@import "../../../mixins.scss";
+
+.holidayEnqiryForm {
+  // position: sticky;
+  // top: 10px;
+  // overflow-y: scroll;
+  // max-height: 100vh;
+  // padding: 15px;
+  // border: 0.5px solid #e5e7eb;
+  // background-color: white;
+  // margin-top: 10px !important;
+  // border-radius: 8px;
+
+  .col-12 {
+    margin-top: 5px !important;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
+
+
+  .datePickEnquiry {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .ant-picker-outlined {
+      padding: 14px !important;
+    }
+    .ant-picker-outlined:focus-within {
+      //   padding: 9px !important;
+      border-color: #e5e7eb !important;
+    }
+
+    .ant-picker-outlined:hover {
+      border-color: #e5e7eb !important;
+    }
+  }
+
+  .humanCount {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 7px 0px;
+
+    label {
+      margin-bottom: 0 !important;
+      padding-bottom: 0 !important;
+    }
+
+    .counter {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+
+      button {
+        border-color: var(--primaryPurple) !important;
+        width: 30px !important;
+        height: 30px !important;
+        color: black;
+        font-size: 18px !important;
+        border-radius: 50% !important;
+        padding: 0 !important;
+      }
+      button:hover {
+        background-color: var(--primaryPurpleHover) !important;
+        color: white !important;
+        font-size: 16px !important;
+      }
+    }
+  }
+
+  .enquiryBotton {
+    width: 100% !important;
+
+    button {
+      width: 100%;
+      padding: 20px !important;
+      background-color: #4f46e5 !important;
+      color: white !important;
+      font-size: 16px !important;
+    }
+    button:hover {
+      // outline: none !important;
+      // border: none !important;
+      background-color: #3e37cc !important;
+      color: white !important;
+    }
+  }
+}
+
+.confirmModalEnquiry {
+  padding: 44px 6px;
+  text-align: center;
+
+  @include md {
+    padding: 44px 56px;
+  }
+
+  h1 {
+    font-weight: 600;
+    font-size: 32px;
+    font-family: "Montserrat";
+    color: #25bf79;
+  }
+  p {
+    font-weight: 500;
+    font-size: 16px;
+  }
+}

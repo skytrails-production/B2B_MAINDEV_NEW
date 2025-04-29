@@ -1,0 +1,4 @@
+export const FAQ_RATING = "FAQ_RATING";
+export const CLEAR_FAQ_RATING = "CLEAR_FAQ_RATING";
+export const FAQ_RATING_LIST_REQ = "FAQ_RATING_LIST_REQ";
+

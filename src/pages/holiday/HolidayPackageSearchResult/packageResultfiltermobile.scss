@@ -1,0 +1,36 @@
+@import "../../../mixins.scss";
+
+// .filterPackageMobileBox {
+.PackagetagFilters {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  .bustravelNameBox {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100%;
+    white-space: wrap;
+    gap: 10px;
+
+    > div {
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      background-color: #f1f1f1;
+      padding: 10px;
+      gap: 8px;
+      height: 190px;
+      overflow: hidden;
+      overflow-y: scroll;
+      border-radius: 6px;
+    }
+  }
+
+  p {
+    margin-bottom: 10px !important;
+  }
+}
+// }
