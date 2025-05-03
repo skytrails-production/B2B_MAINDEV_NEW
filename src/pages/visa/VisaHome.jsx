@@ -1,19 +1,19 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { apiURL } from "../../Constants/constant";
 
 const VisaHome = () => {
   const [token, setToken] = useState("");
+  const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
+
   const fetchToken = async () => {
     try {
       const response = await axios.post(
         `${apiURL.baseURL}/api/skyTrails/getToken`
       );
-      console.log(response);
-      // console.lo
       setToken(response.data.response.access_token);
     } catch (err) {
       console.log(err);
@@ -34,84 +34,177 @@ const VisaHome = () => {
   };
 
   return (
-    <div className="relative isolate px-6 pt-14 lg:px-8">
+    <div className="relative isolate px-6 pt-14 lg:px-8 min-h-screen overflow-hidden">
+      <div className="fixed inset-0 w-screen h-screen overflow-hidden bg-[url('https://ai.theskytrails.com/assets/background1-CtdDjmcE.png')] bg-[length:200%_200%] bg-[left_70%_top_50%] bg-no-repeat flex items-center justify-center isolate px-6 pt-14 lg:px-8"></div>
+      {/* Glowing orange orbs */}
+      {/* <motion.div
+        className="absolute -left-20 -top-20 w-96 h-96 rounded-full bg-orange-500/90 filter blur-3xl"
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.2, 0.4, 0.2],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+
       <motion.div
-        className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-        aria-hidden="true"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-      >
-        <div
-          className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
-          style={{
-            clipPath:
-              "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-          }}
-        ></div>
-      </motion.div>
-      <div className="mx-auto max-w-3xl h-screen py-28 sm:py-36 lg:py-24">
+        className="absolute -right-20 -bottom-20 w-96 h-96 rounded-full bg-amber-500/90 filter blur-3xl"
+        animate={{
+          scale: [1, 1.3, 1],
+          opacity: [0.2, 0.5, 0.2],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2,
+        }}
+      /> */}
+
+      <div className="mx-auto max-w-6xl h-screen py-28 sm:py-36 lg:py-24 relative z-10">
         <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
           className="hidden sm:mb-8 sm:flex sm:justify-center"
         >
-          <div className="relative rounded-full px-3 py-1 text-sm/6 text-indigo-600 ring-1 ring-indigo-900/10 hover:ring-gray-indigo/20">
-            Welcome to the Skytrails Intelligence Visa{" "}
-            <a href="#" className="font-semibold text-indigo-600">
-              {/* <span className="absolute inset-0" aria-hidden="true"></span>Read
-              more <span aria-hidden="true">&rarr;</span> */}
-            </a>
+          <div className="relative rounded-full px-4 py-2 text-sm leading-6 text-[#fd5b00] ring-1 ring-orange-200 bg-orange-50 hover:ring-orange-300">
+            <span className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full text-[#fd5b00] animate-pulse"></span>
+              Welcome to SkyTrails AI Visa Platform
+            </span>
           </div>
         </motion.div>
+
         <div className="text-center">
           <motion.h1
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, duration: 1 }}
-            className="text-balance text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-balance text-5xl font-bold tracking-tight text-gray-900 sm:text-7xl"
           >
-            Get your visa quicky powered by AI
+            <span className="inline-block">Next-Gen Visa Processing</span>
+            <br />
+            <span className="inline-block text-[#fd5b00]">Powered by AI</span>
           </motion.h1>
+
           <motion.p
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.4 }}
-            className="mt-8 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="mt-8 text-lg leading-8 text-gray-600 max-w-3xl mx-auto"
           >
-            SkyTrails simplifies the visa application process with cutting-edge
-            artificial intelligence, ensuring speed, accuracy, and hassle-free
-            approvals
+            SkyTrails revolutionizes visa applications with quantum AI
+            technology, delivering unprecedented speed, 99.8% accuracy, and
+            seamless integration for a borderless future.
           </motion.p>
+
           <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.6 }}
-            className="mt-10 flex items-center justify-center gap-x-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="mt-12 flex items-center justify-center gap-x-6"
           >
-            <button
+            <motion.button
               onClick={handleNavigate}
-              className="rounded-md bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className="relative overflow-hidden  px-8 py-3.5 text-sm font-semibold bg-[#fd5b00] text-white rounded-3xl"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onHoverStart={() => setIsHovered(true)}
+              onHoverEnd={() => setIsHovered(false)}
             >
-              Get started <i class="fa-solid fa-arrow-right-long"></i>
-            </button>
+              <span className="relative z-10 flex items-center gap-2">
+                Begin AI Processing
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M2 10a.75.75 0 01.75-.75h12.59l-2.1-1.95a.75.75 0 111.02-1.1l3.5 3.25a.75.75 0 010 1.1l-3.5 3.25a.75.75 0 11-1.02-1.1l2.1-1.95H2.75A.75.75 0 012 10z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </span>
+              {isHovered && (
+                <motion.span
+                  className="absolute inset-0 bg-white/20"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                />
+              )}
+            </motion.button>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+            className="mt-16 flex justify-center"
+          >
+            <div className="flex items-center gap-4 text-sm text-gray-500">
+              <div className="flex items-center gap-1.5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-4 h-4 text-orange-500"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span>AI-Powered Verification</span>
+              </div>
+              <div className="h-1 w-1 rounded-full bg-orange-200"></div>
+              <div className="flex items-center gap-1.5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-4 h-4 text-orange-500"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span>Blockchain Security</span>
+              </div>
+              <div className="h-1 w-1 rounded-full bg-orange-200"></div>
+              <div className="flex items-center gap-1.5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-4 h-4 text-orange-500"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span>98% Approval Rate</span>
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>
-      <div
-        className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
-        aria-hidden="true"
-      >
-        <div
-          className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
-          style={{
-            clipPath:
-              "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-          }}
-        ></div>
-      </div>
+
+      {/* Floating AI chip visualization */}
     </div>
   );
 };
 
 export default VisaHome;
-// console.log(ddfd)

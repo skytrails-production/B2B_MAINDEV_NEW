@@ -159,9 +159,9 @@ const PayButton = ({
 
   return (
     <>
-      <Button type="primary" className={`${className} `} onClick={handleClick}>
+      <button type="primary" className={`${className} `} onClick={handleClick}>
         {buttonText}
-      </Button>
+      </button>
       {loaderPayment1 && (
         <div className=" fixed top-0 bottom-0 left-0 right-0 z-30 w-full bg-transparent  h-[100%] flex justify-center items-center">
           <div>

@@ -67,7 +67,8 @@ const VisaDate = ({
             }`}
           >
             <Popover.Button
-              className={`relative  flex-1 flex text-left items-center ${fieldClassName} space-x-3 focus:outline-none`}
+              // className={`relative  flex-1 flex text-left items-center ${fieldClassName} space-x-3 focus:outline-none`}
+              className="relative flex-1 flex text-left items-center space-x-3 text-[16px] font-medium text-[rgba(20,24,31,0.7)] cursor-pointer h-[66px] w-full px-[28px] py-[20px] shadow-[inset_0px_3px_10px_rgba(255,255,255,0.16)] border-1 border-[rgba(255,255,255,1)] bg-[rgba(255,255,255,0.2)] backdrop-blur-[32px] rounded-[10px] outline-none placeholder:text-[rgba(20,24,31,0.5)]"
             >
               {renderInput()}
               {startDate && open && (

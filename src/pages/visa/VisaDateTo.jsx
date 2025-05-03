@@ -2,23 +2,21 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import DatePicker from "react-datepicker";
-import ClearDataButton from "../../../components/ClearDateButton";
-import DatePickerCustomHeaderTwoMonth from "../../../components/DatePickerCustomHeaderTwoMonth";
-import DatePickerCustomDay from "../../../components/DatePickerCustomDay";
+import ClearDataButton from "../../components/ClearDateButton";
+import DatePickerCustomHeaderTwoMonth from "../../components/DatePickerCustomHeaderTwoMonth";
+import DatePickerCustomDay from "../../components/DatePickerCustomDay";
 
-const StayEndDate = ({
+const VisaDateTo = ({
   className = "[ lg:nc-flex-2 ]",
   fieldClassName = "[ nc-hero-field-padding-return ]",
   onEndDateChange,
   minDateEnd,
 }) => {
-  console.log(minDateEnd, "minDateEnd");
-
+  console.log(new Date(minDateEnd), "minDateEnd");
   const today = new Date();
   const MinDate = new Date(minDateEnd);
   const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 2);
-
   const [startDate, setStartDate] = useState(MinDate);
 
   useEffect(() => {
@@ -69,7 +67,9 @@ const StayEndDate = ({
             }`}
           >
             <Popover.Button
-              className={`relative z-10 flex-1 flex text-left items-center ${fieldClassName} space-x-3 focus:outline-none`}
+              // className={`relative z-10 flex-1 flex text-left items-center ${fieldClassName} space-x-3 focus:outline-none`}
+
+              className="relative flex-1 flex text-left items-center space-x-3 text-[16px] font-medium text-[rgba(20,24,31,0.7)] cursor-pointer h-[66px] w-full px-[28px] py-[20px] shadow-[inset_0px_3px_10px_rgba(255,255,255,0.16)] border-1 border-[rgba(255,255,255,1)] bg-[rgba(255,255,255,0.2)] backdrop-blur-[32px] rounded-[10px] outline-none placeholder:text-[rgba(20,24,31,0.5)]"
             >
               {renderInput()}
               {startDate && open && (
@@ -113,4 +113,4 @@ const StayEndDate = ({
   );
 };
 
-export default StayEndDate;
+export default VisaDateTo;

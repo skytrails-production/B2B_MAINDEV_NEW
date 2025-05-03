@@ -7,10 +7,11 @@ import axios from "axios";
 import { load } from "@cashfreepayments/cashfree-js";
 import { swalModal } from "../../utility/swal";
 import SecureStorage from "react-secure-storage";
-import { Country } from "country-state-city";
-
+import { country } from "./CountryList";
 import PayButton from "../../utility/PayButton";
 import { useSelector } from "react-redux";
+import { motion } from "framer-motion";
+import VisaDateTo from "./VisaDateTo";
 
 const VisaForm = () => {
   let cashfree;
@@ -22,7 +23,7 @@ const VisaForm = () => {
   };
   initializeSDK();
 
-  const [apiCountries, setApiCountries] = useState([]); // For travelingTo dropdown
+  const [apiCountries, setApiCountries] = useState([]);
   const [departDate, setDepartDate] = useState(null);
   const [arrivalDate, setArrivalDate] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -30,6 +31,14 @@ const VisaForm = () => {
   const [loaderPayment, setLoaderPayment] = useState(false);
   const reducerState = useSelector((state) => state);
   const crmUserID = reducerState?.logIn?.loginData?.id;
+
+  const agentName =
+    reducerState?.logIn?.loginData?.first_name +
+    " " +
+    reducerState?.logIn?.loginData?.last_name;
+  const agentId = reducerState?.logIn?.loginData?.id;
+
+  console.log(departDate, "deparfejffksdafas ");
 
   const access_token = sessionStorage.getItem("visaToken");
   const bearer_token = sessionStorage.getItem("tokExchng");
@@ -43,28 +52,18 @@ const VisaForm = () => {
     visaCategory: "",
   });
 
-  // Get countries from country-state-city for passport and travelingFrom
-  const countryStateCityData = Country.getAllCountries().map((country) => ({
-    ...country,
-    // Add visaCategories and alpha3Code to match original API structure
-    visaCategories: ["Tourist", "Student"], // Default categories
-    alpha3Code: country.iso3Code, // Map iso3Code to alpha3Code
-  }));
-
-  // Options for passport and travelingFrom
-  const countryStateCityOptions = countryStateCityData.map((country) => ({
+  const countryOption = country.map((country) => ({
     value: country,
     label: country.name,
   }));
 
-  // Options for travelingTo (from API)
   const apiCountryOptions = apiCountries.map((country) => ({
+    visaCategories: country?.visaCategories,
     value: country,
     label: country.country,
   }));
 
   useEffect(() => {
-    // Fetch API countries only for travelingTo dropdown
     const fetchApiCountries = async () => {
       try {
         const response = await fetch(
@@ -87,8 +86,6 @@ const VisaForm = () => {
     setArrivalDate(dayjs(dates.startDate).format("DD-MM-YYYY"));
   };
 
-  // skytrails history
-
   const historyPayload = {
     firstName: storedData?.applicant?.firstName,
     lastName: storedData?.applicant?.lastName,
@@ -99,12 +96,19 @@ const VisaForm = () => {
       phone: storedData?.applicant?.phone,
     },
     address: storedData?.applicant?.address,
-    depCountyName: payload?.travelingFrom?.label,
+    depCountyName: payload?.travelingFrom?.value?.name,
     arrCountyName: payload?.travelingTo?.label,
     fromDate: departDate,
     toDate: arrivalDate,
     visaType: payload?.visaCategory,
-
+    applicantUid: applicantUId,
+    bearerToken: bearer_token,
+    visaCategory: payload?.visaCategory,
+    sourceCountry: payload?.travelingFrom?.value?.code,
+    destinationCountry: payload?.travelingTo?.value?.alpha3Code,
+    agentName: agentName,
+    agentId: agentId,
+    contactNumber: "",
     fee: {
       processingFee: 100,
       platformFee: 999,
@@ -115,11 +119,13 @@ const VisaForm = () => {
     const res = await axios.post(
       `${apiURL.baseURL}/skyTrails/api/visa/applyForAiVisa`,
       historyPayload,
-      { headers: { "Content-Type": "application/json" } }
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
-    console.log(res, "response of history");
   };
-  // skytrails history
 
   const handlePayNow = async () => {
     setIsProcessing(true);
@@ -143,16 +149,22 @@ const VisaForm = () => {
         accessToken: access_token,
         visaType: payload.visaCategory,
         visaDuration: 30,
-        fromDate: departDate,
-        toDate: arrivalDate,
-        sourceCountry: payload.travelingFrom.value.alpha3Code, // From country-state-city data
-        destinationCountry: payload.travelingTo.value.alpha3Code, // From API data
+        fromDate: dayjs(departDate, "DD-MM-YYYY").format("YYYY-MM-DD"),
+        toDate: dayjs(arrivalDate, "DD-MM-YYYY").format("YYYY-MM-DD"),
+        sourceCountry: payload.travelingFrom.value.code,
+        destinationCountry: payload.travelingTo.value.alpha3Code,
         bearerToken: bearer_token,
       };
 
       const response = await axios.get(
         `${apiURL.baseURL}/api/skyTrails/createRedirectURL`,
-        { params }
+        { params },
+        {
+          headers: {
+            "X-Access-Key": "theskytrails2025",
+            "Content-Type": "application/json",
+          },
+        }
       );
 
       if (response.data.statusCode === 200) {
@@ -171,7 +183,6 @@ const VisaForm = () => {
     }
   };
 
-  // Rest of your payment functions remain unchanged
   let orderId1 = "";
 
   const handlePayment = async () => {
@@ -225,171 +236,260 @@ const VisaForm = () => {
       }
     });
   };
+
   useEffect(() => {
     if (loaderPayment == true) {
       handlePayNow();
-
       console.log("payment sucessfully completed");
     }
   }, [loaderPayment]);
 
   return (
-    <div className="relative isolate px-6 pt-14 lg:px-8">
-      <div
-        className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-        aria-hidden="true"
-      >
-        <div
-          className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
-          style={{
-            clipPath:
-              "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-          }}
-        ></div>
-      </div>
-      <div className="bg-white rounded-lg shadow-xl max-w-5xl mx-auto px-4 p-8">
-        {/* Passport Country */}
-        <h2 className="text-2xl font-bold text-gray-900 mb-8">
-          Visa Application Form
-        </h2>
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            What country is your passport from?
-          </label>
-          <Select
-            options={countryStateCityOptions}
-            value={payload.passportCountry}
-            onChange={(selected) =>
-              setPayload({ ...payload, passportCountry: selected })
-            }
-            isSearchable
-            className="react-select-container"
-            classNamePrefix="react-select"
-          />
-        </div>
+    <div className="relative isolate px-6 py-14 lg:px-8 min-h-screen bg-white overflow-hidden">
+      <div className="fixed inset-0 w-screen h-screen overflow-hidden bg-[url('https://ai.theskytrails.com/assets/background1-CtdDjmcE.png')] bg-[length:200%_200%] bg-[left_70%_top_50%] bg-no-repeat flex items-center justify-center isolate px-6 pt-14 lg:px-8"></div>
 
-        {/* Traveling From/To */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Traveling From
-            </label>
-            <Select
-              options={countryStateCityOptions}
-              value={payload.travelingFrom}
-              onChange={(selected) =>
-                setPayload({ ...payload, travelingFrom: selected })
-              }
-              isSearchable
-              className="react-select-container"
-              classNamePrefix="react-select"
-            />
+      <div className="mx-auto max-w-6xl  relative z-10">
+        <motion.div
+          className="w-full h-full px-[96px] py-[70px] bg-[rgba(213,213,213,0.1)] backdrop-blur-[42px] border border-white rounded-[16px]"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="mb-8 text-center">
+            <h2 className="text-3xl font-bold text-gray-900">
+              Visa Application Form
+            </h2>
+            <p className="mt-2 text-orange-600">
+              Complete your visa application details
+            </p>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Traveling To
-            </label>
-            <Select
-              options={apiCountryOptions}
-              value={payload.travelingTo}
-              onChange={(selected) =>
-                setPayload({ ...payload, travelingTo: selected })
-              }
-              isSearchable
-              className="react-select-container"
-              classNamePrefix="react-select"
-            />
-          </div>
-        </div>
 
-        {/* Visa Categories */}
-        {payload.passportCountry?.value.visaCategories && (
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Select Visa Category
-            </label>
-            <div className="flex gap-4">
-              {payload.passportCountry.value.visaCategories.map((category) => (
-                <button
-                  key={category}
-                  type="button"
-                  onClick={() =>
-                    setPayload({ ...payload, visaCategory: category })
+          {error && (
+            <motion.div
+              className="mb-6 p-4 bg-red-50 text-red-600 rounded-lg border border-red-100"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              {error}
+            </motion.div>
+          )}
+
+          <div className="space-y-6">
+            {/* Passport Country */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                What country is your passport from?
+              </label>
+              <Select
+                options={countryOption}
+                value={payload.passportCountry}
+                onChange={(selected) =>
+                  setPayload({ ...payload, passportCountry: selected })
+                }
+                isSearchable
+                className="react-select-container"
+                classNamePrefix="react-select"
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    minHeight: "52px",
+                    borderColor: "#d1d5db",
+                    fontSize: "16px",
+                    fontWeight: "500",
+                    color: "rgba(20, 24, 31, 0.7)",
+                    cursor: "pointer",
+                    height: "66px",
+                    width: "100%",
+                    padding: "20px 28px",
+                    boxShadow:
+                      "rgba(255, 255, 255, 0.16) 0px 3px 10px 0px inset",
+                    border: "1px solid rgba(255, 255, 255, 0.56)",
+                    backgroundColor: "rgba(255, 255, 255, 0.2)",
+                    backdropFilter: "blur(32px)",
+                    borderRadius: " 10px",
+                    "&:hover": {
+                      borderColor: "#f97316",
+                    },
+                  }),
+                }}
+              />
+            </div>
+
+            {/* Traveling From/To */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Traveling From
+                </label>
+                <Select
+                  options={countryOption}
+                  value={payload.travelingFrom}
+                  onChange={(selected) => {
+                    setPayload({ ...payload, travelingFrom: selected });
+                  }}
+                  isSearchable
+                  className="react-select-container"
+                  classNamePrefix="react-select"
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      minHeight: "52px",
+                      borderColor: "#d1d5db",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      color: "rgba(20, 24, 31, 0.7)",
+                      cursor: "pointer",
+                      height: "66px",
+                      width: "100%",
+                      padding: "20px 28px",
+                      boxShadow:
+                        "rgba(255, 255, 255, 0.16) 0px 3px 10px 0px inset",
+                      border: "1px solid rgba(255, 255, 255, 0.56)",
+                      backgroundColor: "rgba(255, 255, 255, 0.2)",
+                      backdropFilter: "blur(32px)",
+                      borderRadius: " 10px",
+                      "&:hover": {
+                        borderColor: "#f97316",
+                      },
+                    }),
+                  }}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Traveling To
+                </label>
+                <Select
+                  options={apiCountryOptions}
+                  value={payload.travelingTo}
+                  onChange={(selected) =>
+                    setPayload({ ...payload, travelingTo: selected })
                   }
-                  className={`flex-1 py-3 px-4 rounded-md border ${
-                    payload.visaCategory === category
-                      ? "border-indigo-500 bg-indigo-50"
-                      : "border-gray-300 hover:border-indigo-300"
-                  } transition-colors`}
-                >
-                  {category}
-                </button>
-              ))}
+                  isSearchable
+                  className="react-select-container"
+                  classNamePrefix="react-select"
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      minHeight: "52px",
+                      borderColor: "#d1d5db",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      color: "rgba(20, 24, 31, 0.7)",
+                      cursor: "pointer",
+                      height: "66px",
+                      width: "100%",
+                      padding: "20px 28px",
+                      boxShadow:
+                        "rgba(255, 255, 255, 0.16) 0px 3px 10px 0px inset",
+                      border: "1px solid rgba(255, 255, 255, 0.56)",
+                      backgroundColor: "rgba(255, 255, 255, 0.2)",
+                      backdropFilter: "blur(32px)",
+                      borderRadius: " 10px",
+                      "&:hover": {
+                        borderColor: "#f97316",
+                      },
+                    }),
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Visa Categories */}
+            {payload.travelingTo?.value?.visaCategories && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Select Visa Category
+                </label>
+                <div className="grid grid-cols-2 gap-4">
+                  {payload.travelingTo.value.visaCategories.map((category) => (
+                    <motion.button
+                      key={category}
+                      type="button"
+                      onClick={() =>
+                        setPayload({ ...payload, visaCategory: category })
+                      }
+                      className={`py-3 px-4 rounded-lg border ${
+                        payload.visaCategory === category
+                          ? "border-orange-500 bg-orange-200 text-orange-600"
+                          : " border-1 border-[rgba(255,255,255,1)] bg-[rgba(255,255,255,0.4)] backdrop-blur-[32px] rounded-[10px]"
+                      } transition-colors`}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      {category}
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Dates */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Departure Date
+                </label>
+                <VisaDate className="flex-1" onDateChange={handleDateChange} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Arrival Date
+                </label>
+                <VisaDate className="flex-1" onDateChange={handleDateChange2} />
+              </div>
+            </div>
+
+            {/* Payment Button */}
+            <div className="pt-4" onClick={() => savetodb()}>
+              {/* <PayButton
+                className={`w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 px-6 rounded-lg shadow-md hover:from-orange-400 hover:to-amber-400 transition-all font-medium ${
+                  isProcessing ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                phone={storedData?.applicant?.phone}
+                ticketPrice={1}
+                email={storedData?.applicant?.email}
+                productinfo="ticket"
+                bookingType="VISA"
+                buttonText={isProcessing ? "Processing..." : "Pay Now"}
+                setPaymentLoading={(state) => {}}
+                setLoaderPayment1={(state) => {}}
+                setLoaderPayment={(state) => {
+                  setLoaderPayment(state);
+                }}
+                setLoadingButton={(state) => {}}
+              /> */}
+
+              <PayButton
+                className={`w-full bg-orange-500 text-white py-3 px-4 rounded-md transition-colors font-medium ${
+                  isProcessing
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-orange-600"
+                }`}
+                phone={storedData?.applicant?.phone}
+                ticketPrice={1}
+                email={storedData?.applicant?.email}
+                productinfo="ticket"
+                bookingType="VISA"
+                buttonText={isProcessing ? "Processing..." : "Pay Now"}
+                setPaymentLoading={(state) => {
+                  // savetodb();
+                  // setPaymentLoading(state);
+                }}
+                setLoaderPayment1={(state) => {
+                  // setLoaderPayment1(state);
+                }}
+                setLoaderPayment={(state) => {
+                  setLoaderPayment(state);
+                }}
+                setLoadingButton={(state) => {
+                  // setLoadingButton(state);
+                  // savetodb();
+                }}
+              />
             </div>
           </div>
-        )}
-
-        {/* Dates and payment button remain unchanged */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Departure Date
-            </label>
-            <VisaDate className="flex-1" onDateChange={handleDateChange} />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Arrival Date
-            </label>
-            <VisaDate className="flex-1" onDateChange={handleDateChange2} />
-          </div>
-        </div>
-
-        {/* <button
-          // onClick={handlePayNow}
-          onClick={handlePayment}
-          disabled={isProcessing}
-          className={`w-full bg-indigo-600 text-white py-3 px-4 rounded-md transition-colors font-medium ${
-            isProcessing
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:bg-indigo-700"
-          }`}
-        >
-          {isProcessing ? "Processing..." : "Pay Now"}
-        </button> */}
-        <div onClick={() => savetodb()}>
-          <PayButton
-            className={`w-full bg-indigo-600 text-white py-3 px-4 rounded-md transition-colors font-medium ${
-              isProcessing
-                ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-indigo-700"
-            }`}
-            phone={storedData?.applicant?.phone}
-            ticketPrice={1}
-            email={storedData?.applicant?.email}
-            productinfo="ticket"
-            bookingType="VISA"
-            buttonText={isProcessing ? "Processing..." : "Pay Now"}
-            setPaymentLoading={(state) => {
-              // savetodb();
-              // setPaymentLoading(state);
-            }}
-            setLoaderPayment1={(state) => {
-              // setLoaderPayment1(state);
-            }}
-            setLoaderPayment={(state) => {
-              setLoaderPayment(state);
-            }}
-            setLoadingButton={(state) => {
-              // setLoadingButton(state);
-              // savetodb();
-            }}
-          />
-        </div>
-
-        {error && (
-          <div className="mt-4 text-red-600 text-sm text-center">{error}</div>
-        )}
+        </motion.div>
       </div>
     </div>
   );
