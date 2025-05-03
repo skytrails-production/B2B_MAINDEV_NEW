@@ -44,6 +44,7 @@ import VisaForm from "./pages/visa/VisaForm2";
 import VisaForm1 from "./pages/visa/VisaForm1";
 import VisaHome from "./pages/visa/VisaHome";
 import FlightHistoryViewDetails from "./components/bookingHistory/FlightHistoryViewDetails";
+import HotelHoldHome from "./pages/HotelHoldHome";
 
 function App() {
   const reducerState = useSelector((state) => state);
@@ -168,6 +169,10 @@ function App() {
               path="/visa/userdetails/visadetails"
               element={<VisaForm />}
             ></Route>
+
+            {/* hold hotel grn  */}
+            {/* <Route path="/hotelhold" element={<HotelHoldHome />} /> */}
+            {/* hold hotel grn  */}
           </Route>
         </Route>
       </Routes>

@@ -9,9 +9,10 @@ import { swalModal } from "../../utility/swal";
 import SecureStorage from "react-secure-storage";
 import { country } from "./CountryList";
 import PayButton from "../../utility/PayButton";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import VisaDateTo from "./VisaDateTo";
+import { subtractWalletRequest } from "../../Redux/Auth/logIn/actionLogin";
 
 const VisaForm = () => {
   let cashfree;
@@ -30,14 +31,15 @@ const VisaForm = () => {
   const [error, setError] = useState(null);
   const [loaderPayment, setLoaderPayment] = useState(false);
   const reducerState = useSelector((state) => state);
+  const dispatch = useDispatch();
   const crmUserID = reducerState?.logIn?.loginData?.id;
-
+  sessionStorage.setItem("SessionExpireTime", new Date());
   const agentName =
     reducerState?.logIn?.loginData?.first_name +
     " " +
     reducerState?.logIn?.loginData?.last_name;
   const agentId = reducerState?.logIn?.loginData?.id;
-
+  const finalAmount = 199;
   console.log(departDate, "deparfejffksdafas ");
 
   const access_token = sessionStorage.getItem("visaToken");
@@ -168,6 +170,14 @@ const VisaForm = () => {
       );
 
       if (response.data.statusCode === 200) {
+        dispatch(
+          subtractWalletRequest({
+            balance: finalAmount,
+            type: "visa",
+            booking_id: `visa + ${new Date()}`,
+          })
+        );
+
         window.location.href = response.data.response;
       } else {
         setError(response.data.responseMessage || "Payment processing failed");
@@ -239,6 +249,7 @@ const VisaForm = () => {
 
   useEffect(() => {
     if (loaderPayment == true) {
+      sessionStorage.setItem("SessionExpireTime", new Date());
       handlePayNow();
       console.log("payment sucessfully completed");
     }
@@ -467,7 +478,7 @@ const VisaForm = () => {
                     : "hover:bg-orange-600"
                 }`}
                 phone={storedData?.applicant?.phone}
-                ticketPrice={1}
+                ticketPrice={finalAmount}
                 email={storedData?.applicant?.email}
                 productinfo="ticket"
                 bookingType="VISA"

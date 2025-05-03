@@ -30,12 +30,12 @@ const PayButton = ({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let walletAmount = useSelector((state) => state?.logIn?.wallet?.balance || 0);
-  console.log("walletAmount", walletAmount);
+  // console.log("walletAmount", walletAmount);
 
   useEffect(() => {
     const initializeSDK = async () => {
-      //   const cf = await load({ mode: "production" });
-      const cf = await load({ mode: "sandbox" });
+      const cf = await load({ mode: "production" });
+      // const cf = await load({ mode: "sandbox" });
 
       setCashfree(cf);
     };
@@ -43,8 +43,8 @@ const PayButton = ({
   }, []);
 
   const doPayment = async (sessionID, order_id) => {
-    sessionID =
-      "session_FnxN1q49Dptg8rF_QJMaDi3qTSakEQV76V4G_pHnDVOjYKYRDaOLJe-OVu4SUxcsY91LUqQUsJH1QRt-dyqsUWIGXRJyZA_Fx4okYiCacZK71Q340CLr63V1MHBX4wpaymentpayment";
+    // sessionID =
+    //   "session_FnxN1q49Dptg8rF_QJMaDi3qTSakEQV76V4G_pHnDVOjYKYRDaOLJe-OVu4SUxcsY91LUqQUsJH1QRt-dyqsUWIGXRJyZA_Fx4okYiCacZK71Q340CLr63V1MHBX4wpaymentpayment";
 
     const checkoutOptions = {
       paymentSessionId: sessionID,
@@ -138,7 +138,7 @@ const PayButton = ({
   };
 
   const handleClick = () => {
-    walletAmount = ticketPrice + 10;
+    // walletAmount = ticketPrice + 10;
     if (ticketPrice <= walletAmount) {
       console.log(`Proceed to book ${bookingType} with wallet balance`);
       setLoaderPayment(true);

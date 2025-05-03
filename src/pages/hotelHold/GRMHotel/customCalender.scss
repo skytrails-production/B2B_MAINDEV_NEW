@@ -1,0 +1,182 @@
+@import "../../mixins.scss";
+
+.customCalenderModal {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  //   margin: 0 !important;
+  //   top: unset !important;
+  bottom: 0 !important;
+  margin: 0px auto !important;
+  //   display: flex !important;
+  //   flex-direction: column !important;
+  //   justify-content: flex-end !important;
+  padding-bottom: 0 !important;
+  position: relative;
+
+  top: 0 !important;
+
+  > div {
+    position: fixed !important;
+    bottom: 0px !important;
+  }
+
+  .ant-modal-content {
+    // height: 100%;
+    border-radius: 18px 18px 0 0;
+  }
+}
+
+.modalContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modalContent {
+  width: 90%;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-height: 80%;
+}
+
+.weekdaysContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.weekday {
+  width: 14%;
+  text-align: center;
+  font-weight: bold;
+  color: #555;
+}
+
+.monthContainer {
+  margin-bottom: 20px;
+}
+
+.monthLabel {
+  font-size: 18px;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.daysContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+}
+
+.day {
+  width: 13%;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0.5px solid #f1f1f1;
+  border-radius: 3px;
+  margin-bottom: 5px;
+  margin-right: 3px;
+}
+
+.dayText {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.selectedDay {
+  background-color: #ff9ca7;
+}
+
+.inRangeDay {
+  background-color: #ff9ca7;
+}
+
+.selectedDayText {
+  color: #fff;
+  font-weight: bold;
+}
+
+.disabledDay {
+  background-color: #e0e0e0;
+}
+
+.disabledDayText {
+  color: #aaa;
+}
+
+.scrollableContainer {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.selectedDates {
+  margin-top: 0px;
+  font-size: 16px;
+}
+
+.smallCustomCalender {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 80px !important;
+}
+
+.calenderButton {
+  display: flex;
+  width: 100%;
+  padding-top: 14px;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.calenderButton .dateDisplay {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.calenderButton .dateDisplay span {
+  width: 100%;
+  border: 1px solid #f1f1f1;
+  background: #f1f1f1;
+  border-radius: 4px;
+  padding: 7px 15px;
+  text-align: center;
+  font-weight: 600;
+  min-height: 38px;
+}
+
+.ant-modal-close {
+  right: 0 !important;
+}
+
+.calenderButton button {
+  width: 100%;
+  background-color: #ea384d;
+  color: white !important;
+  border: none !important;
+
+  &:not(:disabled):hover {
+    background-color: var(--primaryHover) !important;
+    border: none !important;
+    color: white !important;
+  }
+}
+
+// .calenderButton button:hover {
+// }
+
+.calenderButton button:disabled {
+  background: #888 !important;
+  color: white !important;
+}
+
+.customCalenderModalBOx .ant-modal {
+  height: 100vh !important;
+}
