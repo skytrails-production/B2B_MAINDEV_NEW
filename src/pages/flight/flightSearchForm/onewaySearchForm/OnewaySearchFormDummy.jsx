@@ -25,7 +25,7 @@ import {
 import { resetAllFareData } from "../../../../Redux/FlightFareQuoteRule/actionFlightQuote";
 import { returnActionClear } from "../../../../Redux/FlightSearch/Return/return";
 
-const OnewaySearchForm = ({ adult, child, infant, flightClass }) => {
+const OnewaySearchFormDummy = ({ adult, child, infant, flightClass }) => {
   const [fromCity, setFromCity] = useState(null);
   const [toCity, setToCity] = useState(null);
   const [departDate, setDepartDate] = useState(null);
@@ -127,14 +127,12 @@ const OnewaySearchForm = ({ adult, child, infant, flightClass }) => {
       localStorage.setItem("homeRecentSearch", JSON.stringify(storedSearches));
     }
     const queryString = new URLSearchParams(params).toString();
-    if (isDummy) {
-      navigate(
-        `/flight-details-dummy/one-way/:city/:passengers/?${queryString}`
-      );
-    } else {
-      navigate(`/flight-details/one-way/:city/:passengers/?${queryString}`);
-      // navigate(`/flight-details/one-way/:city/:passengers/?${queryString}`);
-    }
+    // if (isDummy) {/
+    navigate(`/flight-details-dummy/one-way/:city/:passengers/?${queryString}`);
+    // } else {
+    //   navigate(`/flight-details/one-way/:city/:passengers/?${queryString}`);
+    // navigate(`/flight-details/one-way/:city/:passengers/?${queryString}`);
+    // }
 
     // dispatch(returnAction(payload));
   };
@@ -189,4 +187,4 @@ const OnewaySearchForm = ({ adult, child, infant, flightClass }) => {
   return renderForm();
 };
 
-export default OnewaySearchForm;
+export default OnewaySearchFormDummy;

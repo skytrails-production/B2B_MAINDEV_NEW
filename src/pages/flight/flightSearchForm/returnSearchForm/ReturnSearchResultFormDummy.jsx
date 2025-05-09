@@ -3,67 +3,46 @@ import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
+import ReturnResultDateBox from "../onewaySearchForm/ReturnResultDateBox";
 import {
   amadeusSearchRequest,
   tbo_kafila_SearchRequest,
-} from "../../Redux/FlightSearch/Return/return";
-import { searchFlight } from "../../Redux/SearchFlight/actionSearchFlight";
-// import ReturnResultDateBox from "./ReturnResultDateBox";
-
-// import ReturnResultLocationTo from "../../../../components/TailwindSearchComp/heroSection/flightSearchForm/returnSearchForm/ReturnResultLocationTo";
-// import RetrunGuestsInput from "../../../../components/TailwindSearchComp/heroSection/flightSearchForm/returnSearchForm/RetrunGuestsInput";
-// import OnewayResultDateBox from "./OnewayResultDateBox";
-import ReturnResultLocationFrom from "./flightSearchForm/onewaySearchForm/ReturnResultLocationFrom";
-import ReturnResultLocationTo from "./flightSearchForm/onewaySearchForm/ReturnResultLocationTo";
-import RetrunGuestsInput from "./flightSearchForm/onewaySearchForm/RetrunGuestsInput";
-import OnewayResultDateBox from "./flightSearchForm/onewaySearchForm/OnewayResultDateBox";
+} from "../../../../Redux/FlightSearch/Return/return";
+import { searchFlight } from "../../../../Redux/SearchFlight/actionSearchFlight";
+import RetrunGuestsInput from "../onewaySearchForm/RetrunGuestsInput";
+import ReturnResultLocationFrom from "../onewaySearchForm/ReturnResultLocationFrom";
+import ReturnResultLocationTo from "../onewaySearchForm/ReturnResultLocationTo";
 const flightClass = [
   { id: 2, value: "Y", label: "Economy" },
   { id: 3, value: "W", label: "Premium Economy" },
   { id: 4, value: "C", label: "Business" },
   { id: 6, value: "F", label: "First" },
 ];
-const OnewaySearchResultform = () => {
-  const [searchParams] = useSearchParams();
-
+const ReturnSearchResultFormDummy = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const from = queryParams.get("from");
   const to = queryParams.get("to");
-  const tareekh = queryParams.get("date");
-  const [dDate, setdDate] = useState(tareekh);
-  const [fromOrigin, setFromOrigin] = useState(from);
-  const [toDestination, setToDestination] = useState(to);
-
-  // const rDate = queryParams.get("retrunDate");
+  const dDate = queryParams.get("date");
+  const rDate = queryParams.get("retrunDate");
+  const [depDate, setDepDate] = useState(dDate);
+  const [retDate, setRetDate] = useState(dDate);
   const Adult = queryParams.get("Adult");
   const Child = queryParams.get("Child");
   const Infant = queryParams.get("Infant");
   const Class = queryParams.get("FlightCabinClass");
   const Class1 = JSON.parse(queryParams.get("class")) || flightClassState?.[0];
 
-  useEffect(() => {
-    setdDate(queryParams.get("date"));
-    // console.log("dfklefkldfklsdfdklsafhdlsahfdshfds");
-  }, [queryParams]);
-
-  // console.log(dDate, "d date");
-  // console.log(queryParams, from, Class, Class1, "queryParams");
-
   const [fromCity, setFromCity] = useState(from);
   const [toCity, setToCity] = useState(to);
   const [departDate, setDepartDate] = useState(dDate);
-  // const [returnDate, setReturnDate] = useState(rDate);
+  const [returnDate, setReturnDate] = useState(rDate);
   const dispatch = useDispatch();
   const reducerState = useSelector((state) => state);
   const [adult, setAdult] = useState(Adult);
   const [child, setChild] = useState(Child);
   const [infant, setInfant] = useState(Infant);
   const [flightClassState, setFlightClassState] = useState(Class1);
-
-  // console.log(flightClassState, "flight class state");
-
-  // const [newDepartDateCld, setNewDepartDateCld] = useState("");
   const [loader, setLoader] = useState(false);
 
   const navigate = useNavigate();
@@ -74,10 +53,19 @@ const OnewaySearchResultform = () => {
     setToCity(location);
   };
 
+  useEffect(() => {
+    setDepDate(queryParams.get("date"));
+    setRetDate(queryParams.get("retrunDate"));
+  }, [queryParams]);
+
+  // console.log(departDate, "depart date");
+  // console.log(returnDate, "return date");
+
   const handleDateChange = (dates) => {
     setDepartDate(dayjs(dates.startDate).format("DD MMM, YY"));
-    // setReturnDate(dayjs(dates.endDate).format("DD MMM, YY"));
+    setReturnDate(dayjs(dates.endDate).format("DD MMM, YY"));
   };
+
   const handleTravellerClassChange = (travellers, travelClass) => {
     // console.log(travellers, travelClass);
     setAdult(travellers?.adult);
@@ -85,22 +73,22 @@ const OnewaySearchResultform = () => {
     setInfant(travellers?.infant);
     setFlightClassState(travelClass);
   };
-  const amadeusSearch = async (onwardPayloadParam) => {
+  const amadeusSearch = async (onwardPayloadParam, returnPayloadParam) => {
     try {
-      dispatch(amadeusSearchRequest(onwardPayloadParam));
+      dispatch(amadeusSearchRequest(onwardPayloadParam, returnPayloadParam));
     } catch (error) {
       console.error("Unexpected error:", error);
       throw error;
     }
   };
-  const flightReturnTboAndKafila = async (onWardsPayload) => {
-    // const result = {
-    //   onWardsFlight: [],
-    //   returnFlights: [],
-    // };
+  const flightReturnTboAndKafila = async (onWardsPayload, returnPaylods) => {
+    const result = {
+      onWardsFlight: [],
+      returnFlights: [],
+    };
 
     try {
-      // dispatch(tbo_kafila_SearchRequest(onWardsPayload));
+      dispatch(tbo_kafila_SearchRequest(onWardsPayload, returnPaylods));
     } catch (error) {
       console.error("Unexpected error:", error);
       throw error;
@@ -110,10 +98,10 @@ const OnewaySearchResultform = () => {
     sessionStorage.setItem("SessionExpireTime", new Date());
 
     const params = {
-      from: fromCity.AirportCode || to,
-      to: toCity.AirportCode || from,
+      from: fromCity.AirportCode || from,
+      to: toCity.AirportCode || to,
       date: departDate,
-      // retrunDate: returnDate,
+      retrunDate: returnDate,
       Adult: adult,
       Child: child,
       Infant: infant,
@@ -123,18 +111,14 @@ const OnewaySearchResultform = () => {
     const queryString = new URLSearchParams(params).toString();
 
     navigate(
-      `/flight-details/one-way/${fromCity}-${toCity}/adt${Adult}-chd${Child}-inf${infant}?${queryString}`
+      `/flight-details-dummy/round-trip/${fromCity.AirportCode}-${toCity.AirportCode}/adt${adult}chd${child}inf${infant}?${queryString}`
     );
-    // navigate("/ReturnResult");
   };
   const handleSubmitt = async () => {
-    // console.log(dDate, rDate, "ddateesdfdf");
+    if (to === from) {
+      return;
+    }
     sessionStorage.setItem("SessionExpireTime", new Date());
-    // console.log(flightClassState, "flightstateclass");
-    setFromOrigin(from);
-    setToDestination(to);
-    setdDate(tareekh);
-
     const payload = {
       EndUserIp: reducerState?.ip?.ipData,
       TokenId: reducerState?.ip?.tokenData,
@@ -161,19 +145,45 @@ const OnewaySearchResultform = () => {
       cabinClass: flightClassState?.value || Class,
       px: adult,
     };
+    const payloadReturn = {
+      EndUserIp: reducerState?.ip?.ipData,
+      TokenId: reducerState?.ip?.tokenData,
+      AdultCount: adult,
+      ChildCount: child,
+      InfantCount: infant,
+      DirectFlight: "false",
+      OneStopFlight: "false",
+      JourneyType: 1,
+      PreferredAirlines: null,
+      Segments: [
+        {
+          Destination: fromCity.AirportCode || from,
+          Origin: toCity.AirportCode || to,
+          FlightCabinClass: flightClassState?.id || Class,
+          PreferredDepartureTime: rDate,
+          PreferredArrivalTime: rDate,
+        },
+      ],
+      Sources: null,
 
+      from: to,
+      to: from,
+      date: rDate,
+      cabinClass: flightClassState?.value || Class,
+      px: adult,
+    };
     const searchpy = {
       from: fromCity,
       to: toCity,
-      FlightCabinClass: flightClassState?.label,
+      FlightCabinClass: flightClass?.id,
       date: departDate,
-      // returnDate: returnDate,
+      returnDate: returnDate,
     };
 
     dispatch(searchFlight(searchpy));
 
-    amadeusSearch(payload);
-    flightReturnTboAndKafila(payload);
+    amadeusSearch(payload, payloadReturn);
+    // flightReturnTboAndKafila(payload, payloadReturn);
 
     sessionStorage.setItem("adults", adult);
     sessionStorage.setItem("childs", child);
@@ -182,7 +192,7 @@ const OnewaySearchResultform = () => {
       from: from,
       to: to,
       date: dDate,
-      // retrunDate: rDate,
+      retrunDate: rDate,
       Adult: adult,
       Child: child,
       Infant: infant,
@@ -192,17 +202,17 @@ const OnewaySearchResultform = () => {
     const queryString = new URLSearchParams(params).toString();
 
     navigate(
-      `/flight-details/one-way/${from}-${to}/adt${Adult}chd${Child}inf${infant}?${queryString}`
+      `/flight-details-dummy/round-trip/${from}-${to}/adt${adult}chd${child}inf${infant}?${queryString}`
     );
-    // navigate("/ReturnResult");
   };
   useEffect(() => {
-    // console.log("handlesubmitcall");
     handleSubmitt();
-  }, [dDate, fromOrigin, toDestination, adult, child]);
+  }, [rDate, dDate, from, to, adult, child]);
+
   const renderForm = () => {
     return (
-      <form className="w-full relative rounded-[10px]   bg-white/15 shadow-lg backdrop-blur-sm  border-1 border-white/15">
+      // <form className="w-full relative rounded-[10px]   bg-white ">
+      <form className="w-full relative rounded-[10px]   bg-white/15 shadow-lg backdrop-blur-sm  border-1 border-white/15 ">
         <div className="flex flex-1 rounded-full">
           <ReturnResultLocationFrom
             placeHolder="Flying from"
@@ -219,15 +229,13 @@ const OnewaySearchResultform = () => {
             onLocationSelect={handleToSelect}
           />
           <div className="self-center border-r border-slate-200  h-8"></div>
-          <OnewayResultDateBox
-            // selectsRange={dropOffLocationType !== "oneWay"}
+          <ReturnResultDateBox
             className="flex-1"
-            onSubmit={handleSubmit}
             onDateChange={handleDateChange}
             loader={loader}
             hasButtonSubmit={false}
-            StartDate={dDate}
-            // EndDate={rDate}
+            StartDate={depDate}
+            EndDate={retDate}
           />
           <div className="self-center border-r border-slate-200  h-8"></div>
           <RetrunGuestsInput
@@ -246,4 +254,4 @@ const OnewaySearchResultform = () => {
   return renderForm();
 };
 
-export default OnewaySearchResultform;
+export default ReturnSearchResultFormDummy;

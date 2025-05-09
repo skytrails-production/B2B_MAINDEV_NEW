@@ -13,7 +13,10 @@ const Itinerary = () => {
 
   const tokenFromURL = query.get("token");
   const redirectURL = query.get("redirectURL");
+  const isDummy = query.get("isDummy");
   const storedToken = secureLocalStorage.getItem("jwtToken");
+  sessionStorage.setItem("isDummy", isDummy);
+  sessionStorage.setItem("redirectURL", redirectURL);
 
   // Prefer token from URL, fallback to stored token
   const token = tokenFromURL || storedToken;

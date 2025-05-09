@@ -256,7 +256,7 @@ const VisaForm = () => {
   }, [loaderPayment]);
 
   return (
-    <div className="relative isolate px-6 py-14 lg:px-8 min-h-screen bg-white overflow-hidden">
+    <div className="relative isolate px-6 py-14 lg:px-8 min-h-screen">
       <div className="fixed inset-0 w-screen h-screen overflow-hidden bg-[url('https://ai.theskytrails.com/assets/background1-CtdDjmcE.png')] bg-[length:200%_200%] bg-[left_70%_top_50%] bg-no-repeat flex items-center justify-center isolate px-6 pt-14 lg:px-8"></div>
 
       <div className="mx-auto max-w-6xl  relative z-10">

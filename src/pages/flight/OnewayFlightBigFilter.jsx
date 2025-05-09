@@ -93,7 +93,7 @@ const OnewayFlightBigFilter = ({
       <div className="mt-3">
         <h2 className="sidebar-title text-base text-gray-800">{title}</h2>
 
-        <div className="flex flex-row w-full gap-2">
+        <div className="flex flex-row w-full gap-2 flex-wrap">
           {/* <span className="checkmark"></span> */}
           {svgs?.map((SvgComponent, index) => {
             let timeValue = IconTime?.[index]?.value;
@@ -130,11 +130,12 @@ const OnewayFlightBigFilter = ({
 
               <label
                 key={`SvgComponent-${index}`}
-                className={`flex flex-1 flex-col justify-between items-center gap-2 p-1 border-2 rounded-lg cursor-pointer transition-all ${
+                className={`flex flex-1 flex-col justify-between items-center gap-2 p-1 border-2 rounded-lg cursor-pointer transition-all min-w-[100px] group hover:border-primary-6000 ${
                   exists
                     ? "border-primary-6000 text-primary-6000"
                     : "border-gray-200 text-gray-700"
-                }`}
+                }
+                ${exists ? "bg-primary-50" : "bg-white"}`}
                 onClick={(e) => handleTimeChange(e, stateUpdater, filterKey)}
               >
                 <input
@@ -146,13 +147,15 @@ const OnewayFlightBigFilter = ({
                   className="hidden"
                 />
                 <span
-                  className={`checkedSVG pe-2 transition-all ${
+                  className={`checkedSVG pe-2 transition-all group-hover:text-primary-6000 ${
                     exists ? "text-primary-6000" : "text-gray-600"
-                  }`}
+                  } `}
                 >
                   <SvgComponent />
                 </span>
-                <span className="text-[12px]">{IconTime?.[index]?.title}</span>
+                <span className="text-[12px] group-hover:text-primary-6000">
+                  {IconTime?.[index]?.title}
+                </span>
               </label>
               // </label>
             );

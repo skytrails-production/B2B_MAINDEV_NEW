@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import ClearDataButton from "../../ClearDataButton";
 import { PlaneLanding } from "lucide-react";
+import { apiURL } from "../../../../../../Constants/constant";
 
 const ReturnResultLocationTo = ({
   autoFocus = false,
@@ -101,7 +102,7 @@ const ReturnResultLocationTo = ({
     if (keyword.length > 2) {
       try {
         const response = await axios.get(
-          `https://back.theskytrails.com/skyTrails/city/searchCityData?keyword=${keyword}`
+          `${apiURL.baseURL}/skyTrails/city/searchCityData?keyword=${keyword}`
         );
         const locations =
           response?.data?.data?.map((item) => ({

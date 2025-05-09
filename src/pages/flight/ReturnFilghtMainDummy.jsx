@@ -15,8 +15,9 @@ import FlightSearchLeftSkeleton from "./skeleton-loader/FlightSearchLeftSkeleton
 import FlightSearchRightSkeleton from "./skeleton-loader/FlightSearchRightSkeleton";
 import ReturnSearchResultForm from "./flightSearchForm/returnSearchForm/ReturnSearchResultForm";
 import { clearAllFareQuotesRuleAirsel } from "../../Redux/FareQuoteRuleAirsel/actionFlightQuoteRuleAirsel";
+import ReturnSearchResultFormDummy from "./flightSearchForm/returnSearchForm/ReturnSearchResultFormDummy";
 
-const ReturnFlightMain = () => {
+const ReturnFlightMainDummy = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
@@ -315,7 +316,7 @@ const ReturnFlightMain = () => {
           reducerState?.return?.returnData?.returnFlight ||
           []
       );
-      if (reducerState?.return?.isLoadingFilter) {
+      if (reducerState?.return?.isLoading) {
         // console.log(
         //   "inside filterloding",
         //   reducerState?.return?.returnData?.journeyFlight
@@ -520,7 +521,7 @@ const ReturnFlightMain = () => {
       <div className="sticky top-0 left-0 z-40 hidden md:flex  w-full z-3 bg-gradient-to-b from-primary-6000 via-primary-6000 to-primary-6000">
         {/* <Oneway2 /> */}
         <div className="custom-container p-2 flex justify-center items-center">
-          <ReturnSearchResultForm />
+          <ReturnSearchResultFormDummy />
         </div>
       </div>
 
@@ -561,9 +562,7 @@ const ReturnFlightMain = () => {
           true && (
             <div className="flex flex-col   md:flex-row gap-2">
               <div className="col-lg-3 visibleBig p-0">
-                {!loaderFilter &&
-                minPrice !== Infinity &&
-                maxPrice !== -Infinity ? (
+                {!loader ? (
                   <ReturnFlightBigFilter
                     airlineCodes={airlineCodes}
                     minPrice={minPrice}
@@ -637,7 +636,7 @@ const ReturnFlightMain = () => {
                     retrunFlights={retrunFlights}
                     handleClearAllFilter={handleClearAllFilter}
                     activeFilterLabels={activeFilterLabels}
-                    isDummy={false}
+                    isDummy={true}
                   />
                 ) : (
                   <FlightSearchRightSkeleton />
@@ -651,4 +650,4 @@ const ReturnFlightMain = () => {
   );
 };
 
-export default ReturnFlightMain;
+export default ReturnFlightMainDummy;

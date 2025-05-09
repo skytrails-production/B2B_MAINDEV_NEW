@@ -968,3 +968,29 @@ input[type="number"] {
 .animate-bounce-x {
   animation: bounce-x 1s infinite;
 }
+
+@keyframes plane {
+  0% {
+    left: -5%;
+  }
+  100% {
+    left: 105%;
+  }
+}
+
+@keyframes progress {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.animate-plane {
+  animation: plane 2s ease-in-out infinite;
+}
+
+.animate-progress {
+  animation: progress 1.5s ease-in-out infinite;
+}

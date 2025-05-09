@@ -10,15 +10,14 @@ import {
 import FlightResultCard from "./FlightResultCard";
 import NoResult from "./NoResult";
 
-const OnewayFlightResult = ({
+const OnewayFlightResultDummy = ({
   jornyFlights,
   handleClearAllFilter,
   activeFilterLabels,
-  isDummy,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const isDummy = sessionStorage.getItem("isDummy");
+  const isDummy = sessionStorage.getItem("isDummy");
   const [isChepest, setIsChepest] = useState(true);
   const [selectedFlights, setSelectedFlights] = useState({
     onward: jornyFlights[0],
@@ -85,13 +84,9 @@ const OnewayFlightResult = ({
         FlightCabinClass: 1,
       };
       const queryString = new URLSearchParams(params).toString();
-      // Boolean(isDummy)
-      //   ? navigate(
-      //       `/flight-details-dummy/one-way/${from}-${to}/adt${Adult}chd${Child}inf${Infant}?${queryString}`
-      //     )
-      //   :
+
       navigate(
-        `/flight-details/one-way/${from}-${to}/adt${Adult}chd${Child}inf${Infant}?${queryString}`
+        `/flight-details-dummy/one-way/${from}-${to}/adt${Adult}chd${Child}inf${Infant}?${queryString}`
       );
     };
     console.log(Boolean(isDummy), "isDummyyy");
@@ -234,7 +229,7 @@ const OnewayFlightResult = ({
                 isOnward={isOnward}
                 index={index}
                 selectedIndex={selectedIndex}
-                isDummy={false}
+                isDummy={true}
               />
             );
           })}
@@ -271,4 +266,4 @@ const OnewayFlightResult = ({
   );
 };
 
-export default OnewayFlightResult;
+export default OnewayFlightResultDummy;

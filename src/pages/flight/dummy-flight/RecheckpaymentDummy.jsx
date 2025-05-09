@@ -1,9 +1,11 @@
 import React from "react";
 import { Modal, Button } from "antd";
-import BookWrapperSummary from "../../../../components/BookWraperFlight/BookWrapperSummary";
-import PayButton from "../../../../utility/PayButton";
+import BookWrapperSummary from "../../../components/BookWraperFlight/BookWrapperSummary";
+import PayButton from "../../../utility/PayButton";
+// import BookWrapperSummary from "../../../../components/BookWraperFlight/BookWrapperSummary";
+// import PayButton from "../../../../utility/PayButton";
 
-const RecheckPayment = ({
+const RecheckPaymentDummy = ({
   handleConfirmationModalClose,
   handlePayment,
   isConfirmationModalOpen,
@@ -64,4 +66,4 @@ const RecheckPayment = ({
   );
 };
 
-export default RecheckPayment;
+export default RecheckPaymentDummy;

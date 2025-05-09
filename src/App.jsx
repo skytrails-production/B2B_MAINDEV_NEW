@@ -1,5 +1,5 @@
 import "./App.css";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import HotelHome from "./pages/HotelHome";
 import Home from "./pages/Home";
@@ -7,6 +7,7 @@ import HolidayHome from "./pages/HolidayHome";
 
 import ResultOnewayMain from "./pages/flight/ResultOnewayMain";
 import ReturnFlightResult from "./pages/flight/ReturnFlightMain";
+import ReturnFilghtMainDummy from "./pages/flight/ReturnFilghtMainDummy";
 import { ipAction, tokenAction } from "./Redux/IP/actionIp";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -44,7 +45,14 @@ import VisaForm from "./pages/visa/VisaForm2";
 import VisaForm1 from "./pages/visa/VisaForm1";
 import VisaHome from "./pages/visa/VisaHome";
 import FlightHistoryViewDetails from "./components/bookingHistory/FlightHistoryViewDetails";
+
+import ResultOnewayMainDummy from "./pages/flight/ResultOnewayMainDummy";
+import FlightBookWrapperDummy from "./pages/flight/dummy-flight/FlightBookWrapperDummy";
+import LoginPage from "./pages/Auth/LoginPage";
+import HomeDummy from "./pages/flight/dummy-flight/HomeDummy";
+
 import HotelHoldHome from "./pages/HotelHoldHome";
+
 
 function App() {
   const reducerState = useSelector((state) => state);
@@ -62,13 +70,62 @@ function App() {
     };
     dispatch(tokenAction(payload));
   }, [reducerState?.ip?.ipData]);
+  const MainLayoutDummy = () => {
+    const isDummy = sessionStorage.getItem("isDummy");
+    const redirectURL = sessionStorage.getItem("redirectURL");
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      if (!isDummy) {
+        navigate(`/`, { replace: true });
+      }
+    }, [isDummy, navigate]);
+
+    if (isDummy != "true") {
+      return null; // Or loading spinner while redirecting
+    }
+
+    return (
+      <>
+        <Outlet />
+      </>
+    );
+  };
   return (
     <>
       <Routes>
         <Route path="/itinerary" element={<Itinerary />} />
+        <Route path="/log-in" element={<LoginPage />} />
 
         {/* Protected Pages */}
         <Route element={<ProtectedLayout />}>
+          {/* <Route element={<MainLayoutDummy />}> */}
+          <Route path="/dummy-flight" element={<HomeDummy />} />
+
+          <Route
+            path="/flight-details-dummy"
+            element={
+              <div className="flex justify-center items-center h-screen">
+                <h1 className="text-2xl font-bold">Dummy Flight Details</h1>
+              </div>
+            }
+          />
+
+          <Route
+            path="/flight-details-dummy/one-way/:city/:passengers"
+            // element={<ResultOnewayMain />}
+            element={<ResultOnewayMainDummy />}
+          />
+          <Route
+            path="/flight-dummy/review-details"
+            element={<FlightBookWrapperDummy />}
+          />
+          <Route path="/flight-dummy/ticket" element={<FlightBookTicket />} />
+          <Route
+            path="/flight-details-dummy/round-trip/:city/:passengers"
+            element={<ReturnFilghtMainDummy />}
+          />
+          {/* </Route> */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/hotelform" element={<HotelHome />} />
@@ -77,6 +134,7 @@ function App() {
               path="/flight-details/one-way/:city/:passengers"
               element={<ResultOnewayMain />}
             />
+
             <Route
               path="/flight/review-details"
               element={<FlightBookWrapper />}

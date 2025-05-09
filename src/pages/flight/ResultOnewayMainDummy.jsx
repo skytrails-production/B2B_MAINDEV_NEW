@@ -13,8 +13,10 @@ import OnewayFlightBigFilter from "./OnewayFlightBigFilter";
 
 import FlightSearchRightSkeleton from "./skeleton-loader/FlightSearchRightSkeleton";
 import FlightSearchLeftSkeleton from "./skeleton-loader/FlightSearchLeftSkeleton";
+import OnewaySearchResultFormDummy from "./OnewaySearchResultformDummy";
+import OnewayFlightResultDummy from "./OnewayFlightResultDummy";
 
-const ResultOnewayMain = () => {
+const ResultOnewayMainDummy = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
@@ -89,6 +91,10 @@ const ResultOnewayMain = () => {
         price
       );
     };
+    console.log(
+      standardizedFlights1,
+      "standardizedFlights1 in calculatePriceRange"
+    );
     standardizedFlights1?.forEach((flight) => {
       let price = flight?.price;
       let dur = flight?.layover;
@@ -327,7 +333,7 @@ const ResultOnewayMain = () => {
     // console.log("clear all filters");
   };
   useEffect(() => {
-    if (!reducerState?.return?.isLoadingFilter) {
+    if (!reducerState?.return?.isLoading) {
       setLoaderFilter(false);
       // calculatePriceRange();
       setStandardizedFlights1(
@@ -349,7 +355,7 @@ const ResultOnewayMain = () => {
     if (!reducerState?.return?.isLoading) {
       setLoader(false);
       setStandardizedFlights1(
-        reducerState?.return?.returnData?.[0]?.journeyFlight || []
+        reducerState?.return?.returnData?.journeyFlight || []
       );
       //   setStandardizedFlights2(
       //     reducerState?.return?.returnData?.[0]?.returnFlight || []
@@ -373,18 +379,21 @@ const ResultOnewayMain = () => {
       //   setReturnFlights(standardizedFlights2);
       // console.log(loaderFilter, standardizedFlights1, "standardizedFlightsdd");
     }
-  }, [standardizedFlights1]);
+  }, [standardizedFlights1, loader]);
   useEffect(() => {
     dispatch(clearAllFareQuotesRuleAirsel());
   }, []);
-
+  console.log(
+    standardizedFlights1,
+    "standardizedFlights1 in result oneway main"
+  );
   return (
     <div className="bg-indigo-50 pb-4">
       {/* <div className="flightMainOneWayDiv visibleBig "> */}
       <div className=" sticky top-0 left-0 z-40 hidden md:flex  w-full z-3 bg-gradient-to-b from-primary-6000 via-primary-6000 to-primary-6000">
         {/* <Oneway2 /> */}
         <div className="container p-2 flex justify-center items-center">
-          <OnewaySearchResultform />
+          <OnewaySearchResultFormDummy />
         </div>
       </div>
       {/* </div> */}
@@ -403,7 +412,7 @@ const ResultOnewayMain = () => {
               </div>
               <div
                 onClick={() => {
-                  navigate("/");
+                  navigate("/dummy-flight");
                 }}
               >
                 {/* <EditOutlined /> */}
@@ -417,9 +426,7 @@ const ResultOnewayMain = () => {
         {true && (
           <div className=" w-full flex flex-col   md:flex-row gap-2  ">
             <div className="col-lg-3 visibleBig p-0 w-full  md:w-3/12 ">
-              {!loaderFilter &&
-              minPrice !== Infinity &&
-              maxPrice !== -Infinity ? (
+              {!loader ? (
                 <OnewayFlightBigFilter
                   airlineCodes={airlineCodes}
                   minPrice={minPrice}
@@ -450,7 +457,7 @@ const ResultOnewayMain = () => {
 
             <div className="col-lg-9 w-full  ">
               {!loader ? (
-                <OnewayFlightResult
+                <OnewayFlightResultDummy
                   jornyFlights={jornyFlights}
                   //   retrunFlights={retrunFlights}
                   handleClearAllFilter={handleClearAllFilter}
@@ -468,4 +475,4 @@ const ResultOnewayMain = () => {
   );
 };
 
-export default ResultOnewayMain;
+export default ResultOnewayMainDummy;

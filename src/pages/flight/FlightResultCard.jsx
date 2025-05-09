@@ -17,11 +17,14 @@ const FlightResultCard = ({
   index,
   isOnward,
   selectedIndex,
+  isDummy,
 }) => {
   const type = isOnward ? "onward" : "return";
   // console.log(item, "itemitemitemitemitem");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  console.log(isDummy, "dksjnj");
+  // const isDummy = sessionStorage.getItem("isDummy");
 
   // const [data, setData] = useState({
   //   onward: null,
@@ -43,9 +46,13 @@ const FlightResultCard = ({
         return: null,
       })
     );
-    navigate("/flight/review-details", {
-      state: { isHold: isHold === "hold" ? true : false },
-    });
+    Boolean(isDummy)
+      ? navigate("/flight-dummy/review-details", {
+          state: { isHold: isHold === "hold" ? true : false },
+        })
+      : navigate("/flight/review-details", {
+          state: { isHold: isHold === "hold" ? true : false },
+        });
     // }
   };
 
@@ -161,12 +168,14 @@ const FlightResultCard = ({
                 Hold
               </button>
             )}
-            <button
-              onClick={() => handleNavigate(item, "book")}
-              className=" px-3  bg-primary-6000 hover:bg-primary-700 text-white font-medium py-1 rounded-full text-sm"
-            >
-              Book Now
-            </button>
+            {!isDummy && (
+              <button
+                onClick={() => handleNavigate(item, "book")}
+                className=" px-3  bg-primary-6000 hover:bg-primary-700 text-white font-medium py-1 rounded-full text-sm"
+              >
+                Book Now
+              </button>
+            )}
           </div>
         </div>
       </div>

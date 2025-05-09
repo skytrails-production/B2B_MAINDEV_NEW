@@ -95,7 +95,7 @@ const ReturnFlightBigFilter = ({
       <div className="mt-3">
         <h2 className="sidebar-title text-base text-gray-800">{title}</h2>
 
-        <div className="flex flex-row w-full gap-2">
+        <div className="flex flex-row w-full gap-2 flex-wrap">
           {/* <span className="checkmark"></span> */}
           {svgs?.map((SvgComponent, index) => {
             let timeValue = IconTime?.[index]?.value;
@@ -107,10 +107,10 @@ const ReturnFlightBigFilter = ({
             return (
               <label
                 key={`${title}-${index}`}
-                className={`flex flex-1 flex-col justify-between items-center gap-2 p-1 border-2 rounded-lg cursor-pointer transition-all ${
+                className={`flex flex-1 min-w-[100px] flex-col justify-between items-center gap-2 p-1 border-2 hover:text-primary-700 rounded-lg cursor-pointer transition-all hover:border-primary-6000 group ${
                   exists
                     ? "border-primary-6000 text-primary-6000"
-                    : "border-gray-200 text-gray-800"
+                    : "border-gray-200 text-gray-600"
                 }`}
                 onClick={(e) => handleTimeChange(e, stateUpdater, filterKey)}
               >
@@ -123,7 +123,7 @@ const ReturnFlightBigFilter = ({
                   className="hidden"
                 />
                 <span
-                  className={`checkedSVG pe-2 transition-all ${
+                  className={`checkedSVG pe-2 transition-all group-hover:text-primary-6000 ${
                     exists ? "text-primary-6000" : "text-gray-800"
                   }`}
                 >

@@ -1,12 +1,28 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import { useEffect } from "react";
+import NavbarVisa from "./NavbarVisa";
 
 const MainLayout = () => {
+  const isDummy = sessionStorage.getItem("isDummy");
+  const redirectURL = sessionStorage.getItem("redirectURL");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (isDummy) {
+      navigate(`/${redirectURL}`, { replace: true });
+    }
+  }, [isDummy, navigate]);
+
+  if (isDummy) {
+    return null; // Or loading spinner while redirecting
+  }
+
   return (
     <>
-      <Navbar />
+      {location.pathname.includes("visa") ? <NavbarVisa /> : <Navbar />}
       <Outlet />
-      {/* Footer bhi yahin add kar sakte ho */}
     </>
   );
 };

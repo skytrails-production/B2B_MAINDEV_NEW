@@ -51,7 +51,7 @@ export default function AvatarDropdown({ className = "" }) {
           <>
             {userName ? (
               <Popover.Button
-                className={`self-center cursor-pointer flex p-2 gap-2 h-10 px-4  sm:h-12 rounded-md text-gray-800  bg-transparent border-1 border-gray-600  focus:outline-none  items-center justify-center`}
+                className={`self-center cursor-pointer flex p-2 gap-2 h-10 px-4  sm:h-12 rounded-md text-gray-800  bg-transparent border-1 border-gray-400  focus:outline-none  items-center justify-center`}
               >
                 <h4 className="font-semibold hidden md:flex text-sm xl:text-base mb-0">
                   {/* Hey, {userName.split(" ")?.[0]} */}

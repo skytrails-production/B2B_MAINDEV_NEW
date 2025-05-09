@@ -28,7 +28,7 @@ import {
 import { searchFlight } from "../../../../Redux/SearchFlight/actionSearchFlight";
 import ReturnDepartDate from "./ReturnDepartDate";
 import ReturnEndDate from "./ReturnEndDate";
-const ReturnSearchForm = ({ adult, child, infant, flightClass }) => {
+const ReturnSearchFormDummy = ({ adult, child, infant, flightClass }) => {
   // console.log(flightClass, "flightclass");
   const [fromCity, setFromCity] = useState(null);
   const [toCity, setToCity] = useState(null);
@@ -426,4 +426,4 @@ const ReturnSearchForm = ({ adult, child, infant, flightClass }) => {
   return renderForm();
 };
 
-export default ReturnSearchForm;
+export default ReturnSearchFormDummy;

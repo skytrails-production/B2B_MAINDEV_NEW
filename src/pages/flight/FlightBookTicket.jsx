@@ -199,6 +199,8 @@ const FlightBookTicket = () => {
     () => Number(sessionStorage.getItem("infants") || 0),
     []
   );
+  const book1 = flightBookErrorCheck("onward");
+  const book2 = flightBookErrorCheck("return");
 
   // Memoized flight fares
   const [FlightFareOnward, FlightFareReturn] = useMemo(() => {
@@ -254,27 +256,24 @@ const FlightBookTicket = () => {
   let returnTotalAmount = totalReturn + totalReturn * markUP + returnAddOnPrice;
   // Save DB effects
   useEffect(() => {
-    if (!Return && !hasSaved) {
+    if (!Return && !hasSaved && !book1?.loading) {
       saveDB("onward", isHold, onwardTotalAmount);
       setHasSaved(true);
     }
-  }, [Return, hasSaved, isHold]);
+  }, [Return, hasSaved, isHold, book1]);
   console.log(onwardTotalAmount, returnTotalAmount, "onwardTotalAmount");
 
   useEffect(() => {
-    if (Return && !hasSaved) {
+    if (Return && !hasSaved && !book1?.loading && !book2?.loading) {
       saveDB("onward", isHold, onwardTotalAmount);
       saveDB("return", isHold, returnTotalAmount);
       setHasSaved(true);
     }
-  }, [Return, hasSaved, isHold]);
+  }, [Return, hasSaved, isHold, book1, book2]);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
-
-  const book1 = flightBookErrorCheck("onward");
-  const book2 = flightBookErrorCheck("return");
 
   if (book1?.loading || (Return && book2?.loading)) {
     return (
@@ -293,70 +292,71 @@ const FlightBookTicket = () => {
       </div>
     );
   }
-
-  return (
-    <div className="bg-gray-100 p-2 md:p-6 min-h-screen">
-      <div className="max-w-4xl pt-3 mx-auto w-full flex justify-between items-center text-center rounded-b-lg">
-        <button
-          onClick={() => navigate("/")}
-          className="flex items-center cursor-pointer text-base font-semibold text-gray-700"
-        >
-          <ChevronLeft size={18} className="mr-1" /> Back to Home
-        </button>
-        <button
-          onClick={handlePrint}
-          className="flex items-center gap-2 cursor-pointer text-base font-semibold text-gray-700"
-        >
-          <Printer size={18} /> Download PDF
-        </button>
-      </div>
-      <div className="bg-gray-100 p-2 md:p-6 min-h-screen flex items-center justify-center">
-        <div
-          ref={componentRef}
-          className="max-w-4xl w-full bg-white shadow-lg rounded-lg border border-gray-200"
-        >
-          <div className="flex items-center justify-between p-6 border-b border-gray-200 rounded-t-md bg-indigo-600 text-white">
-            <div className="flex items-center space-x-4">
-              <img
-                src="https://theskytrails.com/static/media/logoSky.63ff4d7e95a8ed4a90ba8f28c3b8958a.svg"
-                alt="Company Logo"
-                className="h-12 w-12 rounded-full"
-              />
-              <h1 className="hidden md:flex text-2xl font-bold">
-                TheSkyTrails
-              </h1>
+  if (!book1?.loading && (Return ? !book2?.loading : true)) {
+    return (
+      <div className="bg-gray-100 p-2 md:p-6 min-h-screen">
+        <div className="max-w-4xl pt-3 mx-auto w-full flex justify-between items-center text-center rounded-b-lg">
+          <button
+            onClick={() => navigate("/")}
+            className="flex items-center cursor-pointer text-base font-semibold text-gray-700"
+          >
+            <ChevronLeft size={18} className="mr-1" /> Back to Home
+          </button>
+          <button
+            onClick={handlePrint}
+            className="flex items-center gap-2 cursor-pointer text-base font-semibold text-gray-700"
+          >
+            <Printer size={18} /> Download PDF
+          </button>
+        </div>
+        <div className="bg-gray-100 p-2 md:p-6 min-h-screen flex items-center justify-center">
+          <div
+            ref={componentRef}
+            className="max-w-4xl w-full bg-white shadow-lg rounded-lg border border-gray-200"
+          >
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 rounded-t-md bg-indigo-600 text-white">
+              <div className="flex items-center space-x-4">
+                <img
+                  src="https://theskytrails.com/static/media/logoSky.63ff4d7e95a8ed4a90ba8f28c3b8958a.svg"
+                  alt="Company Logo"
+                  className="h-12 w-12 rounded-full"
+                />
+                <h1 className="hidden md:flex text-2xl font-bold">
+                  TheSkyTrails
+                </h1>
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col gap-2 bg-white">
-            <TicketCard
-              type="onward"
-              ticket={onwardTicket}
-              totalFare={totalOnward}
-              markUP={markUP}
-              combinedAddOnPrice={onwardAddOnPrice}
-              isHold={isHold}
-              className={className}
-              date={dDate}
-              dispatch={dispatch}
-            />
-            {Return && (
+            <div className="flex flex-col gap-2 bg-white">
               <TicketCard
-                type="return"
-                ticket={returnTicket}
-                totalFare={totalReturn}
+                type="onward"
+                ticket={onwardTicket}
+                totalFare={totalOnward}
                 markUP={markUP}
-                combinedAddOnPrice={returnAddOnPrice}
+                combinedAddOnPrice={onwardAddOnPrice}
                 isHold={isHold}
                 className={className}
-                date={rDate}
+                date={dDate}
                 dispatch={dispatch}
               />
-            )}
+              {Return && (
+                <TicketCard
+                  type="return"
+                  ticket={returnTicket}
+                  totalFare={totalReturn}
+                  markUP={markUP}
+                  combinedAddOnPrice={returnAddOnPrice}
+                  isHold={isHold}
+                  className={className}
+                  date={rDate}
+                  dispatch={dispatch}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default FlightBookTicket;

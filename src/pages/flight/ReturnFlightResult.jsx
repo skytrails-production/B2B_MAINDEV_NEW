@@ -20,6 +20,7 @@ const ReturnFlightResult = ({
   retrunFlights,
   handleClearAllFilter,
   activeFilterLabels,
+  isDummy,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const ReturnFlightResult = ({
     onward: 0,
     return: 0,
   });
+  // let isDummy = sessionStorage.getItem("isDummy");
   useEffect(() => {
     setSelectedFlights({
       onward: jornyFlights[0],
@@ -108,10 +110,15 @@ const ReturnFlightResult = ({
         FlightCabinClass: 1,
       };
       const queryString = new URLSearchParams(params).toString();
-
-      navigate(
-        `/flight-details/round-trip/${from}-${to}/adt${Adult}chd${Child}inf${Infant}?${queryString}`
-      );
+      if (isDummy == "true") {
+        navigate(
+          `/flight-details-dummy/round-trip/${from}-${to}/adt${Adult}chd${Child}inf${Infant}?${queryString}`
+        );
+      } else {
+        navigate(
+          `/flight-details/round-trip/${from}-${to}/adt${Adult}chd${Child}inf${Infant}?${queryString}`
+        );
+      }
     };
 
     const handlePrev = () => {
@@ -281,7 +288,11 @@ const ReturnFlightResult = ({
   };
   const handleBook = () => {
     dispatch(setReturnSelectedFlight(selectedFlights));
-    navigate("/flight/review-details");
+    if (isDummy) {
+      navigate("/flight-dummy/review-details");
+    } else {
+      navigate("/flight/review-details");
+    }
   };
 
   return (

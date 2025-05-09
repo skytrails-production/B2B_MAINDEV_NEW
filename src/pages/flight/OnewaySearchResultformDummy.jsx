@@ -8,11 +8,7 @@ import {
   tbo_kafila_SearchRequest,
 } from "../../Redux/FlightSearch/Return/return";
 import { searchFlight } from "../../Redux/SearchFlight/actionSearchFlight";
-// import ReturnResultDateBox from "./ReturnResultDateBox";
 
-// import ReturnResultLocationTo from "../../../../components/TailwindSearchComp/heroSection/flightSearchForm/returnSearchForm/ReturnResultLocationTo";
-// import RetrunGuestsInput from "../../../../components/TailwindSearchComp/heroSection/flightSearchForm/returnSearchForm/RetrunGuestsInput";
-// import OnewayResultDateBox from "./OnewayResultDateBox";
 import ReturnResultLocationFrom from "./flightSearchForm/onewaySearchForm/ReturnResultLocationFrom";
 import ReturnResultLocationTo from "./flightSearchForm/onewaySearchForm/ReturnResultLocationTo";
 import RetrunGuestsInput from "./flightSearchForm/onewaySearchForm/RetrunGuestsInput";
@@ -23,7 +19,7 @@ const flightClass = [
   { id: 4, value: "C", label: "Business" },
   { id: 6, value: "F", label: "First" },
 ];
-const OnewaySearchResultform = () => {
+const OnewaySearchResultFormDummy = () => {
   const [searchParams] = useSearchParams();
 
   const location = useLocation();
@@ -123,7 +119,7 @@ const OnewaySearchResultform = () => {
     const queryString = new URLSearchParams(params).toString();
 
     navigate(
-      `/flight-details/one-way/${fromCity}-${toCity}/adt${Adult}-chd${Child}-inf${infant}?${queryString}`
+      `/flight-details-dummy/one-way/${fromCity}-${toCity}/adt${Adult}-chd${Child}-inf${infant}?${queryString}`
     );
     // navigate("/ReturnResult");
   };
@@ -192,7 +188,7 @@ const OnewaySearchResultform = () => {
     const queryString = new URLSearchParams(params).toString();
 
     navigate(
-      `/flight-details/one-way/${from}-${to}/adt${Adult}chd${Child}inf${infant}?${queryString}`
+      `/flight-details-dummy/one-way/${from}-${to}/adt${Adult}chd${Child}inf${infant}?${queryString}`
     );
     // navigate("/ReturnResult");
   };
@@ -246,4 +242,4 @@ const OnewaySearchResultform = () => {
   return renderForm();
 };
 
-export default OnewaySearchResultform;
+export default OnewaySearchResultFormDummy;

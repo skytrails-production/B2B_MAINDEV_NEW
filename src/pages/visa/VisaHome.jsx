@@ -64,7 +64,7 @@ const VisaHome = () => {
         }}
       /> */}
 
-      <div className="mx-auto max-w-6xl h-screen py-28 sm:py-36 lg:py-24 relative z-10">
+      <div className="mx-auto max-w-6xl  pb-28 sm:pb-36 lg:pb-24 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
