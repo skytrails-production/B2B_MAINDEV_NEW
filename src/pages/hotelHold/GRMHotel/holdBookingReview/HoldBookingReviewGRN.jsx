@@ -1,5 +1,4 @@
 import * as React from "react";
-import PriceSummaryGRNcoupon from "./PriceSummaryGRNcoupon";
 import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -7,29 +6,32 @@ import { useEffect } from "react";
 import { Accordion } from "flowbite-react";
 import Modal from "@mui/material/Modal";
 import dayjs from "dayjs";
-import { hotelBookRoomActionGRN } from "../../../Redux/HotelGRN/hotel";
+import { hotelBookRoomActionGRN } from "../../../../Redux/HotelGRN/hotel";
 // import { apiURL } from "../../Constants/constant";
 import axios from "axios";
 // import { swalModal } from "../../utility/swal";
-import { checkSearchTime } from "../../../utility/utils";
-import flightPaymentLoding from "../../../images/loading/loading-ban.gif";
+import { checkSearchTime } from "../../../../utility/utils";
+import flightPaymentLoding from "../../../../images/loading/loading-ban.gif";
 import SecureStorage from "react-secure-storage";
-import freeWifi from "./SVGs/freeWifi.svg";
-import freeBreakfast from "./SVGs/freeBreakfast.svg";
-import freeParking from "./SVGs/freeParking.svg";
-import drinkingWater from "./SVGs/DrinkingWater.svg";
-import expressCheckin from "./SVGs/expressCheckin.svg";
-import welcomeDrink from "./SVGs/welcomeDrink.svg";
-import freeGym from "./SVGs/freeGym.svg";
-import HotelGalleryCarousel from "./HotelGalleryCarousel";
+import freeWifi from "../holdGuestDetails/SVGs/freeWifi.svg";
+import freeBreakfast from "../holdGuestDetails/SVGs/freeBreakfast.svg";
+import freeParking from "../holdGuestDetails/SVGs/freeParking.svg";
+import drinkingWater from "../holdGuestDetails/SVGs/DrinkingWater.svg";
+import expressCheckin from "../holdGuestDetails/SVGs/expressCheckin.svg";
+import welcomeDrink from "../holdGuestDetails/SVGs/welcomeDrink.svg";
+import freeGym from "../holdGuestDetails/SVGs/freeGym.svg";
+
 // import "./bookingreviewGRN.scss";
 import { Baby, BedDouble, MapPin } from "lucide-react";
-import ModalMap from "./ModalMap";
+
 // import { load } from "@cashfreepayments/cashfree-js";
-import { swalModal } from "../../../utility/swal";
-import { apiURL } from "../../../Constants/constant";
-import { subtractWalletRequest } from "../../../Redux/Auth/logIn/actionLogin";
-const BookingReviewGRN = ({
+import { swalModal } from "../../../../utility/swal";
+import { apiURL } from "../../../../Constants/constant";
+import { subtractWalletRequest } from "../../../../Redux/Auth/logIn/actionLogin";
+import HoldModalMap from "../../SearchResult/HoldModalMap";
+import HoldHotelGalleryCarousel from "../../holdSelectRoom/HoldHotelGalleryCarousel";
+import HoldPriceSummaryGRNcoupon from "./HoldPriceSummaryGRNcoupon";
+const HoldBookingReviewGRN = ({
   toggleState,
   setCouponAmountFun,
   couponAmount,
@@ -397,7 +399,7 @@ const BookingReviewGRN = ({
       <div className="py-4 z-10 relative">
         <div className="container bookingReviewMain">
           <div className="row">
-            <HotelGalleryCarousel data={hotelGallery} />
+            <HoldHotelGalleryCarousel data={hotelGallery} />
           </div>
           <div className="row mt-4">
             <div className="col-lg-8">
@@ -429,7 +431,7 @@ const BookingReviewGRN = ({
                         {hotelMainReducer?.no_of_rooms} Room
                       </div>
 
-                      <ModalMap mapUrl={mapUrl} />
+                      <HoldModalMap mapUrl={mapUrl} />
 
                       <div className="flex flex-row items-center gap-2 font-semibold text-[14px] text-gray-800">
                         <i class="fa-regular fa-user text-purple text-lg"></i>
@@ -830,7 +832,7 @@ const BookingReviewGRN = ({
               </div>
             </div>
             <div className="col-lg-4 ">
-              <PriceSummaryGRNcoupon
+              <HoldPriceSummaryGRNcoupon
                 onFinalAmountChange={handleFinalAmountChange}
                 oncouponselect={handlecouponChange}
                 // payButton={handleClickBooking}
@@ -851,4 +853,4 @@ const BookingReviewGRN = ({
   );
 };
 
-export default BookingReviewGRN;
+export default HoldBookingReviewGRN;

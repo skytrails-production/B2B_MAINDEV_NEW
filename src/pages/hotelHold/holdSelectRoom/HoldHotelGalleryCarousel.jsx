@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 import { Image } from "lucide-react";
 import { Carousel } from "flowbite-react";
 
-const HotelGalleryCarousel = ({ data }) => {
+const HoldHotelGalleryCarousel = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClose = () => setIsOpen(false);
@@ -107,4 +107,4 @@ const HotelGalleryCarousel = ({ data }) => {
   );
 };
 
-export default HotelGalleryCarousel;
+export default HoldHotelGalleryCarousel;

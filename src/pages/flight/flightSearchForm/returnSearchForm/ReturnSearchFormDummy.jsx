@@ -354,15 +354,15 @@ const ReturnSearchFormDummy = ({ adult, child, infant, flightClass }) => {
     const queryString = new URLSearchParams(params).toString();
     let isDummy = sessionStorage.getItem("isDummy");
     console.log(isDummy, "isDummy");
-    if (isDummy == "true") {
-      navigate(
-        `/flight-details-dummy/round-trip/${fromCity.AirportCode}-${toCity.AirportCode}/adt${adult}chd${child}inf${infant}?${queryString}`
-      );
-    } else {
-      navigate(
-        `/flight-details-dummy/round-trip/${fromCity.AirportCode}-${toCity.AirportCode}/adt${adult}chd${child}inf${infant}?${queryString}`
-      );
-    }
+    // if (isDummy == "true") {
+    navigate(
+      `/flight-details-dummy/round-trip/${fromCity.AirportCode}-${toCity.AirportCode}/adt${adult}chd${child}inf${infant}?${queryString}`
+    );
+    // } else {
+    //   navigate(
+    //     `/flight-details-dummy/round-trip/${fromCity.AirportCode}-${toCity.AirportCode}/adt${adult}chd${child}inf${infant}?${queryString}`
+    //   );
+    // }
 
     // dispatch(returnAction(payload));
   };

@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import HotelGuestDetailsGRN from "./HotelGuestDetailsGRN";
-import PriceSummaryGRN from "./holdGuestDetails/PriceSummaryGRN";
-
-// import { swalModal } from "../../utility/swal";
+import PriceSummaryGRN from "./PriceSummaryGRN";
 import { Navigate, useNavigate } from "react-router-dom";
-import HotelGalleryCarousel from "./HotelGalleryCarousel";
-import "./bookingDetailsGRN.scss";
-import HotelSelectRoomSkeleton from "./Skeletons/HotelSelectRoomSkeleton";
-import { swalModal } from "../../../utility/swal";
-import BlurredLoader from "../../../components/BlurredLoader";
+import { swalModal } from "../../../../utility/swal";
+import BlurredLoader from "../../../../components/BlurredLoader";
+import HoldHotelGalleryCarousel from "../../holdSelectRoom/HoldHotelGalleryCarousel";
+import HoldGuestDetilsGRN from "./HoldGuestDetailsGRN";
 
-const BookingDetailsGRN = () => {
+const HoldBookingDetails = () => {
   const reducerState = useSelector((state) => state);
   const [loader, setLoader] = useState(true);
   const navigate = useNavigate();
@@ -29,7 +25,7 @@ const BookingDetailsGRN = () => {
   useEffect(() => {
     if (reducerState?.hotelSearchResultGRN?.hotelRoom?.errors?.length > 0) {
       swalModal("hotel", "Session Expired", false);
-      navigate("/st-hotel");
+      navigate("/hotelhold");
     }
   }, [reducerState?.hotelSearchResultGRN?.hotelRoom?.errors]);
 
@@ -53,12 +49,12 @@ const BookingDetailsGRN = () => {
           <div className="py-4 md:pb-8 bg-white">
             <div className="container">
               <div className="row">
-                <HotelGalleryCarousel data={hotelGallery} />
+                <HoldHotelGalleryCarousel data={hotelGallery} />
               </div>
 
               <div className="row mt-3">
                 <div className="col-lg-8">
-                  <HotelGuestDetailsGRN ref={formRef} />
+                  <HoldGuestDetilsGRN ref={formRef} />
                 </div>
                 <div className="col-lg-4">
                   <PriceSummaryGRN />
@@ -72,4 +68,4 @@ const BookingDetailsGRN = () => {
   );
 };
 
-export default BookingDetailsGRN;
+export default HoldBookingDetails;

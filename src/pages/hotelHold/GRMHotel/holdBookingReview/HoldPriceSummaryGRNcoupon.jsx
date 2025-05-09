@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 // import CouponContainer from "../../components/Coupon/Couponcontainer";
 import dayjs from "dayjs";
 import { Button } from "antd";
-import PayButton from "../../../utility/PayButton";
+import PayButton from "../../../../utility/PayButton";
 
-function PriceSummaryGRNcoupon(props) {
+function HoldPriceSummaryGRNcoupon(props) {
   const {
     onFinalAmountChange,
     oncouponselect,
@@ -296,4 +296,4 @@ function PriceSummaryGRNcoupon(props) {
   );
 }
 
-export default PriceSummaryGRNcoupon;
+export default HoldPriceSummaryGRNcoupon;

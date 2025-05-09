@@ -7,7 +7,7 @@ import {
   hotelGalleryRequest,
   singleHotelGRN,
 } from "../../../Redux/HotelGRN/hotel";
-import ModalMap from "./ModalMap";
+import HoldModalMap from "./HoldModalMap";
 
 const HotelResultCardBoxHold = ({ result }) => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const HotelResultCardBoxHold = ({ result }) => {
       };
       dispatch(hotelGalleryRequest(galleryPayload));
       dispatch(singleHotelGRN(payload));
-      navigate("/st-hotel/hotelresult/selectroom");
+      navigate("/hotelhold/hotelresult/selectroom");
     } else {
       sessionStorage.setItem("ResultIndex", item?.ResultIndex);
       sessionStorage.setItem("HotelCode", item?.HotelCode);
@@ -89,7 +89,7 @@ const HotelResultCardBoxHold = ({ result }) => {
         <div className="w-1/2 pl-4">
           {/* {result?.name && <p>grn</p>} */}
 
-          <ModalMap mapUrl={mapUrl} />
+          <HoldModalMap mapUrl={mapUrl} />
           <div className="flex items-center my-2">
             <div className="flex">
               {Array.from({ length: totalStars }).map((_, index) => (

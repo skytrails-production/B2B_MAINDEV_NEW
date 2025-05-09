@@ -4,14 +4,12 @@ import { Box } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-// import { PassengersAction } from "../../Redux/Passengers/passenger";
 import { useEffect } from "react";
-// import Modal from "@mui/material/Modal";
 import dayjs from "dayjs";
 import "react-image-gallery/styles/css/image-gallery.css";
 import axios from "axios";
-import { apiURL } from "../../../Constants/constant";
-import { swalModal } from "../../../utility/swal";
+import { apiURL } from "../../../../Constants/constant";
+import { swalModal } from "../../../../utility/swal";
 import { Modal } from "flowbite-react";
 import freeWifi from "./SVGs/freeWifi.svg";
 import freeBreakfast from "./SVGs/freeBreakfast.svg";
@@ -20,13 +18,12 @@ import drinkingWater from "./SVGs/DrinkingWater.svg";
 import expressCheckin from "./SVGs/expressCheckin.svg";
 import welcomeDrink from "./SVGs/welcomeDrink.svg";
 import freeGym from "./SVGs/freeGym.svg";
-// import HotelGalleryCarousel from "./HotelGalleryCarousel";
-import Amenities from "./Amenities";
-// import Authentic from "..././Auth/Authentic";
 import { Baby, BedDouble, MapPin } from "lucide-react";
-import ModalMap from "./ModalMap";
-import { PassengersAction } from "../../../Redux/Passengers/passenger";
-import Authentic from "../../Auth/Authentic";
+
+import { PassengersAction } from "../../../../Redux/Passengers/passenger";
+import Authentic from "../../../Auth/Authentic";
+import HoldAmenities from "../../holdSelectRoom/HoldAmenities";
+import HoldModalMap from "../../SearchResult/HoldModalMap";
 
 const styleLoader = {
   position: "absolute",
@@ -39,7 +36,7 @@ const styleLoader = {
   justifyContent: "center",
 };
 
-const HotelGuestDetailsGRN = () => {
+const HoldGuestDetilsGRN = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loader, setLoader] = useState(true);
@@ -290,7 +287,7 @@ const HotelGuestDetailsGRN = () => {
       });
       if (res?.status == 200) {
         setLoader(false);
-        navigate("/st-hotel/hotelresult/selectroom/guestDetails/review");
+        navigate("/hotelhold/hotelresult/selectroom/guestDetails/review");
       }
     } catch (error) {
       console.log(error);
@@ -333,7 +330,7 @@ const HotelGuestDetailsGRN = () => {
                   {hotelMainReducer?.no_of_rooms} Room
                 </div>
 
-                <ModalMap mapUrl={mapUrl} />
+                <HoldModalMap mapUrl={mapUrl} />
 
                 <div className="flex flex-row items-center gap-2 font-semibold text-[14px] text-gray-700">
                   <i class="fa-regular fa-user text-purple text-lg"></i>
@@ -559,7 +556,7 @@ const HotelGuestDetailsGRN = () => {
 
           {/* guest details sectin  */}
 
-          <Amenities />
+          <HoldAmenities />
 
           <div className="col-lg-12 mt-3 mb-2">
             <h2 class="mb-2 text-lg font-semibold text-gray-900 ">
@@ -986,4 +983,4 @@ const HotelGuestDetailsGRN = () => {
   );
 };
 
-export default HotelGuestDetailsGRN;
+export default HoldGuestDetilsGRN;

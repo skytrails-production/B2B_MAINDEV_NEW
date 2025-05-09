@@ -100,7 +100,7 @@ const OnewaySearchResultform = () => {
     // };
 
     try {
-      // dispatch(tbo_kafila_SearchRequest(onWardsPayload));
+      dispatch(tbo_kafila_SearchRequest(onWardsPayload));
     } catch (error) {
       console.error("Unexpected error:", error);
       throw error;

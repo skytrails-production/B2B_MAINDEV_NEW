@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import HotelHoldFilter from "./HotelHoldFilter";
 import HotelRestCardMain from "./HotelRestCardMain";
-import HotelResultSkeleton from "./HotelResultSkeleton";
+// import HotelResultSkeleton from "./HotelResultSkeleton";
 // import ResultSearchForm from "./resultSearchForm/ResultSearchFormHold";
 import BlurredLoader from "../../../components/BlurredLoader";
 import ResultSearchFormHold from "./resultSearchForm/ResultSearchFormHold";
@@ -146,6 +146,8 @@ const HotelResultHold = () => {
     totalChildren += room?.children_ages?.length || 0;
   });
 
+  console.log(" in the hotel result check");
+
   return (
     <div className="bg-indigo-50">
       <div className=" sticky top-0 left-0 z-40 hidden md:flex  w-full z-3 bg-gradient-to-b from-primary-6000 via-primary-6000 to-primary-6000">
@@ -181,53 +183,53 @@ const HotelResultHold = () => {
         </section>
       </div>
 
-      {loader ? (
+      {/* {loader ? (
         <HotelResultSkeleton />
-      ) : (
-        <div className="container">
-          {errors ? (
-            <div className="mb-64 mt-10 text-center">
-              <h1 className="text-xl md:text-3xl lg:text-3xl xl:text-3xl font-bold text-gray-900">
-                No result found for the requested search criteria !
-              </h1>
-              <p className="text-red-600 flex items-center gap-2 justify-center">
-                Please Modify Your search <FaPen />
-              </p>
+      ) : ( */}
+      <div className="container">
+        {errors ? (
+          <div className="mb-64 mt-10 text-center">
+            <h1 className="text-xl md:text-3xl lg:text-3xl xl:text-3xl font-bold text-gray-900">
+              No result found for the requested search criteria !
+            </h1>
+            <p className="text-red-600 flex items-center gap-2 justify-center">
+              Please Modify Your search <FaPen />
+            </p>
+          </div>
+        ) : (
+          <div className="row pt-4">
+            <div className=" col-lg-3 visibleBig p-0">
+              <HotelHoldFilter
+                onCategoryChange={handleCategoryChange}
+                onPriceChange={handlePriceChange}
+                onSortChange={handleSortChange}
+                onSearchTermChange={handleSearchTermChange}
+                onClearFilters={handleClearFilters}
+                minPrice={min}
+                maxPrice={max}
+                searchTerm={searchTerm}
+                selectedCategories={selectedCategories}
+                priceRange={priceRange}
+                sortBy={sortBy}
+                onLocationChange={handleLocationChange}
+                locations={locations}
+                selectedLocations={selectedLocations}
+              />
             </div>
-          ) : (
-            <div className="row pt-4">
-              <div className=" col-lg-3 visibleBig p-0">
-                <HotelHoldFilter
-                  onCategoryChange={handleCategoryChange}
-                  onPriceChange={handlePriceChange}
-                  onSortChange={handleSortChange}
-                  onSearchTermChange={handleSearchTermChange}
-                  onClearFilters={handleClearFilters}
-                  minPrice={min}
-                  maxPrice={max}
-                  searchTerm={searchTerm}
-                  selectedCategories={selectedCategories}
-                  priceRange={priceRange}
-                  sortBy={sortBy}
-                  onLocationChange={handleLocationChange}
-                  locations={locations}
-                  selectedLocations={selectedLocations}
-                />
-              </div>
-              <div className=" col-lg-9 col-md-12 ">
-                <HotelRestCardMain
-                  hotels={hotelData}
-                  selectedCategories={selectedCategories}
-                  priceRange={priceRange}
-                  sortBy={sortBy}
-                  searchTerm={searchTerm}
-                  selectedLocations={selectedLocations}
-                />
-              </div>
+            <div className=" col-lg-9 col-md-12 ">
+              <HotelRestCardMain
+                hotels={hotelData}
+                selectedCategories={selectedCategories}
+                priceRange={priceRange}
+                sortBy={sortBy}
+                searchTerm={searchTerm}
+                selectedLocations={selectedLocations}
+              />
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
+      {/* )} */}
     </div>
   );
 };

@@ -52,7 +52,11 @@ import LoginPage from "./pages/Auth/LoginPage";
 import HomeDummy from "./pages/flight/dummy-flight/HomeDummy";
 
 import HotelHoldHome from "./pages/HotelHoldHome";
-
+import HotelResultHold from "./pages/hotelHold/SearchResult/HotelResultHold";
+import HoldBookRoom from "./pages/hotelHold/holdSelectRoom/HoldBookRoom";
+import HoldGuestDetilsGRN from "./pages/hotelHold/GRMHotel/holdGuestDetails/HoldGuestDetailsGRN";
+import HoldBookingDetails from "./pages/hotelHold/GRMHotel/holdGuestDetails/HoldBookingDetails";
+import HoldBookingReviewGRN from "./pages/hotelHold/GRMHotel/holdBookingReview/HoldBookingReviewGRN";
 
 function App() {
   const reducerState = useSelector((state) => state);
@@ -229,7 +233,24 @@ function App() {
             ></Route>
 
             {/* hold hotel grn  */}
-            {/* <Route path="/hotelhold" element={<HotelHoldHome />} /> */}
+            <Route path="/hotelhold" element={<HotelHoldHome />} />
+            <Route
+              path="/hotelhold/hotelresult/:cityName"
+              element={<HotelResultHold />}
+            />
+            <Route
+              path="/hotelhold/hotelresult/selectroom"
+              element={<HoldBookRoom />}
+            />
+            <Route
+              path="/hotelhold/hotelresult/selectroom/guestDetails"
+              element={<HoldBookingDetails />}
+            />
+
+            <Route
+              path="/hotelhold/hotelresult/selectroom/guestDetails/review"
+              element={<HoldBookingReviewGRN />}
+            />
             {/* hold hotel grn  */}
           </Route>
         </Route>

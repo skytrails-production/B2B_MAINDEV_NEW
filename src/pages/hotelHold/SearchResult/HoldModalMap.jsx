@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal } from "flowbite-react";
 import { MapPin } from "lucide-react";
-const ModalMap = ({ mapUrl }) => {
+const HoldModalMap = ({ mapUrl }) => {
   const [openMapModal, setOpenMapModal] = useState(false);
   return (
     <div>
@@ -31,4 +31,4 @@ const ModalMap = ({ mapUrl }) => {
   );
 };
 
-export default ModalMap;
+export default HoldModalMap;
