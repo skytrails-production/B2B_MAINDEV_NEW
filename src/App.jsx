@@ -45,10 +45,12 @@ import VisaForm from "./pages/visa/VisaForm2";
 import VisaForm1 from "./pages/visa/VisaForm1";
 import VisaHome from "./pages/visa/VisaHome";
 import FlightHistoryViewDetails from "./components/bookingHistory/FlightHistoryViewDetails";
-
 import ResultOnewayMainDummy from "./pages/flight/ResultOnewayMainDummy";
 import FlightBookWrapperDummy from "./pages/flight/dummy-flight/FlightBookWrapperDummy";
 import LoginPage from "./pages/Auth/LoginPage";
+
+import MainLayoutDummmy from "./pages/flight/dummy-flight/MianLayoutDummy";
+
 import HomeDummy from "./pages/flight/dummy-flight/HomeDummy";
 
 import HotelHoldHome from "./pages/HotelHoldHome";
@@ -74,27 +76,27 @@ function App() {
     };
     dispatch(tokenAction(payload));
   }, [reducerState?.ip?.ipData]);
-  const MainLayoutDummy = () => {
-    const isDummy = sessionStorage.getItem("isDummy");
-    const redirectURL = sessionStorage.getItem("redirectURL");
-    const navigate = useNavigate();
+  // const MainLayoutDummy = () => {
+  //   const isDummy = sessionStorage.getItem("isDummy");
+  //   const redirectURL = sessionStorage.getItem("redirectURL");
+  //   const navigate = useNavigate();
 
-    useEffect(() => {
-      if (!isDummy) {
-        navigate(`/`, { replace: true });
-      }
-    }, [isDummy, navigate]);
+  //   useEffect(() => {
+  //     if (!isDummy) {
+  //       navigate(`/`, { replace: true });
+  //     }
+  //   }, [isDummy, navigate]);
 
-    if (isDummy != "true") {
-      return null; // Or loading spinner while redirecting
-    }
+  //   if (isDummy != "true") {
+  //     return null; // Or loading spinner while redirecting
+  //   }
 
-    return (
-      <>
-        <Outlet />
-      </>
-    );
-  };
+  //   return (
+  //     <>
+  //       <Outlet />
+  //     </>
+  //   );
+  // };
   return (
     <>
       <Routes>
@@ -103,8 +105,8 @@ function App() {
 
         {/* Protected Pages */}
         <Route element={<ProtectedLayout />}>
-          {/* <Route element={<MainLayoutDummy />}> */}
-          <Route path="/dummy-flight" element={<HomeDummy />} />
+          {/* <Route element={<MainLayoutDummmy />}> */}
+          <Route path="/dummy-flight" element={<Home />} />
 
           <Route
             path="/flight-details-dummy"
@@ -130,129 +132,127 @@ function App() {
             element={<ReturnFilghtMainDummy />}
           />
           {/* </Route> */}
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/hotelform" element={<HotelHome />} />
-            <Route path="/holidayform" element={<HolidayHome />} />
-            <Route
-              path="/flight-details/one-way/:city/:passengers"
-              element={<ResultOnewayMain />}
-            />
+          {/* <Route element={<MainLayout />}> */}
+          <Route path="/" element={<Home />} />
+          <Route path="/hotelform" element={<HotelHome />} />
+          <Route path="/holidayform" element={<HolidayHome />} />
+          <Route
+            path="/flight-details/one-way/:city/:passengers"
+            element={<ResultOnewayMain />}
+          />
 
-            <Route
-              path="/flight/review-details"
-              element={<FlightBookWrapper />}
-            />
-            <Route
-              path="/flight-details/round-trip/:city/:passengers"
-              element={<ReturnFlightResult />}
-            />
-            <Route path="/flight/ticket" element={<FlightBookTicket />} />
-            <Route
-              path="/flight/history/details"
-              element={<FlightHistoryViewDetails />}
-            />
+          <Route
+            path="/flight/review-details"
+            element={<FlightBookWrapper />}
+          />
+          <Route
+            path="/flight-details/round-trip/:city/:passengers"
+            element={<ReturnFlightResult />}
+          />
+          <Route path="/flight/ticket" element={<FlightBookTicket />} />
+          <Route
+            path="/flight/history/details"
+            element={<FlightHistoryViewDetails />}
+          />
 
-            <Route path="/bus" element={<Bus />} />
-            <Route path="/busresult" element={<BusResultMain />} />
-            <Route
-              path="/BusPassengerDetail"
-              element={<BusPassengerDetail />}
-            />
-            <Route path="/BusReviewBooking" element={<BusFinalReview />} />
+          <Route path="/bus" element={<Bus />} />
+          <Route path="/busresult" element={<BusResultMain />} />
+          <Route path="/BusPassengerDetail" element={<BusPassengerDetail />} />
+          <Route path="/BusReviewBooking" element={<BusFinalReview />} />
 
-            <Route
-              path="/holidaypackages/:type/:keyword"
-              element={<HolidayPackageResultMain />}
-            />
-            <Route
-              path="/holidaypackages/packagedetails/:destinationDays"
-              element={<HolidayDetailsEnquiry />}
-            />
+          <Route
+            path="/holidaypackages/:type/:keyword"
+            element={<HolidayPackageResultMain />}
+          />
+          <Route
+            path="/holidaypackages/packagedetails/:destinationDays"
+            element={<HolidayDetailsEnquiry />}
+          />
 
-            <Route
-              path="/st-hotel/hotelresult/:cityName"
-              element={<HotelResultMain />}
-            />
-            <Route
-              path="/st-hotel/hotelresult/selectroom"
-              element={<HotelBookRoomGRN />}
-            />
-            <Route
-              path="/st-hotel/hotelresult/selectroom/guestDetails"
-              element={<BookingDetailsGRN />}
-            />
-            <Route
-              path="/st-hotel/hotelresult/selectroom/guestDetails/review"
-              element={<BookingReviewGRN />}
-            />
-            <Route
-              path="/st-hotel/hotelresult/selectroom/guestDetails/review/ticket"
-              element={<HotelTicketDB />}
-            />
+          <Route
+            path="/st-hotel/hotelresult/:cityName"
+            element={<HotelResultMain />}
+          />
+          <Route
+            path="/st-hotel/hotelresult/selectroom"
+            element={<HotelBookRoomGRN />}
+          />
+          <Route
+            path="/st-hotel/hotelresult/selectroom/guestDetails"
+            element={<BookingDetailsGRN />}
+          />
+          <Route
+            path="/st-hotel/hotelresult/selectroom/guestDetails/review"
+            element={<BookingReviewGRN />}
+          />
+          <Route
+            path="/st-hotel/hotelresult/selectroom/guestDetails/review/ticket"
+            element={<HotelTicketDB />}
+          />
 
-            {/* TBO Hotel */}
-            <Route
-              path="/st-hotel/hotelresult/HotelBooknow"
-              element={<HotelSelectroomMain />}
-            />
-            <Route
-              path="/st-hotel/hotelresult/HotelBooknow/Reviewbooking"
-              element={<TboGuestDetails />}
-            />
-            <Route
-              path="/st-hotel/hotelresult/HotelBooknow/Reviewbooking/bookhotel"
-              element={<TboBookingHotel />}
-            />
-            <Route
-              path="/st-hotel/hotelresult/HotelBooknow/Reviewbooking/GuestDetail/ticket"
-              element={<TboTicketGeneration />}
-            />
-            <Route
-              path="/st-hotel/hotelresult/selectroom/guestDetails/review/ticket"
-              element={<HotelTicketDB />}
-            />
-            <Route
-              exact
-              path="/st-hotel/hotelresult/HotelBooknow/Reviewbooking/GuestDetail/ticket"
-              element={<TboTicketGeneration />}
-            />
+          {/* TBO Hotel */}
+          <Route
+            path="/st-hotel/hotelresult/HotelBooknow"
+            element={<HotelSelectroomMain />}
+          />
+          <Route
+            path="/st-hotel/hotelresult/HotelBooknow/Reviewbooking"
+            element={<TboGuestDetails />}
+          />
+          <Route
+            path="/st-hotel/hotelresult/HotelBooknow/Reviewbooking/bookhotel"
+            element={<TboBookingHotel />}
+          />
+          <Route
+            path="/st-hotel/hotelresult/HotelBooknow/Reviewbooking/GuestDetail/ticket"
+            element={<TboTicketGeneration />}
+          />
+          <Route
+            path="/st-hotel/hotelresult/selectroom/guestDetails/review/ticket"
+            element={<HotelTicketDB />}
+          />
+          <Route
+            exact
+            path="/st-hotel/hotelresult/HotelBooknow/Reviewbooking/GuestDetail/ticket"
+            element={<TboTicketGeneration />}
+          />
 
-            <Route path="/testPayment" element={<PayButton />} />
+          <Route path="/testPayment" element={<PayButton />} />
 
-            <Route path="/bookinghistory" element={<BookingHistory />}></Route>
-            <Route
-              path="/bookinghistory/hotelPdf"
-              element={<DownloadHotelPdf />}
-            ></Route>
-            <Route path="/visa" element={<VisaHome />}></Route>
-            <Route path="/visa/userdetails" element={<VisaForm1 />}></Route>
-            <Route
-              path="/visa/userdetails/visadetails"
-              element={<VisaForm />}
-            ></Route>
+          <Route path="/bookinghistory" element={<BookingHistory />}></Route>
+          <Route
+            path="/bookinghistory/hotelPdf"
+            element={<DownloadHotelPdf />}
+          ></Route>
+          <Route path="/visa" element={<VisaHome />}></Route>
+          <Route path="/visa/userdetails" element={<VisaForm1 />}></Route>
+          <Route
+            path="/visa/userdetails/visadetails"
+            element={<VisaForm />}
+          ></Route>
 
-            {/* hold hotel grn  */}
-            <Route path="/hotelhold" element={<HotelHoldHome />} />
-            <Route
-              path="/hotelhold/hotelresult/:cityName"
-              element={<HotelResultHold />}
-            />
-            <Route
-              path="/hotelhold/hotelresult/selectroom"
-              element={<HoldBookRoom />}
-            />
-            <Route
-              path="/hotelhold/hotelresult/selectroom/guestDetails"
-              element={<HoldBookingDetails />}
-            />
+          {/* hold hotel grn  */}
+          <Route path="/hotelhold" element={<HotelHoldHome />} />
+          <Route
+            path="/hotelhold/hotelresult/:cityName"
+            element={<HotelResultHold />}
+          />
+          <Route
+            path="/hotelhold/hotelresult/selectroom"
+            element={<HoldBookRoom />}
+          />
+          <Route
+            path="/hotelhold/hotelresult/selectroom/guestDetails"
+            element={<HoldBookingDetails />}
+          />
 
-            <Route
-              path="/hotelhold/hotelresult/selectroom/guestDetails/review"
-              element={<HoldBookingReviewGRN />}
-            />
-            {/* hold hotel grn  */}
-          </Route>
+          <Route
+            path="/hotelhold/hotelresult/selectroom/guestDetails/review"
+            element={<HoldBookingReviewGRN />}
+          />
+          {/* hold hotel grn  */}
+
+          {/* </Route> */}
         </Route>
       </Routes>
     </>
