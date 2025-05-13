@@ -127,14 +127,14 @@ const OnewaySearchForm = ({ adult, child, infant, flightClass }) => {
       localStorage.setItem("homeRecentSearch", JSON.stringify(storedSearches));
     }
     const queryString = new URLSearchParams(params).toString();
-    if (isDummy) {
-      navigate(
-        `/flight-details-dummy/one-way/:city/:passengers/?${queryString}`
-      );
-    } else {
-      navigate(`/flight-details/one-way/:city/:passengers/?${queryString}`);
-      // navigate(`/flight-details/one-way/:city/:passengers/?${queryString}`);
-    }
+    // if (isDummy) {
+    //   navigate(
+    //     `/flight-details-dummy/one-way/:city/:passengers/?${queryString}`
+    //   );
+    // } else {
+    navigate(`/flight-details/one-way/:city/:passengers/?${queryString}`);
+    // navigate(`/flight-details/one-way/:city/:passengers/?${queryString}`);
+    // }
 
     // dispatch(returnAction(payload));
   };

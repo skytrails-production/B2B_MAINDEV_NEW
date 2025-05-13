@@ -8,15 +8,15 @@ const MainLayout = () => {
   const navigate = useNavigate();
   console.log(isDummy, "isDummy");
 
-  useEffect(() => {
-    if (isDummy === "true") {
-      navigate(`/${redirectURL}`, { replace: true });
-    }
-  }, [isDummy, navigate]);
+  // useEffect(() => {
+  //   if (isDummy === "true") {
+  //     navigate(`/${redirectURL}`, { replace: true });
+  //   }
+  // }, [isDummy, navigate]);
 
-  if (isDummy === "true") {
-    return null; // Or loading spinner while redirecting
-  }
+  // if (isDummy === "true") {
+  //   return null; // Or loading spinner while redirecting
+  // }
 
   return (
     <>
