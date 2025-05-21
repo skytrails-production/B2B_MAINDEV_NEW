@@ -1,0 +1,280 @@
+.itenarySelect .ant-select {
+    width: 100% !important;
+    height: 35px !important;
+}
+
+.itenarySelect .ant-picker {
+    height: 35px !important;
+    width: 100% !important;
+}
+
+
+.itenarySelectRoom {
+    /* height: 100%; */
+    width: 100%;
+    background-color: white;
+    border: 1px solid #d9d9d9;
+    border-radius: 3px;
+    padding: 8px 0px !important;
+}
+
+
+
+.itenarySelectRoom {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.itenarySelectRoom .travellerButton {
+    padding-left: 10px;
+    font-weight: 500;
+}
+
+
+
+
+/* itenerary result page design  */
+
+.dayWiseItenaryMainBox h5 {
+    font-weight: 600;
+    font-family: "Montserrat", "Helvetica Neue", ;
+    color: #1c1c21;
+    line-height: 1.2;
+    margin-bottom: 10px;
+}
+
+.dayWiseItenaryMainBox h6 {
+    font-weight: 600;
+    font-family: "Montserrat", "Helvetica Neue", ;
+    color: #1c1c21;
+    line-height: 1.2;
+    margin-bottom: 10px;
+}
+
+.dayWiseItenaryMainBox p {
+    font-weight: 400;
+    font-family: "Montserrat", "Helvetica Neue", ;
+    color: #1c1c21;
+    /* line-height: 1.2; */
+    font-size: 14px;
+    /* margin-bottom: 10px; */
+}
+
+.headingItenary h5 {
+    font-weight: 600;
+    font-family: "Montserrat", "Helvetica Neue", ;
+    color: #1c1c21;
+    line-height: 1.2;
+    margin-bottom: 10px;
+}
+
+.headingItenary h6 {
+    font-weight: 600;
+    font-family: "Montserrat", "Helvetica Neue", ;
+    color: #1c1c21;
+    line-height: 1.2;
+    margin-bottom: 10px;
+}
+
+
+
+.price-summary-container {
+    background-color: white;
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    border-radius: 5px;
+}
+
+
+.dayWiseItenaryInnerBox {
+    background-color: white;
+    /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
+    padding: 25px;
+    border-radius: 5px;
+}
+
+
+.dayWiseItenaryInnerBoxPDF {
+    background-color: #fefae0;
+    /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
+    padding: 25px;
+
+    border-radius: 12px;
+}
+
+
+.hotelImage img {
+    width: 250px;
+    height: 180px;
+    border-radius: 9px;
+}
+
+.iteFliMod:where(.css-dev-only-do-not-override-j9bb5n).ant-modal .ant-modal-content {
+    background-color: #f1f1f1 !important;
+}
+
+.iteFliMod:where(.css-j9bb5n).ant-modal .ant-modal-content {
+    background-color: #f1f1f1 !important;
+}
+
+
+
+
+
+
+
+
+
+
+.paragraph-Itenary {
+    position: relative;
+}
+
+.paragraphinsideItenary {
+    display: -webkit-box;
+    /* -webkit-line-clamp: 4; */
+    /* Number of lines to show */
+    -webkit-box-orient: vertical;
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; */
+    /* max-height: 6em; */
+    /* Adjust the value based on line height */
+    line-height: 1.5em;
+    /* Adjust the value based on line height */
+}
+
+.show-more .paragraph {
+    -webkit-line-clamp: initial;
+    max-height: none;
+}
+
+.read-moreItenary {
+    display: block;
+    margin-top: 10px;
+    color: blue;
+    cursor: pointer;
+}
+
+
+
+
+.activityBox {
+    border: 1px solid #e8e8e8;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.activityBox h4 {
+    margin: 0;
+}
+
+.activityBox p {
+    margin: 0;
+    color: #777;
+}
+
+.selectedActivity {
+    border: 1px solid #e8e8e8;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+
+.labelItenerary label {
+    font-size: 12px;
+    font-weight: 400;
+    margin-bottom: 8px;
+}
+
+
+.itenaryHeading h3 {
+    font-size: 20px;
+    font-weight: 700;
+
+}
+
+
+/* itenerary result page design  */
+
+
+
+
+
+
+.pdfFlightReturnBox {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #fefae0 !important;
+    border-radius: 8px;
+    gap: 20px;
+    padding: 20px;
+    margin: 10px 0px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+
+
+
+.flightPdfIteneraryPara {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+
+.itenaryPdfBoxHeading {
+    background-color: #fefae0;
+    padding: 10px 20px;
+    border-radius: 8px;
+}
+
+.itenaryPdfBoxHeading>div>p {
+    line-height: 27px;
+    font-size: 15px !important;
+}
+
+
+
+.returnFlightResultBoxOne .returnResultFlightDetailsPDF {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    background: #fff;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+
+.returnResultFlightDetailsPDF img {
+    width: 32px;
+    border-radius: 5px;
+}
+
+.returnResultFlightDetailsPDF span {
+    font-size: 13px;
+    color: #000;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+
+.returnResultFlightDetailsPDF p {
+    color: #d90429;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    font-size: 12px;
+}

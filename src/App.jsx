@@ -59,6 +59,10 @@ import HoldBookRoom from "./pages/hotelHold/holdSelectRoom/HoldBookRoom";
 import HoldGuestDetilsGRN from "./pages/hotelHold/GRMHotel/holdGuestDetails/HoldGuestDetailsGRN";
 import HoldBookingDetails from "./pages/hotelHold/GRMHotel/holdGuestDetails/HoldBookingDetails";
 import HoldBookingReviewGRN from "./pages/hotelHold/GRMHotel/holdBookingReview/HoldBookingReviewGRN";
+import HoldHotelTicketDB from "./pages/hotelHold/GRMHotel/HoldHotelTicketDB";
+import PackageCreationHome from "./pages/packageCreation/packageCreationHome/PackageCreationHome";
+import PackageCreationResult from "./pages/packageCreation/PackageCreationResult";
+import ItenaryPdfDownloader from "./pages/packageCreation/ItenaryPdfDownloader";
 
 function App() {
   const reducerState = useSelector((state) => state);
@@ -105,33 +109,58 @@ function App() {
 
         {/* Protected Pages */}
         <Route element={<ProtectedLayout />}>
-          {/* <Route element={<MainLayoutDummmy />}> */}
-          <Route path="/dummy-flight" element={<HomeDummy />} />
+          <Route element={<MainLayoutDummmy />}>
+            <Route path="/dummy-flight" element={<HomeDummy />} />
 
-          <Route
-            path="/flight-details-dummy"
-            element={
-              <div className="flex justify-center items-center h-screen">
-                <h1 className="text-2xl font-bold">Dummy Flight Details</h1>
-              </div>
-            }
-          />
+            <Route
+              path="/flight-details-dummy"
+              element={
+                <div className="flex justify-center items-center h-screen">
+                  <h1 className="text-2xl font-bold">Dummy Flight Details</h1>
+                </div>
+              }
+            />
 
-          <Route
-            path="/flight-details-dummy/one-way/:city/:passengers"
-            // element={<ResultOnewayMain />}
-            element={<ResultOnewayMainDummy />}
-          />
-          <Route
-            path="/flight-dummy/review-details"
-            element={<FlightBookWrapperDummy />}
-          />
-          <Route path="/flight-dummy/ticket" element={<FlightBookTicket />} />
-          <Route
-            path="/flight-details-dummy/round-trip/:city/:passengers"
-            element={<ReturnFilghtMainDummy />}
-          />
-          {/* </Route> */}
+            <Route
+              path="/flight-details-dummy/one-way/:city/:passengers"
+              // element={<ResultOnewayMain />}
+              element={<ResultOnewayMainDummy />}
+            />
+            <Route
+              path="/flight-dummy/review-details"
+              element={<FlightBookWrapperDummy />}
+            />
+            <Route path="/flight-dummy/ticket" element={<FlightBookTicket />} />
+            <Route
+              path="/flight-details-dummy/round-trip/:city/:passengers"
+              element={<ReturnFilghtMainDummy />}
+            />
+
+            {/* hold hotel grn  */}
+            <Route path="/dummy-hotel" element={<HotelHoldHome />} />
+            <Route
+              path="/hotelhold/hotelresult/:cityName"
+              element={<HotelResultHold />}
+            />
+            <Route
+              path="/hotelhold/hotelresult/selectroom"
+              element={<HoldBookRoom />}
+            />
+            <Route
+              path="/hotelhold/hotelresult/selectroom/guestDetails"
+              element={<HoldBookingDetails />}
+            />
+
+            <Route
+              path="/hotelhold/hotelresult/selectroom/guestDetails/review"
+              element={<HoldBookingReviewGRN />}
+            />
+
+            <Route
+              path="/hotelhold/hotelresult/selectroom/guestDetails/review/ticket"
+              element={<HoldHotelTicketDB />}
+            />
+          </Route>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/hotelform" element={<HotelHome />} />
@@ -235,25 +264,24 @@ function App() {
             ></Route>
 
             {/* hold hotel grn  */}
-            <Route path="/hotelhold" element={<HotelHoldHome />} />
+
+            {/* package creation  */}
+
             <Route
-              path="/hotelhold/hotelresult/:cityName"
-              element={<HotelResultHold />}
+              path="/packagecreationhome"
+              element={<PackageCreationHome />}
             />
             <Route
-              path="/hotelhold/hotelresult/selectroom"
-              element={<HoldBookRoom />}
-            />
-            <Route
-              path="/hotelhold/hotelresult/selectroom/guestDetails"
-              element={<HoldBookingDetails />}
+              path="/packagecreationresult"
+              element={<PackageCreationResult />}
             />
 
             <Route
-              path="/hotelhold/hotelresult/selectroom/guestDetails/review"
-              element={<HoldBookingReviewGRN />}
-            />
-            {/* hold hotel grn  */}
+              // path="/itenaryDownload"
+              path="/itenaryresult/itenaryDownload/:id"
+              element={<ItenaryPdfDownloader />}
+            ></Route>
+            {/* package creation  */}
           </Route>
         </Route>
       </Routes>

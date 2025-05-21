@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import { useReactToPrint } from "react-to-print";
 import userApi from "../../../Redux/API/api";
 
-const HotelTicketDB = () => {
+const HoldHotelTicketDB = () => {
   const location = useLocation();
   const { finalamount } = location.state || {};
   const navigate = useNavigate();
@@ -69,6 +69,8 @@ const HotelTicketDB = () => {
   useEffect(() => {
     const payload = {
       userId: reducerState?.logIn?.loginData?.id,
+      isHold: true,
+      holdAmount: 200,
       agnet_reference: getBookingDetails?.agent_reference,
       booking_date: getBookingDetails?.booking_date,
       booking_id: getBookingDetails?.booking_id,
@@ -77,8 +79,8 @@ const HotelTicketDB = () => {
       checkout: getBookingDetails?.checkout,
       // "total": getBookingDetails?.price?.total,
       total: Number(finalamount).toFixed(2),
-      isHold: false,
-      holdAmount: 0,
+      // isHold: false,
+      // holdAmount: 0,
       holder: {
         title: passenger?.[0]?.adults?.[0]?.Title,
         name: passenger?.[0]?.adults?.[0]?.FirstName,
@@ -231,9 +233,9 @@ const HotelTicketDB = () => {
                     )}
                   </div>
 
-                  <h2 class="mb-2 text-lg font-semibold text-gray-900 ">
+                  {/* <h2 class="mb-2 text-lg font-semibold text-gray-900 ">
                     Total Amount : ₹{totalAmt}
-                  </h2>
+                  </h2> */}
                 </div>
               </div>
 
@@ -374,4 +376,4 @@ const HotelTicketDB = () => {
   );
 };
 
-export default HotelTicketDB;
+export default HoldHotelTicketDB;

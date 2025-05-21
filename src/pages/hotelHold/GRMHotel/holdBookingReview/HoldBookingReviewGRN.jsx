@@ -91,10 +91,6 @@ const HoldBookingReviewGRN = ({
     if (reducerState?.hotelSearchResultGRN?.bookRoom?.status === "confirmed") {
       setLoaderPayment(false);
       couponconfirmation3();
-      console.log(
-        reducerState?.hotelSearchResultGRN?.bookRoom,
-        "reducerState?.hotelSearchResultGRN?.bookRoom"
-      );
       dispatch(
         subtractWalletRequest({
           balance: finalAmount,
@@ -103,7 +99,7 @@ const HoldBookingReviewGRN = ({
         })
       );
 
-      navigate("/st-hotel/hotelresult/selectroom/guestDetails/review/ticket", {
+      navigate("/hotelhold/hotelresult/selectroom/guestDetails/review/ticket", {
         state: { finalamount: finalAmount },
       });
       return;
@@ -409,7 +405,7 @@ const HoldBookingReviewGRN = ({
                     {hotelinfoGRN?.name}
                   </h1>
 
-                  <div className="py-3 flex flex-col mt-4 justify-start gap-3  flex-wrap border-y border-gray-500">
+                  <div className="py-3 flex flex-col mt-4 justify-start gap-3  flex-wrap border-y border-gray-300">
                     <div className="flex flex-row items-center gap-2">
                       {Array.from({ length: totalStars }).map((_, index) => (
                         <i

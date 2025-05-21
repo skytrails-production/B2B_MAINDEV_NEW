@@ -43,6 +43,9 @@ export default function HotelRestCardMain({
     if (!category || category < 3) {
       return false;
     }
+    if (hotel?.min_rate?.non_refundable) {
+      return false;
+    }
 
     if (!image || image.trim() === "") {
       return false;

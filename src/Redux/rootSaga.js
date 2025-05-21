@@ -7,6 +7,7 @@ import {
   watchTobKailaReturnSearch,
 } from "./Saga/returnSaga";
 import { multicityWatcher } from "./Saga/multicitySaga";
+import { returnWatcherPackCreation } from "./Saga/returnPackCreationSaga";
 import { ipWatcher } from "./Saga/ipSaga";
 import { flightFareWatcher } from "./Saga/flightFareSaga";
 import { flightBookWatcher } from "./Saga/flightBookSaga";
@@ -40,6 +41,7 @@ export function* rootSaga() {
     oneWayWatcher(),
     oneWayWatcherCombined(),
     returnWatcher(),
+    returnWatcherPackCreation(),
     watchAmadeusReturnSearch(),
     watchTobKailaReturnSearch(),
     multicityWatcher(),

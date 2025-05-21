@@ -18,6 +18,7 @@ import storage from "redux-persist/lib/storage/session";
 import { passengersReducer } from "./Passengers/passengerReducer";
 // import {packageBookingReducer} from "./HolidayBook/bookingHolidayReducer"
 import { returnReducer } from "./FlightSearch/Return/returnReducer";
+import { returnReducerPackCreation } from "./FlightSearch/returnPackCreation/returnReducerPackCreation";
 import { multicityReducer } from "./FlightSearch/Multicity/multicityReducer";
 import { busSearchReducer } from "./busSearch/busSearchReducer";
 // import { packageBookIDReducer } from "./HolidayBookingRequest/bookingHolidayReducer";
@@ -39,6 +40,7 @@ const appReducer = combineReducers({
   logIn: logInReducer,
   oneWay: oneWayReducer,
   return: returnReducer,
+  returnPackCreation: returnReducerPackCreation,
   multicity: multicityReducer,
   ip: ipReducer,
   flightFare: flightFareReducer,

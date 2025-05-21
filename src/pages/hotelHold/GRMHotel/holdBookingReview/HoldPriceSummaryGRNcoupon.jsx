@@ -116,10 +116,10 @@ function HoldPriceSummaryGRNcoupon(props) {
   }, [finalAmount, couponCode]);
   return (
     <>
-      <div className="top-24 rounded-md shadow-sm border-1 border-gray-500 overflow-y-scroll p-7 sticky">
-        <div className=" flex flex-col w-full border-1 border-gray-500 rounded-md">
+      <div className="top-24 rounded-md shadow-sm border-1 border-gray-300 overflow-y-scroll p-7 sticky">
+        <div className=" flex flex-col w-full border-1 border-gray-300 rounded-md">
           <div className=" flex flex-row justify-center items-center">
-            <div className="p-3 w-full border-b border-gray-500 flex flex-col gap-2 justify-center items-center">
+            <div className="p-3 w-full border-b border-gray-300 flex flex-col gap-2 justify-center items-center">
               <p className="text-sm  text-gray-800 mb-0">Check-In</p>
               <p className="text-sm font-semibold text-gray-800 mb-0">
                 {dayjs(hotelMainReducer?.checkin).format("DD MMM, YY")}
@@ -129,7 +129,7 @@ function HoldPriceSummaryGRNcoupon(props) {
               </p>
             </div>
 
-            <div className="p-3 w-full border-b border-gray-500 flex flex-col gap-2 justify-center items-center">
+            <div className="p-3 w-full border-b border-gray-300 flex flex-col gap-2 justify-center items-center">
               <p className="text-sm text-gray-800 mb-0">Check-Out</p>
               <p className="text-sm font-semibold text-gray-800 mb-0">
                 {dayjs(hotelMainReducer?.checkout).format("DD MMM, YY")}
@@ -226,7 +226,8 @@ function HoldPriceSummaryGRNcoupon(props) {
           <PayButton
             phone={Phoneno}
             email={email}
-            ticketPrice={Number(finalAmount).toFixed(0)}
+            // ticketPrice={Number(finalAmount).toFixed(0)}
+            ticketPrice={200}
             bookingType="HOTEL" // or "BUS" or "HOTEL"
             buttonText="Pay Now"
             // setPaymentLoading={(state) => {
