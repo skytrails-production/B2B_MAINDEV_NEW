@@ -1,6 +1,7 @@
 import { Outlet, useNavigate } from "react-router-dom";
 // import Navbar from "./Navbar";
 import { useEffect } from "react";
+import DummyNavbar from "../../../components/DummyNavBar";
 
 const MainLayoutDummmy = () => {
   const isDummy = sessionStorage.getItem("isDummy");
@@ -20,7 +21,7 @@ const MainLayoutDummmy = () => {
 
   return (
     <>
-      {/* <Navbar /> */}
+      {/* <DummyNavbar /> */}
       <Outlet />
     </>
   );

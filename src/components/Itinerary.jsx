@@ -51,10 +51,10 @@ const Itinerary = () => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
       <div className="text-center flex flex-col items-center space-y-4">
         <h1 className="text-white text-2xl font-semibold">
-          Generating Itinerary
+          Crafting Your Journey
         </h1>
         <p className="text-white text-base">
-          Please wait while we prepare your travel details...
+          Curating personalized experiences and optimizing your travel plans.
         </p>
         <img
           src={loaderImg}

@@ -371,7 +371,7 @@ const ItenaryRoundFlightResult = ({
 
               {/* Stops */}
               <div>
-                <h3 className="font-semibold text-gray-700 mb-2 flex items-center">
+                <h3 className="font-semibold text-gray-700 mb-2 flex items-center text-base">
                   <Plane className="mr-2" size={16} /> Suggested for you
                 </h3>
                 <div className="space-y-2">
@@ -406,7 +406,7 @@ const ItenaryRoundFlightResult = ({
 
               {/* Price Range */}
               <div>
-                <h3 className="font-semibold text-gray-700 mb-2 flex items-center">
+                <h3 className="font-semibold text-gray-700 mb-2 flex items-center text-base">
                   <span className="mr-2">₹</span> Price Range
                 </h3>
                 <input
@@ -427,7 +427,7 @@ const ItenaryRoundFlightResult = ({
 
               {/* Departure Flight */}
               <div>
-                <h3 className="font-semibold text-blue-600 mb-2">
+                <h3 className="font-semibold text-blue-600 mb-2 text-base">
                   Going Flight
                 </h3>
 
@@ -546,7 +546,7 @@ const ItenaryRoundFlightResult = ({
 
               {/* Return Flight */}
               <div>
-                <h3 className="font-semibold text-blue-600 mb-2">
+                <h3 className="font-semibold text-blue-600 mb-2 text-base">
                   Return Flight
                 </h3>
 

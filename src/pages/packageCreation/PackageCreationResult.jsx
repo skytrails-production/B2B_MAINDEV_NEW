@@ -13,8 +13,9 @@ import {
   setFLightFromRequest,
   setFLightToRequest,
 } from "../../Redux/Itenary/itenary";
-import ItenaryResultSkeleton from "./ItenaryResultSkeleton";
+// import ItenaryResultSkeleton from "./ItenaryResultSkeleton";
 import IteneraryPriceSummary from "./IteneraryPriceSummary";
+import BlurredLoader from "../../components/BlurredLoader";
 
 const PackageCreationResult = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -196,7 +197,7 @@ const PackageCreationResult = () => {
   return (
     <>
       {loader ? (
-        <ItenaryResultSkeleton />
+        <BlurredLoader textData={"Hold on ! Creating Itenerary"} />
       ) : (
         <div className="container-fluid p-4">
           <div className="row">
