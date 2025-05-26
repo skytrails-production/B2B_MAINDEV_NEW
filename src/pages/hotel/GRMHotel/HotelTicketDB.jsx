@@ -37,30 +37,33 @@ const HotelTicketDB = () => {
 
   const [loading, setLoading] = useState(false);
 
+  // const handlePrint = useReactToPrint({
+  //   content: () => componentRef.current,
+  //   onAfterPrint: () => setLoading(false), // Hide loader after printing
+  // });
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-    onAfterPrint: () => setLoading(false), // Hide loader after printing
-  });
+    contentRef: componentRef,
+  });  
 
   const handleDownload = () => {
     setLoading(true);
     handlePrint();
   };
 
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.ctrlKey && event.key === "p") {
-        event.preventDefault();
-        handlePrint();
-      }
-    };
+  // useEffect(() => {
+  //   const handleKeyDown = (event) => {
+  //     if (event.ctrlKey && event.key === "p") {
+  //       event.preventDefault();
+  //       handlePrint();
+  //     }
+  //   };
 
-    window.addEventListener("keydown", handleKeyDown);
+  //   window.addEventListener("keydown", handleKeyDown);
 
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [handlePrint]);
+  //   return () => {
+  //     window.removeEventListener("keydown", handleKeyDown);
+  //   };
+  // }, [handlePrint]);
 
   const handleCancel = () => {
     setIsOpen(false);

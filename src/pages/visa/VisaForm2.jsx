@@ -174,7 +174,7 @@ const VisaForm = () => {
           subtractWalletRequest({
             balance: finalAmount,
             type: "visa",
-            booking_id: `visa + ${new Date()}`,
+            booking_id: "visa" + new Date(),
           })
         );
 

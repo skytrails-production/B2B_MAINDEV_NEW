@@ -128,11 +128,9 @@ const TicketCard = React.memo(
 
         <div className="w-full sm:w-1/4 bg-indigo-50 p-2 md:p-6 border-t md:border-t-0 md:border-l border-gray-200">
           <div className="text-center">
-            <p className="text-indigo-800 text-lg font-semibold">
-              Boarding Pass
-            </p>
+            <p className="text-indigo-800 text-lg font-semibold">PNR</p>
             <div className="mt-2 md:mt-6">
-              <p className="text-sm text-indigo-600">PNR:</p>
+              {/* <p className="text-sm text-indigo-600">PNR:</p> */}
               <p className="text-lg font-bold text-indigo-800">
                 {ticket?.PNR || "Loading..."}
               </p>
@@ -272,8 +270,10 @@ const FlightBookTicket = () => {
   }, [Return, hasSaved, isHold, book1, book2]);
 
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
+    contentRef: componentRef,
   });
+
+  // const handlePrint = useReactToPrint({ contentRef: componentRef });
 
   if (book1?.loading || (Return && book2?.loading)) {
     return (

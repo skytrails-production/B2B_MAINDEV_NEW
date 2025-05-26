@@ -63,14 +63,19 @@ import HoldHotelTicketDB from "./pages/hotelHold/GRMHotel/HoldHotelTicketDB";
 import PackageCreationHome from "./pages/packageCreation/packageCreationHome/PackageCreationHome";
 import PackageCreationResult from "./pages/packageCreation/PackageCreationResult";
 import ItenaryPdfDownloader from "./pages/packageCreation/ItenaryPdfDownloader";
+import secureLocalStorage from "react-secure-storage";
+import { walletRequest } from "./Redux/Auth/logIn/actionLogin";
 
 function App() {
   const reducerState = useSelector((state) => state);
   const dispatch = useDispatch();
 
+  let token = useSelector((state) => state?.logIn?.token);
+
   useEffect(() => {
     dispatch(ipAction());
     dispatch(getMarkUpAction());
+    dispatch(walletRequest(token));
     // dispatch(faqRatingListReq());
   }, []);
 
