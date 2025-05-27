@@ -15,15 +15,6 @@ import VisaDateTo from "./VisaDateTo";
 import { subtractWalletRequest } from "../../Redux/Auth/logIn/actionLogin";
 
 const VisaForm = () => {
-  let cashfree;
-  const initializeSDK = async () => {
-    cashfree = await load({
-      mode: "sandbox",
-      // mode: "production",
-    });
-  };
-  initializeSDK();
-
   const [apiCountries, setApiCountries] = useState([]);
   const [departDate, setDepartDate] = useState(null);
   const [arrivalDate, setArrivalDate] = useState(null);
@@ -191,60 +182,6 @@ const VisaForm = () => {
     } finally {
       setIsProcessing(false);
     }
-  };
-
-  let orderId1 = "";
-
-  const handlePayment = async () => {
-    const token = localStorage?.getItem("jwtToken");
-
-    savetodb();
-
-    const cashpayload = {
-      phone: storedData?.applicant?.phone,
-      amount: 1,
-      email: storedData?.applicant?.email,
-      productinfo: "ticket",
-      bookingType: "VISA",
-    };
-
-    try {
-      const response = await axios({
-        method: "post",
-        url: `${apiURL.baseURL}/skyTrails/api/transaction/walletRecharge`,
-        data: cashpayload,
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      });
-
-      if (response.status === 200) {
-        orderId1 = response.data.result.order_id;
-        doPayment(response.data.result.payment_session_id);
-      }
-    } catch (error) {
-      console.error("API call failed:", error);
-    }
-  };
-
-  const doPayment = async (sessionID) => {
-    let checkoutOptions = {
-      paymentSessionId: sessionID,
-      redirectTarget: "_modal",
-    };
-
-    cashfree.checkout(checkoutOptions).then((result) => {
-      if (result.error) {
-        swalModal("hotel", "Some error occurred!", false);
-      }
-      if (result.redirect) {
-        console.log("Payment will be redirected");
-      }
-      if (result.paymentDetails) {
-        handlePayNow();
-      }
-    });
   };
 
   useEffect(() => {

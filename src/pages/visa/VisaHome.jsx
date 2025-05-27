@@ -108,39 +108,44 @@ const VisaHome = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="mt-12 flex items-center justify-center gap-x-6"
           >
-            <motion.button
-              onClick={handleNavigate}
-              className="relative overflow-hidden  px-8 py-3.5 text-sm font-semibold bg-[#fd5b00] text-white rounded-3xl"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onHoverStart={() => setIsHovered(true)}
-              onHoverEnd={() => setIsHovered(false)}
-            >
-              <span className="relative z-10 flex items-center gap-2">
-                Begin AI Processing
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className="w-5 h-5"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M2 10a.75.75 0 01.75-.75h12.59l-2.1-1.95a.75.75 0 111.02-1.1l3.5 3.25a.75.75 0 010 1.1l-3.5 3.25a.75.75 0 11-1.02-1.1l2.1-1.95H2.75A.75.75 0 012 10z"
-                    clipRule="evenodd"
+            {!token ? (
+              <div className="w-10 h-10 border-4 border-[#fd5b00] border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              <motion.button
+                onClick={handleNavigate}
+                className="relative overflow-hidden px-8 py-3.5 text-sm font-semibold bg-[#fd5b00] text-white rounded-3xl"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onHoverStart={() => setIsHovered(true)}
+                onHoverEnd={() => setIsHovered(false)}
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  Begin AI Processing
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M2 10a.75.75 0 01.75-.75h12.59l-2.1-1.95a.75.75 0 111.02-1.1l3.5 3.25a.75.75 0 010 1.1l-3.5 3.25a.75.75 0 11-1.02-1.1l2.1-1.95H2.75A.75.75 0 012 10z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </span>
+
+                {isHovered && (
+                  <motion.span
+                    className="absolute inset-0 bg-white/20"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
                   />
-                </svg>
-              </span>
-              {isHovered && (
-                <motion.span
-                  className="absolute inset-0 bg-white/20"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                />
-              )}
-            </motion.button>
+                )}
+              </motion.button>
+            )}
           </motion.div>
 
           <motion.div
