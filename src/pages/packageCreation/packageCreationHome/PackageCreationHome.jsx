@@ -1,17 +1,18 @@
 import { apiURL } from "../../../Constants/constant";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SearchOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./packageHome.css";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-// import "./itenary.css";
-import { Input, Select } from "antd";
-import { DatePicker, Button } from "antd";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment } from "react";
+import { Combobox } from "@headlessui/react";
+import {
+  CheckIcon,
+  ChevronUpDownIcon,
+  PlusIcon,
+  MinusCircleIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/20/solid";
 import dayjs from "dayjs";
 import {
   clearFlightSelectedIteneraryReducer,
@@ -20,13 +21,9 @@ import {
   itenerarysearchRequest,
   savePayloadrRequest,
 } from "../../../Redux/Itenary/itenary";
-import { clearHotelReducer, hotelAction } from "../../../Redux/Hotel/hotel";
+import { clearHotelReducer } from "../../../Redux/Hotel/hotel";
 
-// Select city data logic
-
-let FromTimeout;
-let FromCurrentValue;
-
+// Initial data constants
 const initialSelectedFromData = {
   Destination: "New Delhi",
   StateProvinceCode: "DL",
@@ -38,268 +35,11 @@ const initialSelectedFromData = {
   _id: "63fc59c1ec25cae0ebcfd9b1",
 };
 
-const fetchFromCity = (value, callback) => {
-  if (FromTimeout) {
-    clearTimeout(FromTimeout);
-    FromTimeout = null;
-  }
-  FromCurrentValue = value;
-  const cityData = () => {
-    axios
-      .post(`${apiURL.baseURL}/skyTrails/city/hotelCitySearch?keyword=${value}`)
-      .then((response) => {
-        if (FromCurrentValue === value) {
-          const res = response.data.data;
-          const result = res?.map((item) => ({
-            Destination: item.Destination,
-            StateProvinceCode: item.StateProvinceCode,
-            cityid: item.cityid,
-            country: item.country,
-            countrycode: item.countrycode,
-            stateprovince: item.stateprovince,
-            __v: item.__v,
-            _id: item._id,
-            item,
-          }));
-          callback(result);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  };
-  if (value) {
-    FromTimeout = setTimeout(cityData, 200);
-  } else {
-    callback([]);
-  }
-};
-
-const FromSearchInput = (props) => {
-  const { onItemSelect } = props;
-  const [fromData, setFromData] = useState([]);
-  const [fromValue, setFromValue] = useState(
-    initialSelectedFromData.Destination
-  );
-  const [selectedItem, setSelectedItem] = useState(initialSelectedFromData);
-
-  const [FromPlaceholder, setFromPlaceholder] = useState("");
-  const [FromDisplayValue, setFromDisplayValue] = useState(
-    initialSelectedFromData.Destination
-  );
-  const [inputStyle, setInputStyle] = useState({});
-
-  useEffect(() => {
-    setFromData([
-      {
-        Destination: initialSelectedFromData.Destination,
-        StateProvinceCode: initialSelectedFromData.StateProvinceCode,
-        cityid: initialSelectedFromData.cityid,
-        country: initialSelectedFromData.country,
-        countrycode: initialSelectedFromData.countrycode,
-        stateprovince: initialSelectedFromData.stateprovince,
-        __v: initialSelectedFromData.__v,
-        _id: initialSelectedFromData._id,
-        item: initialSelectedFromData,
-      },
-    ]);
-  }, []);
-
-  const handleFromSearch = (newValue) => {
-    fetchFromCity(newValue, setFromData);
-  };
-
-  const handleFromChange = (newValue) => {
-    const selected = fromData.find((d) => d.cityid === newValue);
-    setFromValue(selected ? selected.Destination : newValue);
-    setFromDisplayValue(selected ? selected.Destination : newValue);
-    setSelectedItem(selected ? selected.item : null);
-    setInputStyle({ caretColor: "transparent" });
-    if (selected) {
-      onItemSelect(selected.item);
-    }
-  };
-
-  const handleFromFocus = () => {
-    setFromPlaceholder("From");
-    setFromDisplayValue(""); // Clear display value to show placeholder
-    setInputStyle({});
-  };
-
-  const handleFromBlur = () => {
-    setFromPlaceholder("");
-    setFromDisplayValue(fromValue); // Reset display value to selected value
-    setInputStyle({ caretColor: "transparent" });
-  };
-  const renderFromOption = (option) => (
-    <div>
-      <div>
-        {option.Destination} ({option.countrycode})
-      </div>
-      <div style={{ color: "gray" }}>{option.cityid}</div>
-    </div>
-  );
-
-  return (
-    <Select
-      showSearch
-      style={inputStyle}
-      // value={fromValue}
-      value={FromDisplayValue}
-      // placeholder={props.placeholder}
-      placeholder={FromPlaceholder || props.placeholder}
-      // style={props.style}
-      defaultActiveFirstOption={false}
-      suffixIcon={null}
-      filterOption={false}
-      onSearch={handleFromSearch}
-      onChange={handleFromChange}
-      onFocus={handleFromFocus} // Set placeholder on focus
-      onBlur={handleFromBlur}
-      notFoundContent={null}
-      options={fromData.map((d) => ({
-        value: d.cityid,
-        label: renderFromOption(d),
-      }))}
-    />
-  );
-};
-
-// select city data logic
-
-// select country logic
-
-let ToTimeout;
-let ToCurrentValue;
-
 const initialSelectedToData = {
   countryCode: "IN",
   countryCode3: "IND",
   countryName: "India",
 };
-
-const fetchToCity = (value, callback) => {
-  if (ToTimeout) {
-    clearTimeout(ToTimeout);
-    ToTimeout = null;
-  }
-  ToCurrentValue = value;
-  const cityData = () => {
-    axios
-      .get(`${apiURL.baseURL}/skyTrails/grnconnect/getcountrylist`)
-      .then((response) => {
-        if (ToCurrentValue === value) {
-          const { data } = response.data;
-          const filteredData = data.filter((item) =>
-            item.countryName.toLowerCase().includes(value.toLowerCase())
-          );
-          const result = filteredData.map((item) => ({
-            value: item.countryCode,
-            countryName: item.countryName,
-            countryCode3: item.countryCode3,
-            item,
-          }));
-          callback(result);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  };
-  if (value) {
-    ToTimeout = setTimeout(cityData, 200);
-  } else {
-    callback([]);
-  }
-};
-
-const NationalityInput = (props) => {
-  const { onItemSelect } = props;
-  const [toData, setToData] = useState([]);
-  const [toValue, setToValue] = useState(initialSelectedToData.countryName);
-  const [selectedItem, setSelectedItem] = useState(initialSelectedToData);
-
-  const [ToPlaceholder, setToPlaceholder] = useState("");
-  const [ToDisplayValue, setToDisplayValue] = useState(
-    initialSelectedToData.countryName
-  );
-  const [inputStyle, setInputStyle] = useState({});
-
-  useEffect(() => {
-    setToData([
-      {
-        value: initialSelectedToData.countryCode,
-        countryCode3: initialSelectedToData.countryCode3,
-        countryName: initialSelectedToData.countryName,
-        item: initialSelectedToData,
-      },
-    ]);
-  }, []);
-
-  const handleToSearch = (newValue) => {
-    fetchToCity(newValue, setToData);
-  };
-
-  const handleToChange = (newValue) => {
-    const selected = toData.find((d) => d.value === newValue);
-    setToValue(selected ? selected.countryName : newValue);
-    setToDisplayValue(selected ? selected.countryName : newValue);
-    setSelectedItem(selected ? selected.item : null);
-    setInputStyle({ caretColor: "transparent" });
-    if (selected) {
-      onItemSelect(selected.item);
-    }
-  };
-
-  const handleToFocus = () => {
-    setToPlaceholder("To");
-    setToDisplayValue("");
-    setInputStyle({});
-  };
-
-  const handleTOBlur = () => {
-    setToPlaceholder("");
-    setToDisplayValue(toValue);
-    setInputStyle({ caretColor: "transparent" });
-  };
-
-  const renderToOption = (option) => (
-    <div>
-      <div>
-        {option.countryName} ({option.value})
-      </div>
-      <div style={{ color: "gray" }}>{option.countryCode3}</div>
-    </div>
-  );
-
-  return (
-    <Select
-      showSearch
-      value={ToDisplayValue}
-      placeholder={ToPlaceholder || props.placeholder}
-      style={inputStyle}
-      defaultActiveFirstOption={false}
-      suffixIcon={null}
-      filterOption={false}
-      onSearch={handleToSearch}
-      onChange={handleToChange}
-      onFocus={handleToFocus}
-      onBlur={handleTOBlur}
-      notFoundContent={null}
-      options={toData.map((d) => ({
-        value: d.value,
-        label: renderToOption(d),
-      }))}
-    />
-  );
-};
-
-// select country logic
-
-// leaving city logic
-
-let LeavingTimeout;
-let LeavingCurrentValue;
 
 const initialSelectedLeavingData = {
   Destination: "New Delhi",
@@ -312,137 +52,220 @@ const initialSelectedLeavingData = {
   _id: "63fc59c1ec25cae0ebcfd9b1",
 };
 
-const fetchLeavingCity = (value, callback) => {
-  if (LeavingTimeout) {
-    clearTimeout(LeavingTimeout);
-    LeavingTimeout = null;
-  }
-  LeavingCurrentValue = value;
-  const cityData = () => {
-    axios
-      .post(`${apiURL.baseURL}/skyTrails/city/hotelCitySearch?keyword=${value}`)
-      .then((response) => {
-        if (LeavingCurrentValue === value) {
-          const res = response.data.data;
-          const result = res?.map((item) => ({
-            Destination: item.Destination,
-            StateProvinceCode: item.StateProvinceCode,
-            cityid: item.cityid,
-            country: item.country,
-            countrycode: item.countrycode,
-            stateprovince: item.stateprovince,
-            __v: item.__v,
-            _id: item._id,
-            item,
-          }));
-          callback(result);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  };
-  if (value) {
-    LeavingTimeout = setTimeout(cityData, 200);
-  } else {
-    callback([]);
-  }
-};
+// Custom Select Components
+const CitySearchInput = ({ initialValue, onItemSelect, placeholder }) => {
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState(initialValue);
+  const [items, setItems] = useState([initialValue]);
 
-const LeavingSearchInput = (props) => {
-  const { onItemSelect } = props;
-  const [fromData, setFromData] = useState([]);
-  const [fromValue, setFromValue] = useState(
-    initialSelectedLeavingData.Destination
-  );
-  const [selectedItem, setSelectedItem] = useState(initialSelectedLeavingData);
-
-  const [FromPlaceholder, setFromPlaceholder] = useState("");
-  const [FromDisplayValue, setFromDisplayValue] = useState(
-    initialSelectedLeavingData.Destination
-  );
-  const [inputStyle, setInputStyle] = useState({});
-
-  useEffect(() => {
-    setFromData([
-      {
-        Destination: initialSelectedLeavingData.Destination,
-        StateProvinceCode: initialSelectedLeavingData.StateProvinceCode,
-        cityid: initialSelectedLeavingData.cityid,
-        country: initialSelectedLeavingData.country,
-        countrycode: initialSelectedLeavingData.countrycode,
-        stateprovince: initialSelectedLeavingData.stateprovince,
-        __v: initialSelectedLeavingData.__v,
-        _id: initialSelectedLeavingData._id,
-        item: initialSelectedLeavingData,
-      },
-    ]);
-  }, []);
-
-  const handleFromSearch = (newValue) => {
-    fetchLeavingCity(newValue, setFromData);
-  };
-
-  const handleFromChange = (newValue) => {
-    const selected = fromData.find((d) => d.cityid === newValue);
-    setFromValue(selected ? selected.Destination : newValue);
-    setFromDisplayValue(selected ? selected.Destination : newValue);
-    setSelectedItem(selected ? selected.item : null);
-    setInputStyle({ caretColor: "transparent" });
-    if (selected) {
-      onItemSelect(selected.item);
+  const fetchCities = async (value) => {
+    try {
+      const response = await axios.post(
+        `${apiURL.baseURL}/skyTrails/city/hotelCitySearch?keyword=${value}`
+      );
+      const results = response.data.data.map((item) => ({
+        ...item,
+        item, // Include the full item for reference
+      }));
+      setItems(results);
+    } catch (error) {
+      console.error("Error fetching cities:", error);
     }
   };
 
-  const handleFromFocus = () => {
-    setFromPlaceholder("From");
-    setFromDisplayValue(""); // Clear display value to show placeholder
-    setInputStyle({});
-  };
-
-  const handleFromBlur = () => {
-    setFromPlaceholder("");
-    setFromDisplayValue(fromValue); // Reset display value to selected value
-    setInputStyle({ caretColor: "transparent" });
-  };
-  const renderFromOption = (option) => (
-    <div>
-      <div>
-        {option.Destination} ({option.countrycode})
-      </div>
-      {/* <div style={{ color: "gray" }}>{option.cityid}</div> */}
-    </div>
-  );
+  useEffect(() => {
+    if (query) {
+      const timer = setTimeout(() => fetchCities(query), 200);
+      return () => clearTimeout(timer);
+    }
+  }, [query]);
 
   return (
-    <Select
-      showSearch
-      style={inputStyle}
-      // value={fromValue}
-      value={FromDisplayValue}
-      // placeholder={props.placeholder}
-      placeholder={FromPlaceholder || props.placeholder}
-      // style={props.style}
-      defaultActiveFirstOption={false}
-      suffixIcon={null}
-      filterOption={false}
-      onSearch={handleFromSearch}
-      onChange={handleFromChange}
-      onFocus={handleFromFocus} // Set placeholder on focus
-      onBlur={handleFromBlur}
-      notFoundContent={null}
-      options={fromData.map((d) => ({
-        value: d.cityid,
-        label: renderFromOption(d),
-      }))}
-    />
+    <Combobox
+      value={selected}
+      onChange={(value) => {
+        setSelected(value);
+        onItemSelect(value.item || value);
+      }}
+    >
+      <div className="relative">
+        <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+          <Combobox.Input
+            className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
+            displayValue={(item) => item?.Destination || ""}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={placeholder}
+          />
+          <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+            <ChevronUpDownIcon
+              className="h-5 w-5 text-gray-400"
+              aria-hidden="true"
+            />
+          </Combobox.Button>
+        </div>
+        <Transition
+          as={Fragment}
+          leave="transition ease-in duration-100"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+          afterLeave={() => setQuery("")}
+        >
+          <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-10">
+            {items.length === 0 && query !== "" ? (
+              <div className="relative cursor-default select-none px-4 py-2 text-gray-700">
+                Nothing found.
+              </div>
+            ) : (
+              items.map((item) => (
+                <Combobox.Option
+                  key={item.cityid}
+                  className={({ active }) =>
+                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                      active ? "bg-teal-600 text-white" : "text-gray-900"
+                    }`
+                  }
+                  value={item}
+                >
+                  {({ selected, active }) => (
+                    <>
+                      <span
+                        className={`block truncate ${
+                          selected ? "font-medium" : "font-normal"
+                        }`}
+                      >
+                        {item.Destination} ({item.countrycode})
+                      </span>
+                      {selected ? (
+                        <span
+                          className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                            active ? "text-white" : "text-teal-600"
+                          }`}
+                        >
+                          <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                        </span>
+                      ) : null}
+                    </>
+                  )}
+                </Combobox.Option>
+              ))
+            )}
+          </Combobox.Options>
+        </Transition>
+      </div>
+    </Combobox>
   );
 };
 
-// leaving city logic
+const NationalityInput = ({ onItemSelect }) => {
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState(initialSelectedToData);
+  const [items, setItems] = useState([initialSelectedToData]);
+
+  const fetchCountries = async (value) => {
+    try {
+      const response = await axios.get(
+        `${apiURL.baseURL}/skyTrails/grnconnect/getcountrylist`
+      );
+      const filtered = response.data.data
+        .filter((item) =>
+          item.countryName.toLowerCase().includes(value.toLowerCase())
+        )
+        .map((item) => ({
+          ...item,
+          value: item.countryCode,
+          item,
+        }));
+      setItems(filtered);
+    } catch (error) {
+      console.error("Error fetching countries:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (query) {
+      const timer = setTimeout(() => fetchCountries(query), 200);
+      return () => clearTimeout(timer);
+    }
+  }, [query]);
+
+  return (
+    <Combobox
+      value={selected}
+      onChange={(value) => {
+        setSelected(value);
+        onItemSelect(value.item || value);
+      }}
+    >
+      <div className="relative">
+        <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+          <Combobox.Input
+            className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
+            displayValue={(item) => item?.countryName || ""}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Select Nationality"
+          />
+          <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+            <ChevronUpDownIcon
+              className="h-5 w-5 text-gray-400"
+              aria-hidden="true"
+            />
+          </Combobox.Button>
+        </div>
+        <Transition
+          as={Fragment}
+          leave="transition ease-in duration-100"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+          afterLeave={() => setQuery("")}
+        >
+          <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-10">
+            {items.length === 0 && query !== "" ? (
+              <div className="relative cursor-default select-none px-4 py-2 text-gray-700">
+                Nothing found.
+              </div>
+            ) : (
+              items.map((item) => (
+                <Combobox.Option
+                  key={item.value}
+                  className={({ active }) =>
+                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                      active ? "bg-teal-600 text-white" : "text-gray-900"
+                    }`
+                  }
+                  value={item}
+                >
+                  {({ selected, active }) => (
+                    <>
+                      <span
+                        className={`block truncate ${
+                          selected ? "font-medium" : "font-normal"
+                        }`}
+                      >
+                        {item.countryName} ({item.countryCode})
+                      </span>
+                      {selected ? (
+                        <span
+                          className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                            active ? "text-white" : "text-teal-600"
+                          }`}
+                        >
+                          <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                        </span>
+                      ) : null}
+                    </>
+                  )}
+                </Combobox.Option>
+              ))
+            )}
+          </Combobox.Options>
+        </Transition>
+      </div>
+    </Combobox>
+  );
+};
 
 const PackageCreationHome = () => {
-  const [openTravelModal, setOpenTravelModal] = React.useState(false);
+  const [isTravelModalOpen, setIsTravelModalOpen] = useState(false);
   const [selectNationality, setSelectNationality] = useState(
     initialSelectedToData
   );
@@ -458,32 +281,47 @@ const PackageCreationHome = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Date handling
+  const dateFormat = "DD MMM, YY";
+  const today = dayjs().format(dateFormat);
+  const [newDepartDate, setNewDepartDate] = useState(today);
+
+  // Traveler selection
+  const [condition, setCondition] = useState(1);
+  const [formDataDynamic, setFormData] = useState([
+    {
+      NoOfAdults: 1,
+      NoOfChild: 0,
+      ChildAge: [],
+    },
+  ]);
+
+  // Other form fields
+  const [selectedInterest, setSelectedInterest] = useState(null);
+  const [whoisTravelling, setWhoisTravelling] = useState(null);
+  const [ratingData, setRatingData] = useState(null);
+
+  // Initialize
   useEffect(() => {
     dispatch(clearHotelReducer());
     dispatch(clearFlightSelectedIteneraryReducer());
     dispatch(clearItenaryRecuder());
-  }, []);
+  }, [dispatch]);
 
-  // console.log(itineraryItems, "itineraryItems")
-
-  const handleNationalitySelect = (item) => {
-    setSelectNationality(item);
-  };
+  // Handler functions
+  const handleNationalitySelect = (item) => setSelectNationality(item);
+  const handleLeavingSelect = (item) => setSelectedLeaving(item);
 
   const handleFromSelect = (index, item) => {
-    const newItineraryItems = [...itineraryItems];
-    newItineraryItems[index].from = item;
-    setItineraryItems(newItineraryItems);
-  };
-
-  const handleLeavingSelect = (item) => {
-    setSelectedLeaving(item);
+    const newItems = [...itineraryItems];
+    newItems[index].from = item;
+    setItineraryItems(newItems);
   };
 
   const handleNightSelect = (index, value) => {
-    const newItineraryItems = [...itineraryItems];
-    newItineraryItems[index].night = value;
-    setItineraryItems(newItineraryItems);
+    const newItems = [...itineraryItems];
+    newItems[index].night = value;
+    setItineraryItems(newItems);
   };
 
   const handleAddItem = () => {
@@ -494,83 +332,40 @@ const PackageCreationHome = () => {
   };
 
   const handleRemoveItem = (index) => {
-    const newItineraryItems = itineraryItems.filter((_, i) => i !== index);
-    setItineraryItems(newItineraryItems);
+    const newItems = itineraryItems.filter((_, i) => i !== index);
+    setItineraryItems(newItems);
   };
-  //  night show logic
-
-  const nights = Array.from({ length: 30 }, (_, index) => index + 1);
-  //  night show logic
-
-  // date logic here
-
-  const dateFormat = "DD MMM, YY";
-  const today = dayjs().format(dateFormat);
-  const [newDepartDate, setNewDepartDate] = useState(today);
-  // const [newDepartDateCld, setNewDepartDateCld] = useState("");
 
   const handleRangeChange = (date) => {
     if (date) {
       setNewDepartDate(dayjs(date).format(dateFormat));
-    } else {
-      console.log("Selection cleared");
     }
   };
 
-  const disablePastDates = (current) => {
-    return current && current < dayjs().startOf("day");
-  };
+  const disablePastDates = (current) =>
+    current && current < dayjs().startOf("day");
 
-  // date logic here
-
-  // rooms and passenger selection
-
-  const [condition, setCondition] = useState(1);
-  const [formDataDynamic, setFormData] = useState([
-    {
-      NoOfAdults: 1,
-      NoOfChild: 0,
-      ChildAge: [],
-    },
-  ]);
-
-  const handleTravelClickOpen = () => {
-    setOpenTravelModal(true);
-  };
-
-  const handleTravelClose = (event, reason) => {
-    if (reason !== "backdropClick") {
-      setOpenTravelModal(false);
-    }
-  };
-
-  const handleConditionChange = (event) => {
-    const newCondition = parseInt(event.target.value);
+  // Traveler modal handlers
+  const handleConditionChange = (e) => {
+    const newCondition = parseInt(e.target.value);
     setCondition(newCondition);
-    const newFormData = Array.from({ length: newCondition }, () => ({
-      NoOfAdults: 1,
-      NoOfChild: 0,
-      ChildAge: [],
-    }));
-    setFormData(newFormData);
+    setFormData(
+      Array.from({ length: newCondition }, () => ({
+        NoOfAdults: 1,
+        NoOfChild: 0,
+        ChildAge: [],
+      }))
+    );
   };
 
   const handleFormChange = (index, key, value) => {
     const updatedFormData = [...formDataDynamic];
-    if (key === "NoOfAdults" && value > 8) {
-      value = 8; // Limit the number of adults to a maximum of 8
-    }
+    if (key === "NoOfAdults" && value > 8) value = 8;
     updatedFormData[index][key] = value;
 
     if (key === "NoOfChild") {
-      if (value === 0) {
-        updatedFormData[index]["ChildAge"] = [];
-      } else {
-        updatedFormData[index]["ChildAge"] = Array.from(
-          { length: value },
-          () => 1
-        ); // Initialize child age with 1
-      }
+      updatedFormData[index]["ChildAge"] =
+        value === 0 ? [] : Array.from({ length: value }, () => 1);
     }
 
     setFormData(updatedFormData);
@@ -582,90 +377,43 @@ const PackageCreationHome = () => {
     setFormData(updatedFormData);
   };
 
+  // Calculate traveler counts
   const [numAdults, setNumAdults] = useState(0);
   const [numChildren, setNumChildren] = useState(0);
-  // const [numInfants, setNumInfants] = useState(0);
-
-  const calculateTravellerCount = () => {
-    let adults = 0;
-    let children = 0;
-    // let infants = 0;
-
-    formDataDynamic.forEach((data) => {
-      adults += data.NoOfAdults;
-      children += data.NoOfChild;
-    });
-
-    setNumAdults(adults);
-    setNumChildren(children);
-    // setNumInfants(infants);
-  };
 
   useEffect(() => {
-    calculateTravellerCount();
+    const adults = formDataDynamic.reduce(
+      (sum, data) => sum + data.NoOfAdults,
+      0
+    );
+    const children = formDataDynamic.reduce(
+      (sum, data) => sum + data.NoOfChild,
+      0
+    );
+    setNumAdults(adults);
+    setNumChildren(children);
   }, [formDataDynamic]);
 
-  // rooms and passenger selection
-
-  // interest selection
-
-  const [selectedInterest, setSelectedInterest] = useState(null);
-
-  const handleInterestChange = (value) => {
-    setSelectedInterest(value);
-  };
-
-  // interest selection
-
-  // who is travelling selection
-
-  const [whoisTravelling, setwhoisTravelling] = useState(null);
-
-  const handleWhoisTravelling = (value) => {
-    setwhoisTravelling(value);
-  };
-
-  // who is travelling selection
-
-  // who is travelling selection
-
-  const [ratingData, setRatingData] = useState(null);
-
-  const handleRating = (value) => {
-    setRatingData(value);
-  };
-
-  // who is travelling selection
-
-  // console.log(reducerState, "reducer stater in itenary dashboard")
-
-  // handle client name
-
-  const handleClientName = (e) => {
-    setClientName(e.target.value);
-  };
-
-  // handle client name
-
+  // Form submission
   const handleItenarySubmit = () => {
     setLoader(true);
 
     const payload = {
       cityAndNight: itineraryItems,
-      clientName: clientName,
+      clientName,
       leavingFrom: selectedLeaving,
       nationality: selectNationality,
       leavingDate: newDepartDate,
       RoomGuests: [...formDataDynamic],
       interest: selectedInterest,
-      whoisTravelling: whoisTravelling,
-      ratingData: ratingData,
+      whoisTravelling,
+      ratingData,
     };
     dispatch(savePayloadrRequest(payload));
 
     let currentCheckInDate = dayjs(newDepartDate);
 
-    itineraryItems.forEach((item, index) => {
+    itineraryItems.forEach((item) => {
       const payloadSearch = {
         origin: selectedLeaving?.Destination?.toLowerCase(),
         destination: item?.from?.Destination?.toLowerCase(),
@@ -692,356 +440,398 @@ const PackageCreationHome = () => {
       };
 
       dispatch(hotelActionItenerary(payloadHotel));
-
-      // Calculate the next check-in date
       currentCheckInDate = currentCheckInDate.add(item.night, "day");
     });
 
     navigate("/packagecreationresult");
   };
 
+  // Nights options
+  const nights = Array.from({ length: 30 }, (_, index) => index + 1);
+
   return (
-    <section className="py-5">
-      <div
-        className="container px-5 py-3 "
-        style={{ background: "#FFF", borderRadius: "10px", maxWidth: "750px" }}
-      >
-        <div className="itenaryHeading d-flex justify-content-center text-center mb-3">
-          <h3>Customized Holidays</h3>
+    <section className="py-8 bg-gray-50">
+      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-800">
+            Customized Holidays
+          </h2>
         </div>
+
+        {/* Itinerary Items */}
         {itineraryItems.map((item, index) => (
-          <div className="row g-3 mb-2" key={index}>
-            <div className="col-lg-6 col-md-6">
-              <div className="itenarySelect">
-                <FromSearchInput
-                  style={{ width: "100%" }}
-                  placeholder="Search"
-                  onItemSelect={(item) => handleFromSelect(index, item)}
-                />
-              </div>
-            </div>
-            <div className="col-lg-5 col-md-5">
-              <div className="itenarySelect">
-                <Select
-                  style={{ width: "100%" }}
-                  placeholder="Select Night"
-                  onChange={(value) => handleNightSelect(index, value)}
-                  value={item.night}
-                >
-                  {nights.map((night, index) => (
-                    <Select.Option key={night} value={index + 1}>
-                      {night} Night
-                    </Select.Option>
-                  ))}
-                </Select>
-              </div>
-            </div>
-            <div className="col-lg-1 col-md-1">
-              {/* <Button type="danger" >-</Button> */}
-              <MinusCircleOutlined
-                className="dynamic-delete-button"
-                onClick={() => handleRemoveItem(index)}
+          <div key={index} className="grid grid-cols-12 gap-4 mb-4 items-end">
+            <div className="col-span-12 sm:col-span-5">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Destination
+              </label>
+              <CitySearchInput
+                initialValue={item.from}
+                onItemSelect={(item) => handleFromSelect(index, item)}
+                placeholder="Search destination"
               />
+            </div>
+
+            <div className="col-span-8 sm:col-span-5">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Nights
+              </label>
+              <select
+                className="w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                value={item.night || ""}
+                onChange={(e) =>
+                  handleNightSelect(index, parseInt(e.target.value))
+                }
+              >
+                <option value="">Select nights</option>
+                {nights.map((night) => (
+                  <option key={night} value={night}>
+                    {night} Night{night !== 1 ? "s" : ""}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="col-span-4 sm:col-span-2 flex justify-end">
+              <button
+                type="button"
+                onClick={() => handleRemoveItem(index)}
+                className="text-red-600 hover:text-red-800"
+              >
+                <MinusCircleIcon className="h-6 w-6" />
+              </button>
             </div>
           </div>
         ))}
-        <div className="row">
-          <div className="col-lg-12 col-md-12">
-            {/* <Button type="primary" >Add</Button> */}
-            <div className="d-flex justify-content-center mt-2">
-              <Button
-                type="dashed"
-                onClick={handleAddItem}
-                style={{
-                  width: "60%",
-                }}
-                icon={<PlusOutlined />}
-              >
-                Add Another City
-              </Button>
-            </div>
-          </div>
+
+        <div className="flex justify-center mt-4">
+          <button
+            type="button"
+            onClick={handleAddItem}
+            className="inline-flex items-center px-4 py-2 border border-dashed border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            <PlusIcon className="-ml-1 mr-2 h-5 w-5" />
+            Add Another City
+          </button>
         </div>
 
-        <div className="row mt-4 g-2 labelItenerary">
-          <div className="col-lg-6 col-md-6">
-            <label htmlFor="">Client Name</label>
-            <div className="itenarySelect">
-              <Input placeholder="name" onChange={(e) => handleClientName(e)} />
-            </div>
-          </div>
-          <div className="col-lg-6 col-md-6">
-            <label htmlFor="">Leaving City</label>
-            <div className="itenarySelect">
-              <LeavingSearchInput
-                placeholder="Search"
-                style={{ width: "100%" }}
-                onItemSelect={handleLeavingSelect} // Pass the callback function
+        {/* Form Fields */}
+        <div className="mt-8 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Client Name
+              </label>
+              <input
+                type="text"
+                value={clientName}
+                onChange={(e) => setClientName(e.target.value)}
+                className="w-full rounded-md border border-gray-300 py-2 px-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                placeholder="Enter client name"
               />
             </div>
-          </div>
-          <div className="col-lg-6 col-md-6">
-            <label htmlFor="">Nationality</label>
-            <div className="itenarySelect">
-              <NationalityInput
-                placeholder="Search"
-                style={{ width: "100%" }}
-                onItemSelect={handleNationalitySelect} // Pass the callback function
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Leaving City
+              </label>
+              <CitySearchInput
+                initialValue={selectedLeaving}
+                onItemSelect={handleLeavingSelect}
+                placeholder="Search leaving city"
               />
             </div>
-          </div>
-          <div className="col-lg-6 col-md-6">
-            <label htmlFor="">Leaving on</label>
-            <div className="itenarySelect">
-              <DatePicker
-                onChange={handleRangeChange}
-                defaultValue={[dayjs()]}
-                format={dateFormat}
-                disabledDate={disablePastDates}
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Nationality
+              </label>
+              <NationalityInput onItemSelect={handleNationalitySelect} />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Leaving On
+              </label>
+              <input
+                type="date"
+                min={dayjs().format("YYYY-MM-DD")}
+                value={dayjs(newDepartDate, dateFormat).format("YYYY-MM-DD")}
+                onChange={(e) => handleRangeChange(e.target.value)}
+                className="w-full rounded-md border border-gray-300 py-2 px-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
               />
             </div>
-          </div>
-          <div className="col-lg-6 col-md-6">
-            <label htmlFor="">Number of Travellers</label>
-            <div className="itenarySelectRoom">
-              <div onClick={handleTravelClickOpen} className="travellerButton">
-                <span className="">
-                  {condition} Room, {numAdults} Adults {numChildren} Child
-                </span>
-              </div>
 
-              <Dialog
-                sx={{ zIndex: "99999" }}
-                disableEscapeKeyDown
-                open={openTravelModal}
-                onClose={handleTravelClose}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Travelers
+              </label>
+              <button
+                type="button"
+                onClick={() => setIsTravelModalOpen(true)}
+                className="w-full text-left rounded-md border border-gray-300 py-2 px-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
               >
-                <DialogContent>
-                  <>
-                    <div className="travellerModal">
-                      <div className="roomModal">
-                        <div className="hotel_modal_form_input px-0">
-                          <label className="form_label">Room*</label>
-                          <select
-                            name="room"
-                            value={condition}
-                            onChange={handleConditionChange}
-                            className="hotel_input_select"
-                          >
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                          </select>
-                        </div>
-                      </div>
-
-                      <div className="px-1">
-                        {condition > 0 &&
-                          Array.from({ length: condition }).map((_, index) => (
-                            <div key={index} className="room-modal-container">
-                              <div>
-                                <h5>ROOM {index + 1}</h5>
-                              </div>
-                              <div className="row">
-                                <div className="hotel_modal_form_input">
-                                  <label className="form_label">
-                                    No of Adults:
-                                  </label>
-                                  <select
-                                    value={
-                                      formDataDynamic[index]?.NoOfAdults || 1
-                                    }
-                                    className="hotel_input_select"
-                                    onChange={(e) =>
-                                      handleFormChange(
-                                        index,
-                                        "NoOfAdults",
-                                        parseInt(e.target.value)
-                                      )
-                                    }
-                                  >
-                                    {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-                                      <option key={num} value={num}>
-                                        {num}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </div>
-
-                                <div className="hotel_modal_form_input">
-                                  <label className="form_label">
-                                    No of Child:
-                                  </label>
-                                  <select
-                                    value={
-                                      formDataDynamic[index]?.NoOfChild || 0
-                                    }
-                                    className="hotel_input_select"
-                                    name="noOfChild"
-                                    onChange={(e) =>
-                                      handleFormChange(
-                                        index,
-                                        "NoOfChild",
-                                        parseInt(e.target.value)
-                                      )
-                                    }
-                                  >
-                                    {[0, 1, 2, 3, 4].map((childCount) => (
-                                      <option
-                                        key={childCount}
-                                        value={childCount}
-                                      >
-                                        {childCount}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </div>
-                              </div>
-                              {formDataDynamic[index]?.NoOfChild > 0 && (
-                                <div className="hotel_modal_form_input_child_age">
-                                  <label className="mt-3">Child Age:</label>
-                                  <div>
-                                    {Array.from({
-                                      length:
-                                        formDataDynamic[index]?.NoOfChild || 0,
-                                    }).map((_, childIndex) => (
-                                      <div key={childIndex} className="">
-                                        <select
-                                          value={
-                                            formDataDynamic[index]?.ChildAge?.[
-                                              childIndex
-                                            ] || ""
-                                          }
-                                          className="hotel_input_select"
-                                          onChange={(e) =>
-                                            handleChildAgeChange(
-                                              index,
-                                              childIndex,
-                                              e.target.value
-                                            )
-                                          }
-                                        >
-                                          {Array.from(
-                                            { length: 12 },
-                                            (_, i) => (
-                                              <option key={i} value={i + 1}>
-                                                {i + 1}
-                                              </option>
-                                            )
-                                          )}
-                                        </select>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-                  </>
-                </DialogContent>
-                <DialogActions>
-                  <Button
-                    style={{
-                      backgroundColor: "#21325d",
-                      color: "white",
-                    }}
-                    onClick={handleTravelClose}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    style={{
-                      backgroundColor: "#21325d",
-                      color: "white",
-                    }}
-                    onClick={handleTravelClose}
-                  >
-                    Ok
-                  </Button>
-                </DialogActions>
-              </Dialog>
+                {condition} Room, {numAdults} Adults, {numChildren} Children
+              </button>
             </div>
-          </div>
-          <div className="col-lg-6 col-md-6">
-            <label htmlFor="">Interest</label>
-            <div className="itenarySelect">
-              <Select
-                value={selectedInterest}
-                onChange={handleInterestChange}
-                style={{ width: "100%" }}
-                placeholder="Select an option"
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Interest
+              </label>
+              <select
+                value={selectedInterest || ""}
+                onChange={(e) => setSelectedInterest(e.target.value)}
+                className="w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
               >
-                <Select.Option value="Honeymoon">Honeymoon</Select.Option>
-                <Select.Option value="Luxury">Luxury</Select.Option>
-                <Select.Option value="Leisure">Leisure</Select.Option>
-                <Select.Option value="Spa">Spa</Select.Option>
-                <Select.Option value="History">History</Select.Option>
-                <Select.Option value="Art&Culture">Art & Culture</Select.Option>
-                <Select.Option value="Adventure">Adventure</Select.Option>
-                <Select.Option value="Nightlife">Nightlife</Select.Option>
-                <Select.Option value="Shopping">Shopping</Select.Option>
-                <Select.Option value="Entertainment">
-                  Entertainment
-                </Select.Option>
-                <Select.Option value="option7">Adventure</Select.Option>
-              </Select>
+                <option value="">Select interest</option>
+                <option value="Honeymoon">Honeymoon</option>
+                <option value="Luxury">Luxury</option>
+                <option value="Leisure">Leisure</option>
+                <option value="Spa">Spa</option>
+                <option value="History">History</option>
+                <option value="Art&Culture">Art & Culture</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Nightlife">Nightlife</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Entertainment">Entertainment</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Traveling As
+              </label>
+              <select
+                value={whoisTravelling || ""}
+                onChange={(e) => setWhoisTravelling(e.target.value)}
+                className="w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              >
+                <option value="">Select option</option>
+                <option value="Couple">Couple</option>
+                <option value="Family">Family</option>
+                <option value="Friends">Friends</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Star Rating
+              </label>
+              <select
+                value={ratingData || ""}
+                onChange={(e) => setRatingData(e.target.value)}
+                className="w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              >
+                <option value="">Select rating</option>
+                <option value="recommended">Recommended</option>
+                <option value="3">3 Star</option>
+                <option value="4">4 Star</option>
+                <option value="5">5 Star</option>
+              </select>
             </div>
           </div>
 
-          <div className="col-lg-6 col-md-6">
-            <label htmlFor="">Who is Travelling</label>
-            <div className="itenarySelect">
-              <Select
-                value={whoisTravelling}
-                onChange={handleWhoisTravelling}
-                style={{ width: "100%" }}
-                placeholder="Select an option"
-              >
-                <Select.Option value="Couple">Couple</Select.Option>
-                <Select.Option value="Family">Family</Select.Option>
-                <Select.Option value="Friends">Friends</Select.Option>
-              </Select>
-            </div>
-          </div>
-          <div className="col-lg-6 col-md-6">
-            <label htmlFor="">Star Rating</label>
-            <div className="itenarySelect">
-              <Select
-                value={ratingData}
-                onChange={handleRating}
-                style={{ width: "100%" }}
-                placeholder="Select an option"
-              >
-                <Select.Option value="recommended">Recommended</Select.Option>
-                <Select.Option value="3">3 Star</Select.Option>
-                <Select.Option value="4">4 Star</Select.Option>
-                <Select.Option value="5">5 Star</Select.Option>
-              </Select>
-            </div>
-          </div>
-          <div className="col-lg-12 col-md-12">
-            <div className="d-flex justify-content-center ">
-              <Button
-                type="primary"
-                icon={<SearchOutlined />}
-                danger
-                onClick={handleItenarySubmit}
-              >
-                Search
-              </Button>
-            </div>
+          <div className="flex justify-center pt-6">
+            <button
+              type="button"
+              onClick={handleItenarySubmit}
+              disabled={loader}
+              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-6000 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              {loader ? (
+                "Searching..."
+              ) : (
+                <>
+                  <MagnifyingGlassIcon className="-ml-1 mr-3 h-5 w-5" />
+                  Search
+                </>
+              )}
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Traveler Modal */}
+      <Transition appear show={isTravelModalOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          onClose={() => setIsTravelModalOpen(false)}
+        >
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                  >
+                    Travelers
+                  </Dialog.Title>
+
+                  <div className="mt-4">
+                    <div className="mb-6">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Rooms
+                      </label>
+                      <select
+                        value={condition}
+                        onChange={handleConditionChange}
+                        className="w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                      >
+                        {[1, 2, 3, 4, 5, 6].map((num) => (
+                          <option key={num} value={num}>
+                            {num} Room{num !== 1 ? "s" : ""}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {Array.from({ length: condition }).map((_, index) => (
+                      <div
+                        key={index}
+                        className="mb-6 border-b border-gray-200 pb-6 last:border-0 last:pb-0"
+                      >
+                        <h4 className="text-md font-medium text-gray-900 mb-3">
+                          ROOM {index + 1}
+                        </h4>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Adults
+                            </label>
+                            <select
+                              value={formDataDynamic[index]?.NoOfAdults || 1}
+                              onChange={(e) =>
+                                handleFormChange(
+                                  index,
+                                  "NoOfAdults",
+                                  parseInt(e.target.value)
+                                )
+                              }
+                              className="w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                            >
+                              {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                                <option key={num} value={num}>
+                                  {num}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Children
+                            </label>
+                            <select
+                              value={formDataDynamic[index]?.NoOfChild || 0}
+                              onChange={(e) =>
+                                handleFormChange(
+                                  index,
+                                  "NoOfChild",
+                                  parseInt(e.target.value)
+                                )
+                              }
+                              className="w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                            >
+                              {[0, 1, 2, 3, 4].map((num) => (
+                                <option key={num} value={num}>
+                                  {num}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+
+                        {formDataDynamic[index]?.NoOfChild > 0 && (
+                          <div className="mt-4">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Children Ages
+                            </label>
+                            <div className="grid grid-cols-2 gap-3">
+                              {Array.from({
+                                length: formDataDynamic[index]?.NoOfChild,
+                              }).map((_, childIndex) => (
+                                <div key={childIndex}>
+                                  <label className="block text-xs text-gray-500 mb-1">
+                                    Child {childIndex + 1}
+                                  </label>
+                                  <select
+                                    value={
+                                      formDataDynamic[index]?.ChildAge?.[
+                                        childIndex
+                                      ] || 1
+                                    }
+                                    onChange={(e) =>
+                                      handleChildAgeChange(
+                                        index,
+                                        childIndex,
+                                        parseInt(e.target.value)
+                                      )
+                                    }
+                                    className="w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                                  >
+                                    {Array.from({ length: 12 }, (_, i) => (
+                                      <option key={i} value={i + 1}>
+                                        {i + 1} year{i !== 0 ? "s" : ""}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-6 flex justify-end space-x-3">
+                    <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      onClick={() => setIsTravelModalOpen(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      onClick={() => setIsTravelModalOpen(false)}
+                    >
+                      Save
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
     </section>
   );
 };
 
 export default PackageCreationHome;
-
-// export default PackageCreationHome;

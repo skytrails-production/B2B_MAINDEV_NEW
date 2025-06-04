@@ -21,7 +21,7 @@ const MainLayoutDummmy = () => {
 
   return (
     <>
-      {/* <DummyNavbar /> */}
+      <DummyNavbar />
       <Outlet />
     </>
   );

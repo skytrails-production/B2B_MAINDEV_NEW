@@ -75,9 +75,9 @@ function App() {
   useEffect(() => {
     dispatch(ipAction());
     dispatch(getMarkUpAction());
-    dispatch(walletRequest(token));
+    if (token) dispatch(walletRequest(token));
     // dispatch(faqRatingListReq());
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     const payload = {

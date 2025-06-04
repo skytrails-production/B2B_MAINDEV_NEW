@@ -108,19 +108,19 @@ const VisaHome = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="mt-12 flex items-center justify-center gap-x-6"
           >
-            {!token ? (
-              <div className="w-10 h-10 border-4 border-[#fd5b00] border-t-transparent rounded-full animate-spin"></div>
-            ) : (
-              <motion.button
-                onClick={handleNavigate}
-                className="relative overflow-hidden px-8 py-3.5 text-sm font-semibold bg-[#fd5b00] text-white rounded-3xl"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onHoverStart={() => setIsHovered(true)}
-                onHoverEnd={() => setIsHovered(false)}
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  Begin AI Processing
+            <motion.button
+              onClick={handleNavigate}
+              className="relative overflow-hidden px-8 py-3.5 text-sm font-semibold bg-[#fd5b00] text-white rounded-3xl"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onHoverStart={() => setIsHovered(true)}
+              onHoverEnd={() => setIsHovered(false)}
+            >
+              <span className="relative z-10 flex items-center gap-2">
+                Begin AI Processing
+                {!token ? (
+                  <div className="w-5 h-5 border-4 border-orange-300 border-t-transparent rounded-full animate-spin"></div>
+                ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
@@ -133,19 +133,19 @@ const VisaHome = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                </span>
-
-                {isHovered && (
-                  <motion.span
-                    className="absolute inset-0 bg-white/20"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  />
                 )}
-              </motion.button>
-            )}
+              </span>
+
+              {isHovered && (
+                <motion.span
+                  className="absolute inset-0 bg-white/20"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                />
+              )}
+            </motion.button>
           </motion.div>
 
           <motion.div

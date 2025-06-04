@@ -79,36 +79,36 @@ const VisaForm = () => {
     setArrivalDate(dayjs(dates.startDate).format("DD-MM-YYYY"));
   };
 
-  const historyPayload = {
-    firstName: storedData?.applicant?.firstName,
-    lastName: storedData?.applicant?.lastName,
-    email: storedData?.applicant?.email,
-    sex: storedData?.applicant?.sex,
-    userId: String(crmUserID),
-    mobileNumber: {
-      phone: storedData?.applicant?.phone,
-    },
-    address: storedData?.applicant?.address,
-    depCountyName: payload?.travelingFrom?.value?.name,
-    arrCountyName: payload?.travelingTo?.label,
-    fromDate: departDate,
-    toDate: arrivalDate,
-    visaType: payload?.visaCategory,
-    applicantUid: applicantUId,
-    bearerToken: bearer_token,
-    visaCategory: payload?.visaCategory,
-    sourceCountry: payload?.travelingFrom?.value?.code,
-    destinationCountry: payload?.travelingTo?.value?.alpha3Code,
-    agentName: agentName,
-    agentId: agentId,
-    contactNumber: "",
-    fee: {
-      processingFee: 100,
-      platformFee: 999,
-    },
-  };
-
-  const savetodb = async () => {
+  const savetodb = async (applicationCreationKey) => {
+    const historyPayload = {
+      firstName: storedData?.applicant?.firstName,
+      lastName: storedData?.applicant?.lastName,
+      email: storedData?.applicant?.email,
+      sex: storedData?.applicant?.sex,
+      userId: String(crmUserID),
+      mobileNumber: {
+        phone: storedData?.applicant?.phone,
+      },
+      address: storedData?.applicant?.address,
+      depCountyName: payload?.travelingFrom?.value?.name,
+      arrCountyName: payload?.travelingTo?.label,
+      fromDate: departDate,
+      toDate: arrivalDate,
+      visaType: payload?.visaCategory,
+      applicantUid: applicantUId,
+      bearerToken: bearer_token,
+      visaCategory: payload?.visaCategory,
+      sourceCountry: payload?.travelingFrom?.value?.code,
+      destinationCountry: payload?.travelingTo?.value?.alpha3Code,
+      agentName: agentName,
+      agentId: agentId,
+      contactNumber: "",
+      fee: {
+        processingFee: 100,
+        platformFee: 999,
+      },
+      applicationCreationKey: applicationCreationKey,
+    };
     const res = await axios.post(
       `${apiURL.baseURL}/skyTrails/api/visa/applyForAiVisa`,
       historyPayload,
@@ -161,6 +161,7 @@ const VisaForm = () => {
       );
 
       if (response.data.statusCode === 200) {
+        savetodb(response.data.applicationCreationKey);
         dispatch(
           subtractWalletRequest({
             balance: finalAmount,
@@ -168,7 +169,10 @@ const VisaForm = () => {
             booking_id: "visa" + new Date(),
           })
         );
-
+        console.log(
+          "Payment successful, redirecting...",
+          response.data.response
+        );
         window.location.href = response.data.response;
       } else {
         setError(response.data.responseMessage || "Payment processing failed");
@@ -183,6 +187,62 @@ const VisaForm = () => {
       setIsProcessing(false);
     }
   };
+
+
+  let orderId1 = "";
+
+  const handlePayment = async () => {
+    const token = localStorage?.getItem("jwtToken");
+
+    // savetodb();
+
+    const cashpayload = {
+      phone: storedData?.applicant?.phone,
+      amount: 1,
+      email: storedData?.applicant?.email,
+      productinfo: "ticket",
+      bookingType: "VISA",
+    };
+
+    try {
+      const response = await axios({
+        method: "post",
+        url: `${apiURL.baseURL}/skyTrails/api/transaction/walletRecharge`,
+        data: cashpayload,
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+      });
+
+      if (response.status === 200) {
+        orderId1 = response.data.result.order_id;
+        doPayment(response.data.result.payment_session_id);
+      }
+    } catch (error) {
+      console.error("API call failed:", error);
+    }
+  };
+
+  const doPayment = async (sessionID) => {
+    let checkoutOptions = {
+      paymentSessionId: sessionID,
+      redirectTarget: "_modal",
+    };
+
+    cashfree.checkout(checkoutOptions).then((result) => {
+      if (result.error) {
+        swalModal("hotel", "Some error occurred!", false);
+      }
+      if (result.redirect) {
+        console.log("Payment will be redirected");
+      }
+      if (result.paymentDetails) {
+        handlePayNow();
+      }
+    });
+  };
+
 
   useEffect(() => {
     if (loaderPayment == true) {
@@ -389,7 +449,7 @@ const VisaForm = () => {
             </div>
 
             {/* Payment Button */}
-            <div className="pt-4" onClick={() => savetodb()}>
+            <div className="pt-4">
               {/* <PayButton
                 className={`w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 px-6 rounded-lg shadow-md hover:from-orange-400 hover:to-amber-400 transition-all font-medium ${
                   isProcessing ? "opacity-50 cursor-not-allowed" : ""
@@ -415,7 +475,8 @@ const VisaForm = () => {
                     : "hover:bg-orange-600"
                 }`}
                 phone={storedData?.applicant?.phone}
-                ticketPrice={finalAmount}
+                ticketPrice={0}
+                // ticketPrice={finalAmount}
                 email={storedData?.applicant?.email}
                 productinfo="ticket"
                 bookingType="VISA"

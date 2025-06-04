@@ -32,7 +32,7 @@ const Itinerary = () => {
 
     if (token) {
       dispatch(loginAction(token));
-      dispatch(walletRequest(token));
+      // dispatch(walletRequest(token));
     }
   }, [tokenFromURL, token, dispatch]);
 

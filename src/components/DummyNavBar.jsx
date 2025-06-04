@@ -41,10 +41,12 @@ const DummyNavbar = ({ className = "" }) => {
         currentPath === "/dummy-flight" ||
         currentPath === "/flightlist" ||
         currentPath === "/ReturnResult" ||
-        currentPath === "/flight/review-details"
+        currentPath === "/flight/review-details" ||
+        currentPath.includes("flight-details-dummy") ||
+        currentPath.includes("flight-dummy")
       );
     }
-    console.log(currentPath, "currentPath", path);
+    // console.log(currentPath, "currentPath", path);
 
     return currentPath.startsWith(path);
   };
@@ -90,7 +92,7 @@ const DummyNavbar = ({ className = "" }) => {
             <ul className="mb-0 p-0 gap-3 flex overflow-x-auto hiddenScrollbar">
               <li
                 className={`flex-shrink-0 flex gap-1 py-1 ps-2 sm:pe-2  xl:pe-3 rounded-full items-center cursor-pointer text-[12px] lg:text-[13px] xl:text-lg font-medium ${
-                  isActive("/") ? "bg-indigo-200 " : " bg-gray-100"
+                  isActive("/dummy-flight") ? "bg-indigo-200 " : " bg-gray-100"
                 }`}
                 onClick={() => navigationHandler("flight")}
               >
@@ -99,7 +101,9 @@ const DummyNavbar = ({ className = "" }) => {
                   <Plane
                     size={18}
                     className={`${
-                      isActive("/") ? "text-primary-6000" : "text-black"
+                      isActive("/dummy-flight")
+                        ? "text-primary-6000"
+                        : "text-black"
                     }`}
                   />
                 </div>

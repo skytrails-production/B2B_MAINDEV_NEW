@@ -454,9 +454,9 @@ const IteneraryPriceSummary = () => {
     } catch (error) {}
   };
 
-  console.log(data, "data in itenary price summary");
+  // console.log(data, "data in itenary price summary");
   return (
-    <div className="w-100 price-summary-container">
+    <div className="w-100 price-summary-container p-2 border-1 rounded-lg">
       <div className="hotelItenarySummary">
         <div className="">
           <h6

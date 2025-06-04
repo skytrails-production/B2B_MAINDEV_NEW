@@ -197,11 +197,11 @@ const PackageCreationResult = () => {
   return (
     <>
       {loader ? (
-        <BlurredLoader textData={"Hold on ! Creating Itenerary"} />
+        <BlurredLoader textData={"Hold on ! We're Creating Your Itenerary"} />
       ) : (
         <div className="container-fluid p-4">
           <div className="row">
-            <div className="col-lg-8">
+            <div className="col-lg-8 p-3 border-1 rounded-md">
               <div className="row">
                 <div className="col-lg-12">
                   <ItenaryFlightDashboard />
@@ -228,7 +228,10 @@ const PackageCreationResult = () => {
                       );
 
                       return (
-                        <div className="dayWiseItenaryMainBox mb-3" key={index}>
+                        <div
+                          className="dayWiseItenaryMainBox mb-3 border rounded-lg p-3 bg-blue-100"
+                          key={index}
+                        >
                           <div className="headingItenary">
                             <h6 className="mb-3">
                               Day {dayIndex + 1} in{" "}

@@ -205,7 +205,7 @@ const ItenaryHotel = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6">
+    <div className=" mx-auto px-0 py-6">
       {hotels?.map((item, index) => (
         <div key={index} className="mb-8">
           <div className="mb-4">
@@ -224,7 +224,7 @@ const ItenaryHotel = () => {
             </h3>
           </div>
 
-          <div className="bg-white rounded-xl shadow-md overflow-hidden mb-6 border border-gray-100 hover:shadow-lg transition-shadow duration-300">
+          <div className="bg-red-50 rounded-xl  overflow-hidden mb-6 border border-gray-100 hover:shadow-lg transition-shadow duration-300">
             {/* Hotel Card */}
             <div className="p-6">
               <div className="flex flex-col md:flex-row gap-6">
@@ -245,7 +245,7 @@ const ItenaryHotel = () => {
                       alt={item?.HotelName}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded-md flex items-center">
+                    <div className="absolute top-2 right-2 bg-white bg-opacity-70 text-white px-2 py-1 rounded-md flex items-center">
                       {Array.from({ length: item?.StarRating }, (_, i) => (
                         <img
                           key={i}

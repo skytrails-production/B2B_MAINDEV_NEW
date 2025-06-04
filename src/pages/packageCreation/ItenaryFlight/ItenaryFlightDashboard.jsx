@@ -66,8 +66,8 @@ const ItenaryFlightDashboard = () => {
     <div>
       {reducerState?.Itenerary?.itenaryPayload?.cityAndNight?.map(
         (city, index) => (
-          <div key={index} className="dayWiseItenaryMainBox mb-3">
-            <div className="dayWiseItenaryInnerBox">
+          <div key={index} className="dayWiseItenaryMainBox mb-2">
+            <div className="dayWiseItenaryInnerBox border-1 p-2 rounded-md bg-green-50">
               <div className="dayWiseItenaryContent">
                 <h5>
                   {index === 0
