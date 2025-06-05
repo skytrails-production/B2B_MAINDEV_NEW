@@ -28,7 +28,7 @@ const ItenaryHotel = () => {
   const hotelRoomnew = reducerState?.Itenerary?.selectedHotelRoom;
   const result = reducerState?.Itenerary?.hotelResultArray || [];
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isModalVisible2, setIsModalVisible2] = useState(false);
+  const [isModalVisible2, setIsModalVisible2] = useState(true);
   const markUpamount =
     reducerState?.markup?.markUpData?.data?.result[0]?.hotelMarkup;
   const [selectedHotel, setSelectedHotel] = useState([]);

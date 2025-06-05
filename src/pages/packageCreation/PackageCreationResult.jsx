@@ -13,7 +13,6 @@ import {
   setFLightFromRequest,
   setFLightToRequest,
 } from "../../Redux/Itenary/itenary";
-// import ItenaryResultSkeleton from "./ItenaryResultSkeleton";
 import IteneraryPriceSummary from "./IteneraryPriceSummary";
 import BlurredLoader from "../../components/BlurredLoader";
 
@@ -21,6 +20,7 @@ const PackageCreationResult = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedDayIndex, setSelectedDayIndex] = useState(null);
   const [selectedActivities, setSelectedActivities] = useState({});
+  const [selectedCityActivities, setSelectedCityActivities] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const reducerState = useSelector((state) => state);
@@ -46,8 +46,9 @@ const PackageCreationResult = () => {
     reducerState?.Itenerary?.itenaryPayload?.cityAndNight?.length,
   ]);
 
-  const showModal = (dayIndex) => {
+  const showModal = (dayIndex, activities) => {
     setSelectedDayIndex(dayIndex);
+    setSelectedCityActivities(activities || []);
     setIsModalVisible(true);
   };
 
@@ -74,14 +75,6 @@ const PackageCreationResult = () => {
       return newActivities;
     });
 
-    // Update the state with itenararyResult
-    dispatch(
-      handleActivityRequest({
-        activities: selectedActivities,
-        itenararyResult: reducerState?.Itenerary?.itenararyResult,
-      })
-    );
-    // console.log("dispatched")
     handleOk();
   };
 
@@ -140,40 +133,29 @@ const PackageCreationResult = () => {
     flightToData();
   }, []);
 
-  // Function to get the latest date among given dates
   const getLatestDate = (dates) => {
-    return dates.reduce((latest, current) => {
-      return dayjs(latest).isAfter(dayjs(current)) ? latest : current;
-    });
+    return dates.reduce((latest, current) =>
+      dayjs(latest).isAfter(dayjs(current)) ? latest : current
+    );
   };
 
-  // console.log(reducerState, "reducerState");
-
-  // Extracting relevant dates
   const leavingDate = dayjs(initialDate);
   const arrivalDate1 = dayjs(
-    reducerState?.Itenerary?.selectedFlight?.[0]?.payloadReturnInternational
-      ?.Segments?.[0]?.[
-      reducerState?.Itenerary?.selectedFlight?.[0]?.payloadReturnInternational
-        ?.Segments?.length - 1
-    ]?.Destination?.ArrTime
+    reducerState?.Itenerary?.selectedFlight?.[0]?.payloadReturnInternational?.Segments?.slice(
+      -1
+    )?.[0]?.Destination?.ArrTime
   );
   const arrivalDate2 = dayjs(
-    reducerState?.Itenerary?.selectedFlight?.[0]?.[0]?.payloadGoing
-      ?.Segments?.[0]?.[
-      reducerState?.Itenerary?.selectedFlight?.[0]?.[0]?.payloadGoing?.Segments
-        ?.length - 1
-    ]?.Destination?.ArrTime
+    reducerState?.Itenerary?.selectedFlight?.[0]?.[0]?.payloadGoing?.Segments?.slice(
+      -1
+    )?.[0]?.Destination?.ArrTime
   );
   const arrivalDate3 = dayjs(
-    reducerState?.Itenerary?.selectedFlight?.[0]?.payloadOneway
-      ?.Segments?.[0]?.[
-      reducerState?.Itenerary?.selectedFlight?.[0]?.payloadOneway?.Segments
-        ?.length - 1
-    ]?.Destination?.ArrTime
+    reducerState?.Itenerary?.selectedFlight?.[0]?.payloadOneway?.Segments?.slice(
+      -1
+    )?.[0]?.Destination?.ArrTime
   );
 
-  // Determine the initial date
   const initialStartDate = getLatestDate([
     leavingDate,
     arrivalDate1,
@@ -185,6 +167,7 @@ const PackageCreationResult = () => {
     reducerState?.Itenerary?.itenaryPayload?.cityAndNight?.map((city) =>
       city?.from?.Destination?.toLowerCase()
     );
+
   const sortedItenaryResults = itenaryResults?.sort((a, b) => {
     const aDestination = a?.data?.result?.[0].destination;
     const bDestination = b?.data?.result?.[0].destination;
@@ -206,7 +189,6 @@ const PackageCreationResult = () => {
                 <div className="col-lg-12">
                   <ItenaryFlightDashboard />
                 </div>
-
                 <div className="col-lg-12">
                   <ItenaryHotel />
                 </div>
@@ -253,12 +235,12 @@ const PackageCreationResult = () => {
                               (activity, activityIndex) => (
                                 <div key={activityIndex}>
                                   <Divider />
-                                  <h6>{activity?.title.slice(0, 60)}</h6>
-                                  <div className="d-flex w-100 justify-content-between gap-5 align-items-center">
+                                  <h6>{activity?.title?.slice(0, 60)}</h6>
+                                  <div className="d-flex justify-content-between gap-5 align-items-center">
                                     <p>
                                       {activity?.description?.slice(0, 100)}
                                     </p>
-                                    <div className="d-flex flex-column justify-content-center gap-2 mb-0 align-items-center">
+                                    <div className="d-flex flex-column justify-content-center gap-2 align-items-center">
                                       <h6
                                         style={{
                                           color: "green",
@@ -290,7 +272,12 @@ const PackageCreationResult = () => {
                                 type="primary"
                                 icon={<PlusOutlined />}
                                 danger
-                                onClick={() => showModal(dayIndex)}
+                                onClick={() =>
+                                  showModal(
+                                    dayIndex,
+                                    itenary?.data?.result?.[0]?.activities || []
+                                  )
+                                }
                               >
                                 Add Activity
                               </Button>
@@ -299,41 +286,6 @@ const PackageCreationResult = () => {
                         </div>
                       );
                     })}
-
-                    <Modal
-                      width={800}
-                      title="Select Activity"
-                      open={isModalVisible}
-                      onOk={handleOk}
-                      onCancel={handleCancel}
-                    >
-                      {itenary?.data?.result?.[0]?.activities?.map(
-                        (activity, activityIndex) => (
-                          <div key={activityIndex}>
-                            <h6>{activity?.title.slice(0, 60)}</h6>
-                            <div className="d-flex w-100 justify-content-between gap-5 align-items-center">
-                              <p>{activity?.description.slice(0, 150)}</p>
-                              <div className="d-flex flex-column justify-content-center gap-2 mb-0 align-items-center">
-                                <h6
-                                  style={{ color: "green", fontWeight: "600" }}
-                                >
-                                  ₹ {activity?.price}
-                                </h6>
-                                <Button
-                                  type="dashed"
-                                  icon={<PlusOutlined />}
-                                  onClick={() => handleSelectActivity(activity)}
-                                  warning
-                                >
-                                  Add
-                                </Button>
-                              </div>
-                            </div>
-                            <Divider />
-                          </div>
-                        )
-                      )}
-                    </Modal>
                   </div>
                 ))}
               </div>
@@ -345,6 +297,38 @@ const PackageCreationResult = () => {
           </div>
         </div>
       )}
+
+      {/* SINGLE MODAL FOR ALL CITIES */}
+      <Modal
+        width={800}
+        title="Select Activity"
+        open={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        {selectedCityActivities?.map((activity, activityIndex) => (
+          <div key={activityIndex}>
+            <h6>{activity?.title?.slice(0, 60)}</h6>
+            <div className="d-flex justify-content-between gap-5 align-items-center">
+              <p>{activity?.description?.slice(0, 150)}</p>
+              <div className="d-flex flex-column justify-content-center gap-2 align-items-center">
+                <h6 style={{ color: "green", fontWeight: "600" }}>
+                  ₹ {activity?.price}
+                </h6>
+                <Button
+                  type="dashed"
+                  icon={<PlusOutlined />}
+                  onClick={() => handleSelectActivity(activity)}
+                  warning
+                >
+                  Add
+                </Button>
+              </div>
+            </div>
+            <Divider />
+          </div>
+        ))}
+      </Modal>
     </>
   );
 };

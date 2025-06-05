@@ -272,6 +272,8 @@ const PackageCreationHome = () => {
   const [itineraryItems, setItineraryItems] = useState([
     { from: initialSelectedFromData, night: null },
   ]);
+
+  console.log("Initial Itinerary Items:", itineraryItems);
   const [selectedLeaving, setSelectedLeaving] = useState(
     initialSelectedLeavingData
   );
@@ -396,7 +398,7 @@ const PackageCreationHome = () => {
 
   // Form submission
   const handleItenarySubmit = () => {
-    setLoader(true);
+    // setLoader(true);
 
     const payload = {
       cityAndNight: itineraryItems,
@@ -409,16 +411,22 @@ const PackageCreationHome = () => {
       whoisTravelling,
       ratingData,
     };
+
+    console.log("Payload:", payload);
     dispatch(savePayloadrRequest(payload));
 
     let currentCheckInDate = dayjs(newDepartDate);
 
-    itineraryItems.forEach((item) => {
+    itineraryItems.forEach((item, index) => {
       const payloadSearch = {
-        origin: selectedLeaving?.Destination?.toLowerCase(),
+        origin:
+          index == 0
+            ? selectedLeaving?.Destination?.toLowerCase()
+            : itineraryItems?.[index - 1]?.from?.Destination?.toLowerCase(),
         destination: item?.from?.Destination?.toLowerCase(),
         noOfDays: item?.night,
       };
+      console.log("Payload Search:", payloadSearch);
       dispatch(itenerarysearchRequest(payloadSearch));
 
       const payloadHotel = {

@@ -46,7 +46,7 @@ const DummyNavbar = ({ className = "" }) => {
         currentPath.includes("flight-dummy")
       );
     }
-    // console.log(currentPath, "currentPath", path);
+    console.log(currentPath, "currentPath", path);
 
     return currentPath.startsWith(path);
   };
