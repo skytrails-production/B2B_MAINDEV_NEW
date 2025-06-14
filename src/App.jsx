@@ -83,6 +83,7 @@ function App() {
     const payload = {
       EndUserIp: reducerState?.ip?.ipData,
     };
+    console.log("IP Address", payload);
     dispatch(tokenAction(payload));
   }, [reducerState?.ip?.ipData]);
   // const MainLayoutDummy = () => {

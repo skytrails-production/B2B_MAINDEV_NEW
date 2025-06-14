@@ -210,34 +210,6 @@ const ItenaryPdfDownloader = () => {
               }}
             >
               <div className="flex items-center justify-between mb-6">
-                {/* <div
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    background: "linear-gradient(135deg, #667eea, #764ba2)",
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginRight: "20px",
-                    flexShrink: 0,
-                  }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                  </svg>
-                </div> */}
                 <h3
                   className="text-2xl font-semibold"
                   style={{ color: "#667eea" }}
@@ -523,8 +495,10 @@ const ItenaryPdfDownloader = () => {
                           ].destination;
 
                     const arrivalCity =
-                      flight.id == itineraryData?.flightData.length - 1
-                        ? itineraryData?.ItenaryPayloadData?.leavingFrom
+                      itineraryData?.flightData.length - 1
+                        ? flight?.flightDetails?.[0]?.Segments[0][
+                            flight?.flightDetails?.[0]?.Segments[0].length - 1
+                          ]?.Destination?.Airport?.AirportName
                         : itineraryData?.ItenaryPayloadData?.cityAndNight[
                             flight.id
                           ]?.destination;
@@ -1254,303 +1228,366 @@ const ItenaryPdfDownloader = () => {
               </h2>
 
               <div className="max-w-4xl mx-auto space-y-8">
-                {itineraryData?.itenerieData?.[0]?.itenararyResult?.map(
-                  (itenary, itenaryIndex) => (
-                    <div key={itenaryIndex} className="space-y-8">
-                      {itenary?.[0]?.dayAt?.map((item, index) => {
-                        const dayIndex =
-                          itineraryData?.itenerieData?.[0]?.itenararyResult
-                            ?.slice(0, itenaryIndex)
-                            ?.reduce(
-                              (acc, curr) => acc + curr?.[0]?.dayAt?.length,
-                              0
-                            ) + index;
-                        const activity =
-                          itineraryData?.itenerieData?.[0]?.activities?.[0]?.[
-                            dayIndex
-                          ];
-                        const currentDate = getDateForDay(
-                          initialStartDate,
-                          dayIndex
-                        );
+                {/* First we need to calculate the proper day numbering across cities */}
+                {(() => {
+                  let absoluteDayIndex = 0;
+                  const cityAndNight =
+                    itineraryData?.ItenaryPayloadData?.cityAndNight || [];
+                  const itenaryResults =
+                    itineraryData?.itenerieData?.[0]?.itenararyResult || [];
+                  const activities =
+                    itineraryData?.itenerieData?.[0]?.activities?.[0] || {};
 
-                        return (
-                          <div
-                            key={index}
-                            className="rounded-xl overflow-hidden"
-                            style={{
-                              background: "rgba(255, 255, 255, 0.05)",
-                              border: "1px solid rgba(255, 255, 255, 0.1)",
-                              backdropFilter: "blur(10px)",
-                            }}
-                          >
-                            {/* Day Header */}
-                            <div
-                              className="p-6"
-                              style={{
-                                background:
-                                  "linear-gradient(135deg, rgba(251, 194, 235, 0.15) 0%, rgba(166, 193, 238, 0.15) 100%)",
-                                borderBottom:
-                                  "1px solid rgba(255, 255, 255, 0.1)",
-                              }}
-                            >
-                              <div className="flex justify-between items-center">
-                                <h3
-                                  className="text-xl font-bold"
-                                  style={{ color: "#fbc2eb" }}
-                                >
-                                  Day {dayIndex + 1}:{" "}
-                                  {itenary?.[0]?.destination}
-                                </h3>
-                                <span
-                                  className="px-3 py-1 rounded-full text-sm font-medium"
-                                  style={{
-                                    background: "rgba(255, 255, 255, 0.1)",
-                                    color: "#a6c1ee",
-                                  }}
-                                >
-                                  {currentDate}
-                                </span>
-                              </div>
-                              <p className="mt-2 opacity-90">
-                                {item?.title || "Exciting adventures await!"}
-                              </p>
-                            </div>
+                  return cityAndNight.map((cityNight, cityIndex) => {
+                    // Find the matching itinerary for this city
+                    const matchingItinerary = itenaryResults.find(
+                      (itenary) =>
+                        itenary?.[0]?.destination?.toLowerCase() ===
+                        cityNight?.destination?.toLowerCase()
+                    );
 
-                            {/* Main Content */}
-                            <div className="p-6">
-                              {item?.description && (
-                                <div className="mb-6">
-                                  <h4 className="text-lg font-semibold mb-2 flex items-center">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="20"
-                                      height="20"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="#fbc2eb"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      className="mr-2"
-                                    >
-                                      <circle cx="12" cy="12" r="10"></circle>
-                                      <line
-                                        x1="12"
-                                        y1="8"
-                                        x2="12"
-                                        y2="12"
-                                      ></line>
-                                      <line
-                                        x1="12"
-                                        y1="16"
-                                        x2="12.01"
-                                        y2="16"
-                                      ></line>
-                                    </svg>
-                                    Today's Overview
-                                  </h4>
-                                  <p className="text-gray-300 pl-8">
-                                    {item.description}
-                                  </p>
-                                </div>
-                              )}
+                    if (!matchingItinerary) return null;
 
-                              {/* Activities Section */}
-                              {activity && activity.length > 0 && (
-                                <div>
-                                  <h4 className="text-lg font-semibold mb-4 flex items-center">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="20"
-                                      height="20"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="#a6c1ee"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      className="mr-2"
-                                    >
-                                      <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
-                                      <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
-                                      <line x1="6" y1="1" x2="6" y2="4"></line>
-                                      <line
-                                        x1="10"
-                                        y1="1"
-                                        x2="10"
-                                        y2="4"
-                                      ></line>
-                                      <line
-                                        x1="14"
-                                        y1="1"
-                                        x2="14"
-                                        y2="4"
-                                      ></line>
-                                    </svg>
-                                    Today's Activities
-                                  </h4>
+                    const nights = parseInt(cityNight?.night) || 0;
+                    const daysInCity = nights + 1;
+                    const destination = matchingItinerary?.[0]?.destination;
 
-                                  <div className="space-y-4 pl-8">
-                                    {activity.map(
-                                      (singleActivity, activityIndex) => (
-                                        <div
-                                          key={activityIndex}
-                                          className="p-4 rounded-lg"
-                                          style={{
-                                            background:
-                                              "rgba(255, 255, 255, 0.07)",
-                                            border:
-                                              "1px solid rgba(255, 255, 255, 0.1)",
-                                          }}
-                                        >
-                                          <div className="flex items-start">
-                                            <div className="flex-shrink-0 mt-1 mr-4">
-                                              <div
-                                                className="h-8 w-8 rounded-full flex items-center justify-center"
-                                                style={{
-                                                  background:
-                                                    "rgba(166, 193, 238, 0.15)",
-                                                  border:
-                                                    "1px solid rgba(166, 193, 238, 0.3)",
-                                                }}
-                                              >
-                                                <span
-                                                  style={{ color: "#a6c1ee" }}
-                                                >
-                                                  {activityIndex + 1}
-                                                </span>
-                                              </div>
-                                            </div>
-                                            <div>
-                                              <h5
-                                                className="font-semibold"
-                                                style={{ color: "#fbc2eb" }}
-                                              >
-                                                {singleActivity.title}
-                                              </h5>
-                                              {/* {singleActivity.timing && (
-                                                <div className="flex items-center text-sm text-gray-400 mt-1 mb-2">
-                                                  <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    width="14"
-                                                    height="14"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth="2"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    className="mr-1"
-                                                  >
-                                                    <circle
-                                                      cx="12"
-                                                      cy="12"
-                                                      r="10"
-                                                    ></circle>
-                                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                                  </svg>
-                                                  {singleActivity.timing}
-                                                </div>
-                                              )} */}
-                                              <p className="text-gray-300 mt-1">
-                                                {singleActivity.description}
-                                              </p>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      )
-                                    )}
-                                  </div>
-                                </div>
-                              )}
+                    // For cities after first one, adjust the day index for transfer day
+                    if (cityIndex > 0) {
+                      absoluteDayIndex--; // Adjust for transfer day
+                    }
 
-                              {/* Travel Information */}
+                    return (
+                      <div key={cityIndex} className="space-y-8">
+                        {matchingItinerary?.[0]?.dayAt?.map(
+                          (item, dayItemIndex) => {
+                            const currentAbsoluteDayIndex =
+                              absoluteDayIndex + dayItemIndex;
+                            const currentDate = getDateForDay(
+                              initialStartDate,
+                              currentAbsoluteDayIndex
+                            );
+                            const isTransferDay =
+                              dayItemIndex === 0 && cityIndex > 0;
+                            const dayActivities =
+                              activities?.[cityIndex]?.[
+                                currentAbsoluteDayIndex
+                              ] || [];
+
+                            return (
                               <div
-                                className="mt-6 pt-4"
+                                key={dayItemIndex}
+                                className="rounded-xl overflow-hidden"
                                 style={{
-                                  borderTop:
-                                    "1px solid rgba(255, 255, 255, 0.1)",
+                                  background: "rgba(255, 255, 255, 0.05)",
+                                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                                  backdropFilter: "blur(10px)",
                                 }}
                               >
-                                <h4 className="text-lg font-semibold mb-3 flex items-center">
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="20"
-                                    height="20"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="#fbc2eb"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="mr-2"
-                                  >
-                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                                  </svg>
-                                  Travel Information
-                                </h4>
-                                <div className="grid grid-cols-2 md:grid-cols-2 gap-4 pl-8">
-                                  <div className="flex items-start">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="18"
-                                      height="18"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="#a6c1ee"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      className="flex-shrink-0 mt-1 mr-3"
+                                {/* Day Header */}
+                                <div
+                                  className="p-6"
+                                  style={{
+                                    background:
+                                      "linear-gradient(135deg, rgba(251, 194, 235, 0.15) 0%, rgba(166, 193, 238, 0.15) 100%)",
+                                    borderBottom:
+                                      "1px solid rgba(255, 255, 255, 0.1)",
+                                  }}
+                                >
+                                  <div className="flex justify-between items-center">
+                                    <h3
+                                      className="text-xl font-bold"
+                                      style={{ color: "#fbc2eb" }}
                                     >
-                                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                      <circle cx="12" cy="10" r="3"></circle>
-                                    </svg>
-                                    <div>
-                                      <p className="text-sm font-medium text-gray-400">
-                                        Current Location
-                                      </p>
-                                      <p className="text-gray-200">
-                                        {itenary?.[0]?.destination}
+                                      Day {currentAbsoluteDayIndex + 1}:{" "}
+                                      {destination}
+                                      {isTransferDay && " (Transfer Day)"}
+                                    </h3>
+                                    <span
+                                      className="px-3 py-1 rounded-full text-sm font-medium"
+                                      style={{
+                                        background: "rgba(255, 255, 255, 0.1)",
+                                        color: "#a6c1ee",
+                                      }}
+                                    >
+                                      {currentDate}
+                                    </span>
+                                  </div>
+                                  <p className="mt-2 opacity-90">
+                                    {item?.title ||
+                                      "Exciting adventures await!"}
+                                  </p>
+                                </div>
+
+                                {/* Main Content */}
+                                <div className="p-6">
+                                  {item?.description && (
+                                    <div className="mb-6">
+                                      <h4 className="text-lg font-semibold mb-2 flex items-center">
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="20"
+                                          height="20"
+                                          viewBox="0 0 24 24"
+                                          fill="none"
+                                          stroke="#fbc2eb"
+                                          strokeWidth="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          className="mr-2"
+                                        >
+                                          <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="10"
+                                          ></circle>
+                                          <line
+                                            x1="12"
+                                            y1="8"
+                                            x2="12"
+                                            y2="12"
+                                          ></line>
+                                          <line
+                                            x1="12"
+                                            y1="16"
+                                            x2="12.01"
+                                            y2="16"
+                                          ></line>
+                                        </svg>
+                                        Today's Overview
+                                      </h4>
+                                      <p className="text-gray-300 pl-8">
+                                        {item.description}
                                       </p>
                                     </div>
-                                  </div>
-                                  {index === 0 && itenaryIndex === 0 && (
-                                    <div className="flex items-start">
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="18"
-                                        height="18"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="#a6c1ee"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        className="flex-shrink-0 mt-1 mr-3"
-                                      >
-                                        <path d="M5 12h14M12 5l7 7-7 7"></path>
-                                      </svg>
-                                      <div>
-                                        <p className="text-sm font-medium text-gray-400">
-                                          Departing From
-                                        </p>
-                                        <p className="text-gray-200">
-                                          {itenary?.[0]?.origin}
-                                        </p>
+                                  )}
+
+                                  {/* Activities Section */}
+                                  {dayActivities.length > 0 && (
+                                    <div>
+                                      <h4 className="text-lg font-semibold mb-4 flex items-center">
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="20"
+                                          height="20"
+                                          viewBox="0 0 24 24"
+                                          fill="none"
+                                          stroke="#a6c1ee"
+                                          strokeWidth="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          className="mr-2"
+                                        >
+                                          <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                                          <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                                          <line
+                                            x1="6"
+                                            y1="1"
+                                            x2="6"
+                                            y2="4"
+                                          ></line>
+                                          <line
+                                            x1="10"
+                                            y1="1"
+                                            x2="10"
+                                            y2="4"
+                                          ></line>
+                                          <line
+                                            x1="14"
+                                            y1="1"
+                                            x2="14"
+                                            y2="4"
+                                          ></line>
+                                        </svg>
+                                        Today's Activities
+                                      </h4>
+
+                                      <div className="space-y-4 pl-8">
+                                        {dayActivities.map(
+                                          (activity, activityIndex) => (
+                                            <div
+                                              key={activityIndex}
+                                              className="p-4 rounded-lg"
+                                              style={{
+                                                background:
+                                                  "rgba(255, 255, 255, 0.07)",
+                                                border:
+                                                  "1px solid rgba(255, 255, 255, 0.1)",
+                                              }}
+                                            >
+                                              <div className="flex items-start">
+                                                <div className="flex-shrink-0 mt-1 mr-4">
+                                                  <div
+                                                    className="h-8 w-8 rounded-full flex items-center justify-center"
+                                                    style={{
+                                                      background:
+                                                        "rgba(166, 193, 238, 0.15)",
+                                                      border:
+                                                        "1px solid rgba(166, 193, 238, 0.3)",
+                                                    }}
+                                                  >
+                                                    <span
+                                                      style={{
+                                                        color: "#a6c1ee",
+                                                      }}
+                                                    >
+                                                      {activityIndex + 1}
+                                                    </span>
+                                                  </div>
+                                                </div>
+                                                <div>
+                                                  <h5
+                                                    className="font-semibold"
+                                                    style={{ color: "#fbc2eb" }}
+                                                  >
+                                                    {activity.title}
+                                                  </h5>
+                                                  <p className="text-gray-300 mt-1">
+                                                    {activity.description}
+                                                  </p>
+                                                  {/* <p className="text-sm text-gray-400 mt-1">
+                                                    Price: ₹{activity.price}
+                                                  </p> */}
+                                                </div>
+                                              </div>
+                                            </div>
+                                          )
+                                        )}
                                       </div>
                                     </div>
                                   )}
+
+                                  {/* Travel Information */}
+                                  <div
+                                    className="mt-6 pt-4"
+                                    style={{
+                                      borderTop:
+                                        "1px solid rgba(255, 255, 255, 0.1)",
+                                    }}
+                                  >
+                                    <h4 className="text-lg font-semibold mb-3 flex items-center">
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="#fbc2eb"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="mr-2"
+                                      >
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                      </svg>
+                                      Travel Information
+                                    </h4>
+                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 pl-8">
+                                      <div className="flex items-start">
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="18"
+                                          height="18"
+                                          viewBox="0 0 24 24"
+                                          fill="none"
+                                          stroke="#a6c1ee"
+                                          strokeWidth="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          className="flex-shrink-0 mt-1 mr-3"
+                                        >
+                                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                          <circle
+                                            cx="12"
+                                            cy="10"
+                                            r="3"
+                                          ></circle>
+                                        </svg>
+                                        <div>
+                                          <p className="text-sm font-medium text-gray-400">
+                                            Current Location
+                                          </p>
+                                          <p className="text-gray-200">
+                                            {destination}
+                                          </p>
+                                        </div>
+                                      </div>
+                                      {currentAbsoluteDayIndex === 0 && (
+                                        <div className="flex items-start">
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="18"
+                                            height="18"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="#a6c1ee"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            className="flex-shrink-0 mt-1 mr-3"
+                                          >
+                                            <path d="M5 12h14M12 5l7 7-7 7"></path>
+                                          </svg>
+                                          <div>
+                                            <p className="text-sm font-medium text-gray-400">
+                                              Departing From
+                                            </p>
+                                            <p className="text-gray-200">
+                                              {
+                                                itineraryData
+                                                  ?.ItenaryPayloadData
+                                                  ?.leavingFrom
+                                              }
+                                            </p>
+                                          </div>
+                                        </div>
+                                      )}
+                                      {isTransferDay && (
+                                        <div className="flex items-start">
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="18"
+                                            height="18"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="#a6c1ee"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            className="flex-shrink-0 mt-1 mr-3"
+                                          >
+                                            <path d="M5 12h14M12 5l7 7-7 7"></path>
+                                          </svg>
+                                          <div>
+                                            <p className="text-sm font-medium text-gray-400">
+                                              Transfer From
+                                            </p>
+                                            <p className="text-gray-200">
+                                              {
+                                                cityAndNight[cityIndex - 1]
+                                                  ?.destination
+                                              }
+                                            </p>
+                                          </div>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )
-                )}
+                            );
+                          }
+                        )}
+
+                        {/* Update the absolute day index for the next city */}
+                        {(() => {
+                          absoluteDayIndex += daysInCity;
+                          return null;
+                        })()}
+                      </div>
+                    );
+                  });
+                })()}
               </div>
             </div>
           </div>
@@ -1765,7 +1802,7 @@ const ItenaryPdfDownloader = () => {
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                         <polyline points="22,6 12,13 2,6"></polyline>
                       </svg>
-                      <span>support@yourtravelagency.com</span>
+                      <span>holidays@theskytrails.com</span>
                     </div>
                     <div className="flex items-center">
                       <svg
@@ -1782,7 +1819,7 @@ const ItenaryPdfDownloader = () => {
                       >
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                       </svg>
-                      <span>+1 (123) 456-7890</span>
+                      <span>+91-9209793097</span>
                     </div>
                   </div>
                   <p className="text-gray-300 mt-6 text-sm">

@@ -34,7 +34,6 @@ const PackageCreationResult = () => {
   const [isAddItineraryModalVisible, setIsAddItineraryModalVisible] =
     useState(false);
   const [selectedDayIndex, setSelectedDayIndex] = useState(null);
-  const [selectedCityIndex, setSelectedCityIndex] = useState(null);
   const [selectedActivities, setSelectedActivities] = useState({});
   const [selectedCityActivities, setSelectedCityActivities] = useState([]);
   const [currentCityIndex, setCurrentCityIndex] = useState(0);
@@ -47,47 +46,15 @@ const PackageCreationResult = () => {
   const reducerState = useSelector((state) => state);
   const initialDate = reducerState?.Itenerary?.itenaryPayload?.leavingDate;
   const [loader, setLoader] = useState(true);
-  const [globalDayCounter, setGlobalDayCounter] = useState(1);
 
-  // Calculate total days and day numbering
-  useEffect(() => {
-    const cityAndNight =
-      reducerState?.Itenerary?.itenaryPayload?.cityAndNight || [];
-    let dayCounter = 1;
-
-    cityAndNight.forEach((city, index) => {
-      const nights = parseInt(city.night) || 0;
-      // For first city, days start from 1
-      // For subsequent cities, first day is same as last day of previous city (transfer day)
-      if (index > 0) {
-        dayCounter--; // Adjust for transfer day
-      }
-      dayCounter += nights + 1;
-    });
-
-    setGlobalDayCounter(dayCounter);
-  }, [reducerState?.Itenerary?.itenaryPayload?.cityAndNight]);
-
-  // Get ordered itinerary data with proper day numbering
+  // Get ordered itinerary data based on cityAndNight array
   const getOrderedItineraryData = () => {
     const cityAndNight =
       reducerState?.Itenerary?.itenaryPayload?.cityAndNight || [];
     const itenaryResults = reducerState?.Itenerary?.itenararyResult || [];
-    let currentDay = 1;
 
-    return cityAndNight.map((city, cityIndex) => {
+    return cityAndNight.map((city, index) => {
       const destination = city?.from?.Destination?.toLowerCase();
-      const nights = parseInt(city.night) || 0;
-      const daysInCity = nights + 1;
-
-      // For cities after first one, first day is same as last day of previous city
-      if (cityIndex > 0) {
-        currentDay--; // Adjust for transfer day
-      }
-
-      const startDay = currentDay;
-      const endDay = currentDay + daysInCity - 1;
-      currentDay = endDay + 1;
 
       // Find matching itinerary result for this city
       const matchingResult = itenaryResults.find((result) => {
@@ -100,14 +67,20 @@ const PackageCreationResult = () => {
       return {
         cityData: city,
         itineraryData: matchingResult?.data,
-        cityIndex,
-        startDay,
-        endDay,
+        index,
       };
     });
   };
 
   const orderedItineraryData = getOrderedItineraryData();
+
+  // Calculate day index offset for each city
+  const getDayIndexOffset = (cityIndex) => {
+    return orderedItineraryData.slice(0, cityIndex).reduce((acc, curr) => {
+      const nights = curr.cityData?.night || 0;
+      return acc + nights + 1; // +1 for arrival day
+    }, 0);
+  };
 
   // Function to refresh all itinerary data
   const refreshAllItineraryData = async () => {
@@ -117,6 +90,7 @@ const PackageCreationResult = () => {
         reducerState?.Itenerary?.itenaryPayload?.cityAndNight || [];
       const leavingFrom = reducerState?.Itenerary?.itenaryPayload?.leavingFrom;
 
+      // Dispatch requests for all cities
       const requests = cityAndNight.map((item, index) => {
         const payloadSearch = {
           origin:
@@ -129,6 +103,7 @@ const PackageCreationResult = () => {
         return dispatch(itenerarysearchRequest(payloadSearch));
       });
 
+      // Wait for all requests to complete
       await Promise.all(requests);
       message.success("Itinerary data refreshed successfully!");
     } catch (error) {
@@ -157,8 +132,7 @@ const PackageCreationResult = () => {
     reducerState?.Itenerary?.itenaryPayload?.cityAndNight?.length,
   ]);
 
-  const showModal = (cityIndex, dayIndex, activities) => {
-    setSelectedCityIndex(cityIndex);
+  const showModal = (dayIndex, activities) => {
     setSelectedDayIndex(dayIndex);
     setSelectedCityActivities(activities || []);
     setIsModalVisible(true);
@@ -167,19 +141,14 @@ const PackageCreationResult = () => {
   const showAddItineraryModal = (cityIndex) => {
     setCurrentCityIndex(cityIndex);
     const nights =
-      parseInt(
-        reducerState?.Itenerary?.itenaryPayload?.cityAndNight?.[cityIndex]
-          ?.night
-      ) || 0;
-
-    const cityData = orderedItineraryData[cityIndex];
+      reducerState?.Itenerary?.itenaryPayload?.cityAndNight?.[cityIndex]?.night;
+    // Initialize day forms based on number of nights (nights + 1 days)
     const initialDayForms = Array.from({ length: nights + 1 }, (_, i) => ({
-      title: `Day ${cityData.startDay + i}`,
+      title: `Day ${i + 1}`,
       description: "",
       price: 0,
-      type: i === 0 && cityIndex > 0 ? "Transfer" : "Sightseeing",
+      type: "Sightseeing",
     }));
-
     setDayForms(initialDayForms);
     setActivityForms([{ title: "", description: "", timing: "", price: 0 }]);
     setIsAddItineraryModalVisible(true);
@@ -200,19 +169,14 @@ const PackageCreationResult = () => {
   const handleSelectActivity = (activity) => {
     setSelectedActivities((prevState) => {
       const newActivities = { ...prevState };
-      if (!newActivities[selectedCityIndex]) {
-        newActivities[selectedCityIndex] = {};
+      if (!newActivities[selectedDayIndex]) {
+        newActivities[selectedDayIndex] = [];
       }
-      if (!newActivities[selectedCityIndex][selectedDayIndex]) {
-        newActivities[selectedCityIndex][selectedDayIndex] = [];
-      }
-
-      const activityExists = newActivities[selectedCityIndex][
-        selectedDayIndex
-      ].some((act) => act._id === activity._id);
-
+      const activityExists = newActivities[selectedDayIndex].some(
+        (act) => act._id === activity._id
+      );
       if (!activityExists) {
-        newActivities[selectedCityIndex][selectedDayIndex].push(activity);
+        newActivities[selectedDayIndex].push(activity);
       }
       return newActivities;
     });
@@ -221,30 +185,18 @@ const PackageCreationResult = () => {
   };
 
   useEffect(() => {
-    // Get the reversed array
-    const reversedItenarary = [
-      ...(reducerState?.Itenerary?.itenararyResult || []),
-    ].reverse();
-
-    // Get the length we need to select
-    const selectLength =
-      reducerState?.Itenerary?.itenaryPayload?.cityAndNight?.length || 0;
-
-    // Select only the required number of items
-    const selectedItenarary = reversedItenarary.slice(0, selectLength);
-
     dispatch(
       handleActivityRequest({
         activities: selectedActivities,
-        itenararyResult: selectedItenarary,
+        itenararyResult: reducerState?.Itenerary?.itenararyResult,
       })
     );
   }, [selectedActivities]);
 
-  const handleRemoveActivity = (cityIndex, dayIndex, activityIndex) => {
+  const handleRemoveActivity = (dayIndex, activityIndex) => {
     setSelectedActivities((prevState) => {
       const newActivities = { ...prevState };
-      newActivities[cityIndex][dayIndex].splice(activityIndex, 1);
+      newActivities[dayIndex].splice(activityIndex, 1);
       return newActivities;
     });
   };
@@ -318,11 +270,10 @@ const PackageCreationResult = () => {
   ]);
 
   const handleAddDayForm = () => {
-    const cityData = orderedItineraryData[currentCityIndex];
     setDayForms([
       ...dayForms,
       {
-        title: `Day ${cityData.startDay + dayForms.length}`,
+        title: `Day ${dayForms.length + 1}`,
         description: "",
         price: 0,
         type: "Sightseeing",
@@ -398,6 +349,7 @@ const PackageCreationResult = () => {
       if (response.data.statusCode === 200) {
         message.success("Itinerary added successfully!");
         setIsAddItineraryModalVisible(false);
+        // Refresh all itinerary data after successful submission
         await refreshAllItineraryData();
       } else {
         message.error("Failed to add itinerary");
@@ -437,59 +389,65 @@ const PackageCreationResult = () => {
                 </div>
 
                 {orderedItineraryData.map(
-                  ({
-                    cityData,
-                    itineraryData,
-                    cityIndex,
-                    startDay,
-                    endDay,
-                  }) => {
+                  ({ cityData, itineraryData, index: cityIndex }) => {
                     const destination = cityData?.from?.Destination;
-                    const nights = parseInt(cityData.night) || 0;
-                    const daysInCity = nights + 1;
-                    const hasData = hasItineraryData(itineraryData);
+                    const nights = cityData?.night;
+
+                    if (!hasItineraryData(itineraryData)) {
+                      return (
+                        <div key={cityIndex} className="col-lg-12">
+                          <div className="dayWiseItenaryMainBox mb-3 border rounded-lg p-3 bg-blue-100">
+                            <div className="headingItenary">
+                              <h6 className="mb-3">{destination}</h6>
+                            </div>
+                            <div className="dayWiseItenaryInnerBox">
+                              <p>No itinerary found for this destination</p>
+                              <Button
+                                type="primary"
+                                onClick={() => showAddItineraryModal(cityIndex)}
+                              >
+                                Add Day Wise Details
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
 
                     return (
                       <div key={cityIndex} className="col-lg-12">
-                        {hasData ? (
-                          itineraryData?.result?.[0]?.dayAt?.map(
-                            (item, dayItemIndex) => {
-                              const dayNumber = startDay + dayItemIndex;
-                              const isTransferDay =
-                                dayItemIndex === 0 && cityIndex > 0;
-                              const dayIndex = dayNumber - 1;
-                              const currentDate = getDateForDay(
-                                initialStartDate,
-                                dayIndex
-                              );
+                        {itineraryData?.result?.[0]?.dayAt?.map(
+                          (item, dayItemIndex) => {
+                            const dayIndex =
+                              getDayIndexOffset(cityIndex) + dayItemIndex;
+                            const currentDate = getDateForDay(
+                              initialStartDate,
+                              dayIndex
+                            );
 
-                              return (
-                                <div
-                                  className="dayWiseItenaryMainBox mb-3 border rounded-lg p-3 bg-blue-100"
-                                  key={dayItemIndex}
-                                >
-                                  <div className="headingItenary">
-                                    <h6 className="mb-3">
-                                      Day {dayNumber} in {destination} (
-                                      {currentDate})
-                                      {isTransferDay && " (Transfer Day)"}
-                                    </h6>
-                                  </div>
-                                  <div className="dayWiseItenaryInnerBox">
-                                    <div className="dayWiseItenaryContent">
-                                      <h5>{item?.title}</h5>
-                                      <div className="paragraph-Itenary">
-                                        <p className="paragraphinsideItenary">
-                                          {item?.description}
-                                        </p>
-                                      </div>
+                            return (
+                              <div
+                                className="dayWiseItenaryMainBox mb-3 border rounded-lg p-3 bg-blue-100"
+                                key={dayItemIndex}
+                              >
+                                <div className="headingItenary">
+                                  <h6 className="mb-3">
+                                    Day {dayIndex + 1} in {destination}{" "}
+                                    {currentDate}
+                                  </h6>
+                                </div>
+                                <div className="dayWiseItenaryInnerBox">
+                                  <div className="dayWiseItenaryContent">
+                                    <h5>{item?.title}</h5>
+                                    <div className="paragraph-Itenary">
+                                      <p className="paragraphinsideItenary">
+                                        {item?.description}
+                                      </p>
                                     </div>
+                                  </div>
 
-                                    {(
-                                      selectedActivities[cityIndex]?.[
-                                        dayIndex
-                                      ] || []
-                                    ).map((activity, activityIndex) => (
+                                  {(selectedActivities[dayIndex] || []).map(
+                                    (activity, activityIndex) => (
                                       <div key={activityIndex}>
                                         <Divider />
                                         <h6>{activity?.title?.slice(0, 60)}</h6>
@@ -514,7 +472,6 @@ const PackageCreationResult = () => {
                                               icon={<MinusCircleOutlined />}
                                               onClick={() =>
                                                 handleRemoveActivity(
-                                                  cityIndex,
                                                   dayIndex,
                                                   activityIndex
                                                 )
@@ -525,47 +482,29 @@ const PackageCreationResult = () => {
                                           </div>
                                         </div>
                                       </div>
-                                    ))}
+                                    )
+                                  )}
 
-                                    <div className="addActvityRoomItenary mt-4 d-flex justify-content-end">
-                                      <Button
-                                        type="primary"
-                                        icon={<PlusOutlined />}
-                                        danger
-                                        onClick={() =>
-                                          showModal(
-                                            cityIndex,
-                                            dayIndex,
-                                            itineraryData?.result?.[0]
-                                              ?.activities || []
-                                          )
-                                        }
-                                      >
-                                        Add Activity
-                                      </Button>
-                                    </div>
+                                  <div className="addActvityRoomItenary mt-4 d-flex justify-content-end">
+                                    <Button
+                                      type="primary"
+                                      icon={<PlusOutlined />}
+                                      danger
+                                      onClick={() =>
+                                        showModal(
+                                          dayIndex,
+                                          itineraryData?.result?.[0]
+                                            ?.activities || []
+                                        )
+                                      }
+                                    >
+                                      Add Activity
+                                    </Button>
                                   </div>
                                 </div>
-                              );
-                            }
-                          )
-                        ) : (
-                          <div className="dayWiseItenaryMainBox mb-3 border rounded-lg p-3 bg-blue-100">
-                            <div className="headingItenary">
-                              <h6 className="mb-3">{destination}</h6>
-                            </div>
-                            <div className="dayWiseItenaryInnerBox">
-                              <p>
-                                No itinerary details found for this destination
-                              </p>
-                              <Button
-                                type="primary"
-                                onClick={() => showAddItineraryModal(cityIndex)}
-                              >
-                                Add Day Wise Details
-                              </Button>
-                            </div>
-                          </div>
+                              </div>
+                            );
+                          }
                         )}
                       </div>
                     );
@@ -633,9 +572,7 @@ const PackageCreationResult = () => {
         {dayForms.map((day, dayIndex) => (
           <div key={dayIndex} className="mb-4 p-3 border rounded">
             <div className="d-flex justify-content-between align-items-center mb-2">
-              <h5>
-                {day.title} {day.type === "Transfer" && "(Transfer Day)"}
-              </h5>
+              <h5>Day {dayIndex + 1}</h5>
               {dayIndex > 0 && (
                 <Button
                   type="text"
@@ -679,14 +616,14 @@ const PackageCreationResult = () => {
             </Form.Item>
           </div>
         ))}
-        {/* <Button
+        <Button
           type="dashed"
           onClick={handleAddDayForm}
           icon={<PlusCircleOutlined />}
           className="mb-4"
         >
           Add Another Day
-        </Button> */}
+        </Button>
 
         <h4>Activities</h4>
         {activityForms.map((activity, activityIndex) => (

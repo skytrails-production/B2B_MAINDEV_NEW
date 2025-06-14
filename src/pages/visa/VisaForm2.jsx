@@ -188,7 +188,6 @@ const VisaForm = () => {
     }
   };
 
-
   let orderId1 = "";
 
   const handlePayment = async () => {
@@ -242,7 +241,6 @@ const VisaForm = () => {
       }
     });
   };
-
 
   useEffect(() => {
     if (loaderPayment == true) {
@@ -475,8 +473,8 @@ const VisaForm = () => {
                     : "hover:bg-orange-600"
                 }`}
                 phone={storedData?.applicant?.phone}
-                ticketPrice={0}
-                // ticketPrice={finalAmount}
+                // ticketPrice={0}
+                ticketPrice={finalAmount}
                 email={storedData?.applicant?.email}
                 productinfo="ticket"
                 bookingType="VISA"

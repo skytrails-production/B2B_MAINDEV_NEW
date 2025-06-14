@@ -109,6 +109,7 @@ const IteneraryPriceSummary = () => {
   // flight oneway
 
   // Calculate total activities price and day-wise total
+  // Calculate total activities price and day-wise total
   let totalActivitiesPrice = 0;
   const selectedActivities =
     reducerState?.Itenerary?.selectedActivities?.activities;
@@ -117,13 +118,23 @@ const IteneraryPriceSummary = () => {
   const dayWiseTotal = {};
 
   // Calculate total price for each day
-
   if (hasActivities) {
-    Object.keys(selectedActivities).forEach((day) => {
-      dayWiseTotal[day] = selectedActivities[day].reduce((acc, activity) => {
-        return acc + activity.price;
-      }, 0);
-      totalActivitiesPrice += dayWiseTotal[day];
+    Object.keys(selectedActivities).forEach((cityIndex) => {
+      const cityActivities = selectedActivities[cityIndex];
+      if (cityActivities) {
+        Object.keys(cityActivities).forEach((dayIndex) => {
+          const activities = cityActivities[dayIndex];
+          if (activities && activities.length > 0) {
+            dayWiseTotal[`${cityIndex}-${dayIndex}`] = activities.reduce(
+              (acc, activity) => {
+                return acc + (activity.price || 0);
+              },
+              0
+            );
+            totalActivitiesPrice += dayWiseTotal[`${cityIndex}-${dayIndex}`];
+          }
+        });
+      }
     });
   }
   // Calculate total activities price and day-wise total
@@ -392,7 +403,7 @@ const IteneraryPriceSummary = () => {
     }
 
     const extractItenaryData = (itenararyResult) => {
-      return itenararyResult.map((item) => {
+      return itenararyResult?.map((item) => {
         return {
           _id: item._id,
           destination: item.destination,
@@ -404,7 +415,7 @@ const IteneraryPriceSummary = () => {
       });
     };
     const extractedItenaryResult = ItenaryData.itenararyResult
-      ? ItenaryData.itenararyResult.map((item) =>
+      ? ItenaryData.itenararyResult?.map((item) =>
           extractItenaryData(item.data.result)
         )
       : [];
@@ -951,13 +962,24 @@ const IteneraryPriceSummary = () => {
             </h6>
           </div>
           <div>
-            {Object.keys(selectedActivities).map(
-              (day, index) =>
-                // Check if there are activities for the current day
-                selectedActivities[day].length > 0 && (
+            {Object.keys(selectedActivities).map((cityIndex) => {
+              const cityActivities = selectedActivities[cityIndex];
+              if (!cityActivities) return null;
+
+              return Object.keys(cityActivities).map((dayIndex) => {
+                const activities = cityActivities[dayIndex];
+                if (!activities || activities.length === 0) return null;
+
+                const dayNumber = parseInt(dayIndex) + 1;
+                const cityName =
+                  reducerState?.Itenerary?.itenaryPayload?.cityAndNight?.[
+                    cityIndex
+                  ]?.from?.Destination || "Unknown City";
+
+                return (
                   <div
                     className="d-flex justify-content-between align-items-center"
-                    key={index}
+                    key={`${cityIndex}-${dayIndex}`}
                   >
                     <h6
                       style={{
@@ -965,7 +987,7 @@ const IteneraryPriceSummary = () => {
                         fontWeight: "500",
                         textAlign: "left",
                       }}
-                    >{`Day ${parseInt(day) + 1} Activities Price:`}</h6>
+                    >{`Day ${dayNumber} in ${cityName}:`}</h6>
                     <h6
                       style={{
                         fontSize: "13px",
@@ -973,11 +995,14 @@ const IteneraryPriceSummary = () => {
                         textAlign: "left",
                       }}
                     >
-                      ₹ {dayWiseTotal[day].toFixed(0)}
+                      ₹{" "}
+                      {dayWiseTotal[`${cityIndex}-${dayIndex}`]?.toFixed(0) ||
+                        0}
                     </h6>
                   </div>
-                )
-            )}
+                );
+              });
+            })}
           </div>
         </div>
       )}
