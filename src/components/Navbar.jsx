@@ -159,7 +159,7 @@ const Navbar = ({ className = "" }) => {
                 </div>
                 Buses
               </li>
-              <li
+              {/* <li
                 className={`flex-shrink-0 flex gap-1 py-1 ps-2 sm:pe-2  xl:pe-3 rounded-full items-center cursor-pointer text-[12px] lg:text-[13px] xl:text-lg font-medium ${
                   isActive("/visa") ? "bg-indigo-200 " : " bg-gray-100"
                 }`}
@@ -169,7 +169,7 @@ const Navbar = ({ className = "" }) => {
                   <i class="fa-regular fa-address-card text-sm"></i>
                 </div>
                 Visa
-              </li>
+              </li> */}
             </ul>
           </div>
 

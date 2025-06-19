@@ -34,8 +34,8 @@ const PayButton = ({
 
   useEffect(() => {
     const initializeSDK = async () => {
-      // const cf = await load({ mode: "production" });
-      const cf = await load({ mode: "sandbox" });
+      const cf = await load({ mode: "production" });
+      // const cf = await load({ mode: "sandbox" });
 
       setCashfree(cf);
     };
@@ -43,8 +43,8 @@ const PayButton = ({
   }, []);
 
   const doPayment = async (sessionID, order_id) => {
-    sessionID =
-      "session_FnxN1q49Dptg8rF_QJMaDi3qTSakEQV76V4G_pHnDVOjYKYRDaOLJe-OVu4SUxcsY91LUqQUsJH1QRt-dyqsUWIGXRJyZA_Fx4okYiCacZK71Q340CLr63V1MHBX4wpaymentpayment";
+    // sessionID =
+    //   "session_FnxN1q49Dptg8rF_QJMaDi3qTSakEQV76V4G_pHnDVOjYKYRDaOLJe-OVu4SUxcsY91LUqQUsJH1QRt-dyqsUWIGXRJyZA_Fx4okYiCacZK71Q340CLr63V1MHBX4wpaymentpayment";
 
     const checkoutOptions = {
       paymentSessionId: sessionID,

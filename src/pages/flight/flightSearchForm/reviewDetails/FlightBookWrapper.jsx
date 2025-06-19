@@ -569,7 +569,8 @@ const FlightBookWrapper = () => {
               // handlePayment={handleBookingProcess}
               phone={passengerData?.[0]?.ContactNo}
               email={passengerData?.[0]?.email}
-              ticketPrice={lastFinalPrice}
+              // ticketPrice={lastFinalPrice}
+              ticketPrice={isHold ? 100 : lastFinalPrice}
               bookingType="FLIGHTS" // or "BUS" or "HOTEL"
               buttonText="Pay Now"
               setPaymentLoading={(state) => {
